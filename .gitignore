@@ -1,0 +1,7 @@
+data/
+output/*.xlsx
+output/*.csv
+*.csv
+__pycache__/
+*.pyc
+.DS_Store
