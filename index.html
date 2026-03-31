@@ -256,16 +256,16 @@
     <div style="font-size:9px;color:var(--mist);letter-spacing:1px;">Mar 30, 2026</div>
   </div>
   <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>NO-GO activo con rotación defensiva: el mercado no habilita exposición larga direccional; cualquier posicionamiento agresivo opera contra el flujo institucional dominante.</p>
+<p>NO-GO con rotación defensiva activa: 60.3% del Russell 1000 en distribución y 81.4% por debajo de EMA20 inhabilita operaciones en largo; el entorno no soporta exposición direccional.</p>
 <p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>Distribución sistémica: 60.3% del Russell 1000 bajo presión vendedora, con 79.7% por debajo de SMA50 y 60.8% bajo SMA200 — deterioro estructural, no corrección táctica.</li>
-<li>La ligera mejora en breadth técnico (EMA20: 84.0% → 81.4%) no señala recuperación; es ruido dentro de un contexto de presión sostenida, dado que M1 continúa deteriorándose (-0.92 → -0.95).</li>
-<li>Energy es el único sector con acumulación neta positiva (+0.65), con 51% de stocks acumulando — isla de flujo institucional en un océano de distribución. Los 5 tops del scoring son exclusivamente E&P (APA, OXY, MTDR, FANG, CHRD), pero ninguno operables.</li>
-<li>ATR comprimido en solo 9.3% del universo indica que la volatilidad está expandida de forma generalizada — condición de riesgo elevado, no de setups VCP maduros.</li>
+<li>Deterioro marginal pero sostenido en acumulación neta (M1: -0.92 → -0.95), sin señales de estabilización; la tendencia de fondo continúa degradándose.</li>
+<li>Solo 13.1% de stocks acumulando contra 60.3% distribuyendo: la amplitud confirma presión vendedora sistémica, no selectiva.</li>
+<li>ATR mediano 5d en 3.26% con apenas 9.3% comprimido indica volatilidad elevada sin consolidación — ambiente de pánico vendedor, no de base técnica.</li>
+<li>La mejora de 2.6pp en % bajo EMA20 (84.0% → 81.4%) es el único dato positivo marginal, insuficiente para reclasificar régimen.</li>
 <p><strong>SECTORES</strong></p>
-<p>La distribución institucional es más intensa en Real Estate (88% distribuyendo), Utilities (85%) e Industrials (72%), señalando salida de sectores defensivos convencionales y cíclicos simultáneamente. Energy concentra el único flujo positivo verificable.</p>
+<p>Energía es el único sector con Net20d positivo (+0.65) y mayoría acumulando (51%), pero todos los tops stocks del sector son operables: NO — sin puntos de entrada válidos. Real Estate, Industrials y Basic Materials lideran la distribución con niveles extremos (88%, 72%, 71% distribuyendo respectivamente).</p>
 <p><strong>FOCO OPERATIVO</strong></p>
-<p>Monitorear si los nombres E&P (APA, OXY) desarrollan compresión de volatilidad suficiente para pasar a operables cuando el régimen confirme transición a GO.</p></div>
+<p>Mantener cero exposición larga; monitorear si Energía consolida con compresión de ATR y los tops (APA, OXY) generan señales operables ante cualquier mejora de régimen.</p></div>
 </div>
 <!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
@@ -485,11 +485,13 @@ function scoreColor(s) {
 // ── Sectors ───────────────────────────────────────────────────────────────────
 function renderSectors() {
   document.getElementById('sectorList').innerHTML = SECTORS.map((s, i) => {
-    const nc = s.net20 > 0 ? '#00e5cc' : '#ff4d6d';
+    const nc  = s.net20 > 0 ? '#00e5cc' : '#ff4d6d';
+    const sc  = scoreColor(s.score);
     return `<div class="sec-row">
       <div class="sec-c-i">${i+1}</div>
       <div class="sec-c-name" title="${s.name}">${s.name}</div>
       <div class="sec-c-n">${s.n}</div>
+      <div class="sec-c-score" style="color:${sc}">${s.score.toFixed(1)}</div>
       <div class="sec-c-net" style="color:${nc}">${s.net20 >= 0 ? '+' : ''}${s.net20.toFixed(2)}</div>
       <div class="sec-c-pct" style="color:var(--teal)">${s.pct.toFixed(1)}%</div>
       <div class="sec-c-dist" style="color:var(--red)">${s.distPct.toFixed(1)}%</div>
@@ -502,11 +504,13 @@ function renderSectors() {
 // ── Industries ────────────────────────────────────────────────────────────────
 function renderIndustries() {
   document.getElementById('industryList').innerHTML = INDUSTRIES.slice(0,10).map((ind, i) => {
-    const nc = ind.net20 >= 0 ? '#00e5cc' : '#ff4d6d';
+    const nc  = ind.net20 >= 0 ? '#00e5cc' : '#ff4d6d';
+    const sc  = scoreColor(ind.score);
     return `<div class="ind-row">
       <div class="ind-c-i">${i+1}</div>
       <div class="ind-c-name" title="${ind.name}" style="padding-left:8px">${ind.name}</div>
       <div class="ind-c-n">${ind.n}</div>
+      <div class="ind-c-score" style="color:${sc}">${ind.score.toFixed(1)}</div>
       <div class="ind-c-net" style="color:${nc}">${ind.net20 >= 0 ? '+' : ''}${ind.net20.toFixed(2)}</div>
       <div class="ind-c-pct" style="color:var(--teal)">${ind.pct.toFixed(1)}%</div>
       <div class="ind-c-dist" style="color:var(--red)">${ind.distPct.toFixed(1)}%</div>
