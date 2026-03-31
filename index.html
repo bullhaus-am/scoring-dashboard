@@ -95,24 +95,26 @@
   /* Shared table vars */
   :root {
     --col-seci: 14px;
-    --col-secname: 116px;
-    --col-secn: 18px;
-    --col-secnet: 46px;
+    --col-secname: 112px;
+    --col-secn: 16px;
+    --col-secscore: 30px;
+    --col-secnet: 40px;
     --col-secpct: 36px;
     --col-secdist: 36px;
-    --col-secpct5: 38px;
-    --col-secdist5: 38px;
-    --sec-gap: 6px;
+    --col-secpct5: 36px;
+    --col-secdist5: 36px;
+    --sec-gap: 5px;
 
     --col-indi: 14px;
     --col-indname-flex: 1;
-    --col-indn: 20px;
-    --col-indnet: 44px;
+    --col-indn: 16px;
+    --col-indscore: 30px;
+    --col-indnet: 40px;
     --col-indpct: 36px;
     --col-inddist: 36px;
-    --col-indpct5: 38px;
-    --col-inddist5: 38px;
-    --ind-gap: 6px;
+    --col-indpct5: 36px;
+    --col-inddist5: 36px;
+    --ind-gap: 5px;
   }
 
   /* Sector list */
@@ -122,12 +124,13 @@
   .sec-c-i     { width: var(--col-seci); color: var(--mist); text-align: right; flex-shrink: 0; font-size: 9px; }
   .sec-c-name  { width: var(--col-secname); font-size: 10px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; flex-shrink: 0; }
   .sec-c-n     { width: var(--col-secn); font-size: 9px; color: var(--mist); text-align: right; flex-shrink: 0; }
+  .sec-c-score { width: var(--col-secscore); text-align: right; font-size: 10px; font-weight: 700; flex-shrink: 0; }
   .sec-c-net   { width: var(--col-secnet); text-align: right; font-size: 10px; font-weight: 700; flex-shrink: 0; }
   .sec-c-pct   { width: var(--col-secpct); text-align: right; font-size: 10px; flex-shrink: 0; }
   .sec-c-dist  { width: var(--col-secdist); text-align: right; font-size: 10px; flex-shrink: 0; }
   .sec-c-pct5  { width: var(--col-secpct5); text-align: right; font-size: 10px; flex-shrink: 0; }
   .sec-c-dist5 { width: var(--col-secdist5); text-align: right; font-size: 10px; flex-shrink: 0; }
-  .sec-c-hdr   { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mist); font-weight: 600; }
+  .sec-c-hdr   { font-size: 8px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--mist); font-weight: 600; }
 
   /* Industry list */
   .ind-hdr-row, .ind-row { display: flex; align-items: center; gap: var(--ind-gap); padding: 5px 0; font-size: 10px; }
@@ -136,12 +139,13 @@
   .ind-c-i     { width: var(--col-indi); color: var(--mist); text-align: right; flex-shrink: 0; }
   .ind-c-name  { flex: 1; color: var(--white); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ind-c-n     { width: var(--col-indn); text-align: right; color: var(--mist); flex-shrink: 0; }
+  .ind-c-score { width: var(--col-indscore); text-align: right; font-weight: 700; flex-shrink: 0; }
   .ind-c-net   { width: var(--col-indnet); text-align: right; font-weight: 700; flex-shrink: 0; }
   .ind-c-pct   { width: var(--col-indpct); text-align: right; flex-shrink: 0; }
   .ind-c-dist  { width: var(--col-inddist); text-align: right; flex-shrink: 0; }
   .ind-c-pct5  { width: var(--col-indpct5); text-align: right; flex-shrink: 0; }
   .ind-c-dist5 { width: var(--col-inddist5); text-align: right; flex-shrink: 0; }
-  .ind-c-hdr   { font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--mist); font-weight: 600; }
+  .ind-c-hdr   { font-size: 8px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--mist); font-weight: 600; }
 
   /* Stock table */
   .tbl-card { background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r); padding: 18px 20px; margin-bottom: 0; }
@@ -256,16 +260,16 @@
     <div style="font-size:9px;color:var(--mist);letter-spacing:1px;">Mar 30, 2026</div>
   </div>
   <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>NO-GO con rotación defensiva activa: 60.3% del Russell 1000 en distribución y 81.4% por debajo de EMA20 inhabilita operaciones en largo; el entorno no soporta exposición direccional.</p>
+<p>NO-GO activo con rotación defensiva: 60.3% del universo en distribución y solo 13.1% acumulando; el mercado no ofrece condiciones para despliegue de capital en largo.</p>
 <p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>Deterioro marginal pero sostenido en acumulación neta (M1: -0.92 → -0.95), sin señales de estabilización; la tendencia de fondo continúa degradándose.</li>
-<li>Solo 13.1% de stocks acumulando contra 60.3% distribuyendo: la amplitud confirma presión vendedora sistémica, no selectiva.</li>
-<li>ATR mediano 5d en 3.26% con apenas 9.3% comprimido indica volatilidad elevada sin consolidación — ambiente de pánico vendedor, no de base técnica.</li>
-<li>La mejora de 2.6pp en % bajo EMA20 (84.0% → 81.4%) es el único dato positivo marginal, insuficiente para reclasificar régimen.</li>
+<li>La presión vendedora es sistémica: 10 de 11 sectores con Net20d negativo, sin un solo sector con acumulación neta significativa salvo Energy (+0.65).</li>
+<li>Real Estate e Industrials lideran la distribución institucional con Net20d de -1.30 y -1.46 respectivamente, y tasas de distribución superiores al 72%; evitar completamente.</li>
+<li>La leve mejora en % bajo EMA20 (84.0% → 81.4%, Δ -2.6pp) es insuficiente para señalar reversión; puede ser ruido dentro de oversold extremo.</li>
+<li>ATR mediano del 3.26% con solo 9.3% de compresión indica volatilidad expandida sin setups VCP válidos; riesgo por acción elevado y sin estructuras de bajo riesgo disponibles.</li>
 <p><strong>SECTORES</strong></p>
-<p>Energía es el único sector con Net20d positivo (+0.65) y mayoría acumulando (51%), pero todos los tops stocks del sector son operables: NO — sin puntos de entrada válidos. Real Estate, Industrials y Basic Materials lideran la distribución con niveles extremos (88%, 72%, 71% distribuyendo respectivamente).</p>
+<p>Energy es el único sector con acumulación neta positiva (51% acumulando vs. 32% distribuyendo), aunque todos los top 5 stocks están marcados como no operables, limitando la ejecución. El resto del mercado muestra distribución institucional coordinada y amplia.</p>
 <p><strong>FOCO OPERATIVO</strong></p>
-<p>Mantener cero exposición larga; monitorear si Energía consolida con compresión de ATR y los tops (APA, OXY) generan señales operables ante cualquier mejora de régimen.</p></div>
+<p>Mantener cero exposición larga; monitorear exclusivamente el universo Energy (APA, OXY, MTDR) para identificar el momento en que los scores superen umbrales operables con ATR comprimido y estructura VCP confirmada.</p></div>
 </div>
 <!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
@@ -365,11 +369,12 @@
         <div class="sec-c-i sec-c-hdr">#</div>
         <div class="sec-c-name sec-c-hdr">Sector</div>
         <div class="sec-c-n sec-c-hdr" style="text-align:right;">N</div>
+        <div class="sec-c-score sec-c-hdr">Scr</div>
         <div class="sec-c-net sec-c-hdr">Net20d</div>
-        <div class="sec-c-pct sec-c-hdr">%Acc20d</div>
-        <div class="sec-c-dist sec-c-hdr">%Dist20d</div>
-        <div class="sec-c-pct5 sec-c-hdr">%Acc5d</div>
-        <div class="sec-c-dist5 sec-c-hdr">%Dist5d</div>
+        <div class="sec-c-pct sec-c-hdr">Acc20d</div>
+        <div class="sec-c-dist sec-c-hdr">Dist20d</div>
+        <div class="sec-c-pct5 sec-c-hdr">Acc5d</div>
+        <div class="sec-c-dist5 sec-c-hdr">Dist5d</div>
       </div>
       <div id="sectorList"></div>
     </div>
@@ -380,11 +385,12 @@
         <div class="ind-c-i ind-c-hdr">#</div>
         <div class="ind-c-name ind-c-hdr" style="padding-left:8px;">Industry</div>
         <div class="ind-c-n ind-c-hdr">N</div>
+        <div class="ind-c-score ind-c-hdr">Scr</div>
         <div class="ind-c-net ind-c-hdr">Net20d</div>
-        <div class="ind-c-pct ind-c-hdr">%Acc20d</div>
-        <div class="ind-c-dist ind-c-hdr">%Dist20d</div>
-        <div class="ind-c-pct5 ind-c-hdr">%Acc5d</div>
-        <div class="ind-c-dist5 ind-c-hdr">%Dist5d</div>
+        <div class="ind-c-pct ind-c-hdr">Acc20d</div>
+        <div class="ind-c-dist ind-c-hdr">Dist20d</div>
+        <div class="ind-c-pct5 ind-c-hdr">Acc5d</div>
+        <div class="ind-c-dist5 ind-c-hdr">Dist5d</div>
       </div>
       <div id="industryList"></div>
     </div>
