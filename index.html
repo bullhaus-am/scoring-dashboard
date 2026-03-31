@@ -94,7 +94,8 @@
 
   /* Shared table vars */
   :root {
-    --col-secname: 130px;
+    --col-seci: 14px;
+    --col-secname: 116px;
     --col-secn: 18px;
     --col-secnet: 46px;
     --col-secpct: 36px;
@@ -118,6 +119,7 @@
   .sec-hdr-row, .sec-row { display: flex; align-items: center; gap: var(--sec-gap); padding: 5px 0; }
   .sec-row { border-bottom: 1px solid var(--rule); }
   .sec-row:last-child { border-bottom: none; }
+  .sec-c-i     { width: var(--col-seci); color: var(--mist); text-align: right; flex-shrink: 0; font-size: 9px; }
   .sec-c-name  { width: var(--col-secname); font-size: 10px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; flex-shrink: 0; }
   .sec-c-n     { width: var(--col-secn); font-size: 9px; color: var(--mist); text-align: right; flex-shrink: 0; }
   .sec-c-net   { width: var(--col-secnet); text-align: right; font-size: 10px; font-weight: 700; flex-shrink: 0; }
@@ -254,16 +256,16 @@
     <div style="font-size:9px;color:var(--mist);letter-spacing:1px;">Mar 30, 2026</div>
   </div>
   <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>NO-GO con rotación defensiva activa: 60.3% del universo en distribución y solo 13.1% acumulando exige posicionamiento en cash o cobertura; no hay condiciones para despliegue de capital largo.</p>
+<p>NO-GO activo con rotación defensiva: el mercado no habilita exposición larga direccional; cualquier posicionamiento agresivo opera contra el flujo institucional dominante.</p>
 <p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>La amplitud es devastadora: 81.4% bajo EMA20 y 60.8% bajo SMA200, confirmando daño técnico estructural más allá de corrección táctica.</li>
-<li>La leve mejora de -2.6pp en % bajo EMA20 no señala reversión; con M1 deteriorándose (-0.92 → -0.95) el rebote intradiario carece de respaldo institucional.</li>
-<li>Solo 1 sector positivo (Energy, Net20d +0.65 con 51% acumulando) versus 10 en distribución; la dispersión sectorial de 0.59 evidencia rotación forzada hacia refugio, no liderazgo genuino.</li>
-<li>Los 5 mejores stocks por score son todos E&P (APA, OXY, MTDR, FANG, CHRD) con scores moderados (55-80) y marcados NO operables — la calidad del liderazgo disponible es insuficiente.</li>
+<li>Distribución sistémica: 60.3% del Russell 1000 bajo presión vendedora, con 79.7% por debajo de SMA50 y 60.8% bajo SMA200 — deterioro estructural, no corrección táctica.</li>
+<li>La ligera mejora en breadth técnico (EMA20: 84.0% → 81.4%) no señala recuperación; es ruido dentro de un contexto de presión sostenida, dado que M1 continúa deteriorándose (-0.92 → -0.95).</li>
+<li>Energy es el único sector con acumulación neta positiva (+0.65), con 51% de stocks acumulando — isla de flujo institucional en un océano de distribución. Los 5 tops del scoring son exclusivamente E&P (APA, OXY, MTDR, FANG, CHRD), pero ninguno operables.</li>
+<li>ATR comprimido en solo 9.3% del universo indica que la volatilidad está expandida de forma generalizada — condición de riesgo elevado, no de setups VCP maduros.</li>
 <p><strong>SECTORES</strong></p>
-<p>Energy es el único sector con acumulación neta marginal (+0.65) y merece monitoreo como refugio relativo. Real Estate (-1.30, 88% distribuyendo), Basic Materials (-1.48, 71%) e Industrials (-1.46, 72%) concentran la distribución más agresiva — evitar.</p>
+<p>La distribución institucional es más intensa en Real Estate (88% distribuyendo), Utilities (85%) e Industrials (72%), señalando salida de sectores defensivos convencionales y cíclicos simultáneamente. Energy concentra el único flujo positivo verificable.</p>
 <p><strong>FOCO OPERATIVO</strong></p>
-<p>Mantener exposición neta mínima; vigilar si Energy consolida estructura VCP en APA/OXY como único pipeline potencial cuando el régimen cambie.</p></div>
+<p>Monitorear si los nombres E&P (APA, OXY) desarrollan compresión de volatilidad suficiente para pasar a operables cuando el régimen confirme transición a GO.</p></div>
 </div>
 <!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
@@ -360,11 +362,12 @@
     <div class="card">
       <div class="card-tag">Sector ranking — net 20d, % acc/dist (20d &amp; 5d)</div>
       <div class="sec-hdr-row" style="padding:4px 0 6px;border-bottom:1px solid var(--rule2);margin-bottom:2px;">
+        <div class="sec-c-i sec-c-hdr">#</div>
         <div class="sec-c-name sec-c-hdr">Sector</div>
         <div class="sec-c-n sec-c-hdr" style="text-align:right;">N</div>
         <div class="sec-c-net sec-c-hdr">Net20d</div>
-        <div class="sec-c-pct sec-c-hdr">%Acc</div>
-        <div class="sec-c-dist sec-c-hdr">%Dist</div>
+        <div class="sec-c-pct sec-c-hdr">%Acc20d</div>
+        <div class="sec-c-dist sec-c-hdr">%Dist20d</div>
         <div class="sec-c-pct5 sec-c-hdr">%Acc5d</div>
         <div class="sec-c-dist5 sec-c-hdr">%Dist5d</div>
       </div>
@@ -378,8 +381,8 @@
         <div class="ind-c-name ind-c-hdr" style="padding-left:8px;">Industry</div>
         <div class="ind-c-n ind-c-hdr">N</div>
         <div class="ind-c-net ind-c-hdr">Net20d</div>
-        <div class="ind-c-pct ind-c-hdr">%Acc</div>
-        <div class="ind-c-dist ind-c-hdr">%Dist</div>
+        <div class="ind-c-pct ind-c-hdr">%Acc20d</div>
+        <div class="ind-c-dist ind-c-hdr">%Dist20d</div>
         <div class="ind-c-pct5 ind-c-hdr">%Acc5d</div>
         <div class="ind-c-dist5 ind-c-hdr">%Dist5d</div>
       </div>
@@ -481,9 +484,10 @@ function scoreColor(s) {
 
 // ── Sectors ───────────────────────────────────────────────────────────────────
 function renderSectors() {
-  document.getElementById('sectorList').innerHTML = SECTORS.map(s => {
+  document.getElementById('sectorList').innerHTML = SECTORS.map((s, i) => {
     const nc = s.net20 > 0 ? '#00e5cc' : '#ff4d6d';
     return `<div class="sec-row">
+      <div class="sec-c-i">${i+1}</div>
       <div class="sec-c-name" title="${s.name}">${s.name}</div>
       <div class="sec-c-n">${s.n}</div>
       <div class="sec-c-net" style="color:${nc}">${s.net20 >= 0 ? '+' : ''}${s.net20.toFixed(2)}</div>
