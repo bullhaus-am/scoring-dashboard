@@ -95,27 +95,26 @@
   /* Shared table vars */
   :root {
     --col-seci: 16px;
-    --col-secname: 130px;
     --col-secn: 22px;
-    --col-secscore: 34px;
-    --col-secnet: 44px;
-    --col-secnet5: 42px;
-    --col-secpct: 40px;
-    --col-secdist: 40px;
-    --col-secpct5: 40px;
-    --col-secdist5: 40px;
+    --col-secscore: 36px;
+    --col-secnet: 46px;
+    --col-secnet5: 44px;
+    --col-secpct: 42px;
+    --col-secdist: 42px;
+    --col-secpct5: 42px;
+    --col-secdist5: 42px;
     --sec-gap: 6px;
 
     --col-indi: 16px;
     --col-indname-flex: 1;
     --col-indn: 22px;
-    --col-indscore: 34px;
-    --col-indnet: 44px;
-    --col-indnet5: 42px;
-    --col-indpct: 40px;
-    --col-inddist: 40px;
-    --col-indpct5: 40px;
-    --col-inddist5: 40px;
+    --col-indscore: 36px;
+    --col-indnet: 46px;
+    --col-indnet5: 44px;
+    --col-indpct: 42px;
+    --col-inddist: 42px;
+    --col-indpct5: 42px;
+    --col-inddist5: 42px;
     --ind-gap: 6px;
   }
 
@@ -124,7 +123,7 @@
   .sec-row { border-bottom: 1px solid var(--rule); }
   .sec-row:last-child { border-bottom: none; }
   .sec-c-i     { width: var(--col-seci); color: var(--mist); text-align: right; flex-shrink: 0; font-size: 9px; }
-  .sec-c-name  { width: var(--col-secname); font-size: 10px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; flex-shrink: 0; }
+  .sec-c-name  { flex: 1; font-size: 10px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 500; }
   .sec-c-n     { width: var(--col-secn); font-size: 9px; color: var(--mist); text-align: right; flex-shrink: 0; }
   .sec-c-score { width: var(--col-secscore); text-align: right; font-size: 10.5px; font-weight: 700; flex-shrink: 0; }
   .sec-c-net   { width: var(--col-secnet); text-align: right; font-size: 10.5px; font-weight: 700; flex-shrink: 0; }
@@ -140,7 +139,7 @@
   .ind-row { border-bottom: 1px solid var(--rule); }
   .ind-row:last-child { border-bottom: none; }
   .ind-c-i     { width: var(--col-indi); color: var(--mist); text-align: right; flex-shrink: 0; }
-  .ind-c-name  { flex: 1; color: var(--white); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ind-c-name  { flex: 1; font-size: 10px; color: var(--white); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .ind-c-n     { width: var(--col-indn); text-align: right; color: var(--mist); flex-shrink: 0; }
   .ind-c-score { width: var(--col-indscore); text-align: right; font-weight: 700; flex-shrink: 0; }
   .ind-c-net   { width: var(--col-indnet); text-align: right; font-weight: 700; flex-shrink: 0; }
@@ -294,16 +293,16 @@
 <div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
 <div class="card ai-commentary-card" style="margin-bottom:20px;">
   <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>NO-GO activo con rotación defensiva: operar en largo está contraindicado salvo posiciones selectivas de mínimo riesgo; el capital debe preservarse.</p>
+<p>NO-GO con rotación defensiva activa: solo 1 de 11 sectores en acumulación neta, con 56% del universo distribuyendo. Operar en largo implica asumir viento de frente estructural severo.</p>
 <p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>La sesión muestra alivio técnico significativo: EMA20 cae 19.2pp en un día y la distribución retrocede 4.3pp, consistente con rebote tras oversold extremo, no con reversión de tendencia.</li>
-<li>El breadth sigue roto estructuralmente: solo 15.9% de stocks acumulando vs. 56% distribuyendo; 74.8% bajo SMA50 indica daño técnico amplio y de mediano plazo.</li>
-<li>ATR comprimido en solo 6.1% del universo confirma que la volatilidad sigue elevada generalizadamente —entornos de expansión de rango, no de contracción pre-breakout.</li>
-<li>Top 5 stocks por score están concentrados en energía (OXY, APA, FANG); los tres mejores marcados como no operables, limitando setup accionable.</li>
+<li>La mejora intrasesional es notable pero insuficiente: el % bajo EMA20 cayó 19.2pp y el flujo distribuidor retrocedió 4.3pp, señalando rebote técnico, no reversión de tendencia</li>
+<li>La amplitud sigue deteriorada en profundidad: 74.8% del Russell 1000 opera bajo SMA50 y 56.2% bajo SMA200, confirmando daño estructural extendido</li>
+<li>ATR mediano del 3.35% con compresión mínima (6.1%) indica expansión de volatilidad sin bases constructivas; el mercado está en movimiento pero sin acumulación</li>
+<li>Los 3 mejores scores (OXY, APA, FANG) son todos no operables, lo que reduce el universo accionable a nombres marginales como GME y LBTYA</li>
 <p><strong>SECTORES</strong></p>
-<p>Energy es el único sector con acumulación neta positiva (+0.59) y balance de acumulación/distribución favorable (49%/22%), operando como refugio relativo. Real Estate y Utilities muestran distribución institucional severa (82-87%), seguidos de cerca por Basic Materials e Industrials.</p>
+<p>Energy es el único sector con acumulación neta (+0.59, 49% acc vs 22% dist), actuando como refugio relativo en el contexto de rotación defensiva. Real Estate y Utilities muestran distribución extrema (82-87% distribuyendo), confirmando salida institucional de activos sensibles a tasas.</p>
 <p><strong>FOCO OPERATIVO</strong></p>
-<p>Monitorear si el rebote técnico de hoy consolida en los próximos 2-3 sesiones con mejora sostenida en % sobre EMA20 y reducción adicional en distribución; hasta entonces, GME y LBTYA son los únicos operables del universo filtrado pero exigen gestión de riesgo estricta dado el régimen vigente.</p></div>
+<p>Mantener exposición reducida, vigilar si la mejora del % bajo EMA20 se consolida en la próxima sesión antes de considerar cualquier reactivación de longs; Energy (OXY/APA) en watchlist para cuando las condiciones operacionales se habiliten.</p></div>
 </div>
 <!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
