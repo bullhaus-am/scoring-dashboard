@@ -390,16 +390,16 @@
 <div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
 <div class="card ai-commentary-card" style="margin-bottom:20px;">
   <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>SELL OFF confirmado: con solo 14.8% de acciones acumulando y 72.8% por debajo del SMA50, el mercado no ofrece condiciones para exposición larga significativa; preservación de capital es la prioridad operativa.</p>
+<p>NO-GO/SELL OFF confirmado: con solo el 14.8% de stocks en acumulación y 72.8% por debajo de SMA50, el mercado no ofrece condiciones para despliegue de capital largo.</p>
 <p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>La distribución es sistémica: 55.8% de acciones en distribución activa con Net20d promedio de -0.75, sin señales de capitulación ni reversión inminente.</li>
-<li>La mejora en % bajo EMA20 (-6.1pp) es el único dato técnico positivo, pero puede reflejar rebote de alivio dentro de tendencia bajista más que cambio de régimen.</li>
-<li>ATR mediano en 3.29% con solo 7.6% de compresión indica volatilidad elevada y expansión de rangos —ambiente hostil para entradas direccionales.</li>
-<li>Solo 1 sector positivo (Energy) con dispersión sectorial baja (0.466): no hay rotación constructiva, sino deterioro uniforme en todo el universo.</li>
+<li>La mejora de -6.1pp en % bajo EMA20 (62.2% → 56.1%) es el único dato constructivo de la sesión, aunque insuficiente para cambiar régimen dado que SMA50 y SMA200 permanecen profundamente comprometidas.</li>
+<li>Distribución institucional generalizada y coordinada: 10 de 11 sectores con Net20d negativo y dispersión sectorial baja (0.466), señal de venta sistémica sin rotación defensiva clara.</li>
+<li>Utilities (87% distribuyendo, Net -1.08) y Real Estate (83% distribuyendo, Net -1.23, 0% acumulando) exhiben capitulación estructural — típicamente los últimos en caer en sell-offs de ciclo.</li>
+<li>ATR mediano 5d en 3.29% con solo 7.6% de compresión indica volatilidad activa sin bases formándose; entorno desfavorable para setups VCP.</li>
 <p><strong>SECTORES</strong></p>
-<p>Energy es el único sector con acumulación neta (+0.41) y balance %Acc/%Dist favorable (43%/22%); Real Estate y Utilities muestran distribución extrema (83-87% distribuyen) con acumulación prácticamente nula.</p>
+<p>Energy es el único sector con flujo neto positivo (Net +0.41, 43% acumulando), concentrando toda la acumulación residual del mercado; el resto muestra distribución institucional uniforme sin refugio alternativo identificable.</p>
 <p><strong>FOCO OPERATIVO</strong></p>
-<p>Monitorear si GME (único operable del top 5) mantiene su Net5d positivo con contracción de ATR como precondición para cualquier setup, mientras se aguarda confirmación de cambio de régimen antes de aumentar exposición.</p></div>
+<p>Monitorear si la mejora en % bajo EMA20 continúa en próximas sesiones como potencial primera señal de estabilización, mientras se mantiene exposición larga en cero — GME (único operable) no justifica entrada en este régimen.</p></div>
 </div>
 <!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
@@ -543,7 +543,7 @@
         <input class="fticker" id="tickerSearch" type="text" placeholder="Ticker..." maxlength="10" oninput="setFilterTicker(this)" autocomplete="off" spellcheck="false">
         <button class="fbtn active" onclick="setFilter('all',this)">All</button>
         <button class="fbtn" onclick="setFilter('operable',this)">Operable</button>
-        <button class="fbtn" onclick="setFilter('volOk',this)">Vol OK</button>
+        <button class="fbtn" onclick="setFilter('volOk',this)">Volat OK</button>
         <button class="fbtn" onclick="setFilter('extOk',this)">Not Extended</button>
         <select class="fselect" id="sectorDropdown" onchange="setFilterSector(this)">
           <option value="">Sector</option>
@@ -680,13 +680,26 @@ function initDropdowns() {
   industries.forEach(i => { const o = document.createElement('option'); o.value = i; o.textContent = i; id.appendChild(o); });
 }
 
-// When sector dropdown changes — also filter industry options to match
+// ── Type filter buttons (All / Operable / Volat OK / Not Extended) ──────────
+function setFilter(f, btn) {
+  filterMode = f;
+  filterTicker = '';
+  const ti = document.getElementById('tickerSearch');
+  if (ti) { ti.value = ''; ti.classList.remove('active'); }
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderStocks();
+}
+
+// ── Scope: sector dropdown ──────────────────────────────────────────────────
 function setFilterSector(sel) {
   filterSector   = sel.value;
   filterIndustry = '';
-  filterMode     = filterSector ? 'sector' : 'all';
+  filterTicker   = '';
+  const ti = document.getElementById('tickerSearch');
+  if (ti) { ti.value = ''; ti.classList.remove('active'); }
 
-  // Reset industry dropdown, then repopulate only industries in this sector
+  // Repopulate industry dropdown scoped to selected sector
   const id = document.getElementById('industryDropdown');
   id.innerHTML = '<option value="">Industria</option>';
   const srcData = filterSector
@@ -695,63 +708,38 @@ function setFilterSector(sel) {
   const inds = [...new Set(srcData.map(s => s.industry).filter(Boolean))].sort();
   inds.forEach(i => { const o = document.createElement('option'); o.value = i; o.textContent = i; id.appendChild(o); });
 
-  // Update active styling
   sel.classList.toggle('active', !!filterSector);
   document.getElementById('industryDropdown').classList.remove('active');
-
-  // Deactivate fbtn buttons
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-  if (!filterSector) document.querySelector('.fbtn').classList.add('active'); // All btn
-
   renderStocks();
 }
 
+// ── Scope: industry dropdown ────────────────────────────────────────────────
 function setFilterIndustry(sel) {
   filterIndustry = sel.value;
-  filterMode     = filterIndustry ? 'industry' : (filterSector ? 'sector' : 'all');
-  sel.classList.toggle('active', !!filterIndustry);
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-  if (!filterIndustry && !filterSector) document.querySelector('.fbtn').classList.add('active');
-  renderStocks();
-}
-
-function setFilter(f, btn) {
-  filterMode     = f;
-  filterSector   = '';
-  filterIndustry = '';
   filterTicker   = '';
-  // Reset ticker input
   const ti = document.getElementById('tickerSearch');
   if (ti) { ti.value = ''; ti.classList.remove('active'); }
-  // Reset dropdowns
-  document.getElementById('sectorDropdown').value = '';
-  document.getElementById('sectorDropdown').classList.remove('active');
-  document.getElementById('industryDropdown').value = '';
-  document.getElementById('industryDropdown').classList.remove('active');
-  // Repopulate industry dropdown (reset to full list)
-  const id = document.getElementById('industryDropdown');
-  id.innerHTML = '<option value="">Industria</option>';
-  const inds = [...new Set(ALL_STOCKS.map(s => s.industry).filter(Boolean))].sort();
-  inds.forEach(i => { const o = document.createElement('option'); o.value = i; o.textContent = i; id.appendChild(o); });
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  sel.classList.toggle('active', !!filterIndustry);
   renderStocks();
 }
 
+// ── Scope: ticker search ────────────────────────────────────────────────────
 function setFilterTicker(input) {
   const val = input.value.trim().toUpperCase();
   filterTicker   = val;
   filterSector   = '';
   filterIndustry = '';
-  filterMode     = val ? 'ticker' : 'all';
   input.classList.toggle('active', !!val);
-  // Reset other controls
+  // Reset dropdowns
   document.getElementById('sectorDropdown').value = '';
   document.getElementById('sectorDropdown').classList.remove('active');
   document.getElementById('industryDropdown').value = '';
   document.getElementById('industryDropdown').classList.remove('active');
-  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-  if (!val) document.querySelector('.fbtn').classList.add('active');
+  // Repopulate industry dropdown (full list)
+  const id = document.getElementById('industryDropdown');
+  id.innerHTML = '<option value="">Industria</option>';
+  const inds = [...new Set(ALL_STOCKS.map(s => s.industry).filter(Boolean))].sort();
+  inds.forEach(i => { const o = document.createElement('option'); o.value = i; o.textContent = i; id.appendChild(o); });
   renderStocks();
 }
 
@@ -778,12 +766,17 @@ function fmt(v, dec) {
 
 function renderStocks() {
   let data = ALL_STOCKS.slice();
+
+  // 1) Type filter (buttons)
   if      (filterMode === 'operable')  data = data.filter(s => s.operable === 'YES');
   else if (filterMode === 'volOk')     data = data.filter(s => s.volOk === 'YES');
   else if (filterMode === 'extOk')     data = data.filter(s => s.extOk === 'YES');
-  else if (filterMode === 'ticker')    data = data.filter(s => s.sym.toUpperCase().includes(filterTicker));
-  else if (filterMode === 'industry')  data = data.filter(s => s.industry === filterIndustry);
-  else if (filterMode === 'sector')    data = data.filter(s => s.sector === filterSector);
+
+  // 2) Scope filter (dropdowns / ticker) — combines with type
+  if      (filterTicker)    data = data.filter(s => s.sym.toUpperCase().includes(filterTicker));
+  else if (filterIndustry)  data = data.filter(s => s.industry === filterIndustry);
+  else if (filterSector)    data = data.filter(s => s.sector === filterSector);
+
   const total = data.length;
   data.sort((a,b) => ((a[sortCol]??-999)-(b[sortCol]??-999))*sortDir);
 
@@ -818,8 +811,11 @@ function renderStocks() {
       <td><span class="${s.operable==='YES'?'op-yes':'op-no'}">${s.operable}</span></td>
     </tr>`;
   }).join('');
+  const typeLabel = {all:'ALL', operable:'OPERABLE', volOk:'VOLAT OK', extOk:'NOT EXTENDED'}[filterMode] || 'ALL';
+  const scopeLabel = filterTicker ? `TICKER: ${filterTicker}` : filterIndustry ? `INDUSTRY: ${filterIndustry}` : filterSector ? `SECTOR: ${filterSector}` : '';
+  const filterDesc = scopeLabel ? `${typeLabel} · ${scopeLabel}` : typeLabel;
   document.getElementById('tblFooter').textContent =
-    `SHOWING 50 OF ${total} STOCKS  ·  SORTED BY ${sortCol.toUpperCase()} ${sortDir===-1?'↓':'↑'}`;
+    `SHOWING ${Math.min(50, total)} OF ${total} STOCKS  ·  ${filterDesc}  ·  SORTED BY ${sortCol.toUpperCase()} ${sortDir===-1?'↓':'↑'}`;
 }
 
 // ── Charts ─────────────────────────────────────────────────────────────────────
