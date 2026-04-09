@@ -57,7 +57,7 @@
   .pill-go   { background: var(--green2); color: var(--green); border-color: rgba(34,197,94,.3); }
 
   /* LAYOUT */
-  .wrap { max-width: 1480px; margin: 0 auto; padding: 28px 24px 56px; }
+  .wrap { max-width: 1920px; margin: 0 auto; padding: 28px 32px 56px; }
   .sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
   .sec-label { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--smoke); font-family: var(--font-sans); }
   .sec-line { flex: 1; height: 1px; background: var(--rule); }
@@ -167,7 +167,7 @@
   /* Stock table */
   .tbl-card { background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r); padding: 18px 20px; margin-bottom: 0; }
   .tbl-top  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
-  .tbl-wrap { overflow-x: auto; }
+  .tbl-wrap { overflow-x: auto; width: 100%; }
   .stbl { width: 100%; border-collapse: collapse; font-size: 11px; }
   .stbl th {
     font-size: 9px; font-weight: 600; color: var(--mist);
@@ -195,9 +195,9 @@
   .op-no  { font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 3px; background: var(--bg3); color: var(--mist); letter-spacing: 1px; }
 
   .sym { font-weight: 700; color: var(--white); font-size: 11px; }
-  .co-name { font-size: 9.5px; color: var(--mist); max-width: 130px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
-  .sector-tag { font-size: 9px; color: var(--smoke); max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .industry-tag { font-size: 9px; color: var(--mist); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .co-name { font-size: 9.5px; color: var(--mist); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+  .sector-tag { font-size: 9px; color: var(--smoke); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .industry-tag { font-size: 9px; color: var(--mist); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   .fbar { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
   .fbar-lbl { font-size: 9px; color: var(--mist); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-right: 4px; font-family: var(--font-sans); }
@@ -291,15 +291,14 @@
 
   /* ── Stock table: better header ──────────────────────────────── */
   .stbl thead tr { border-bottom: 1px solid var(--rule2); }
-  .thead-groups th { border-bottom: none !important; padding: 5px 4px 3px; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-align: center; white-space: nowrap; }
-  .thg { border-right: 1px solid rgba(255,255,255,0.06); }
-  .thg:last-child { border-right: none; }
-  .thg-id   { color: #8899aa; background: rgba(136,153,170,.05); }
-  .thg-rs   { color: #f59e0b; background: rgba(245,158,11,.07);  }
-  .thg-acc  { color: #00e5cc; background: rgba(0,229,204,.05);   }
+  .thead-groups th { border-bottom: 1px solid rgba(255,255,255,0.04) !important; padding: 6px 6px 5px; font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+  .thg { border-right: 1px solid rgba(255,255,255,0.07); border-left: 1px solid rgba(255,255,255,0.07); }
+  .thg-id   { color: #8899aa; background: rgba(136,153,170,.05); border-left: none; }
+  .thg-rs   { color: #f59e0b; background: rgba(245,158,11,.08);  }
+  .thg-acc  { color: #00e5cc; background: rgba(0,229,204,.06);   }
   .thg-vol  { color: #8899aa; background: rgba(136,153,170,.05); }
   .thg-perf { color: #8899aa; background: rgba(136,153,170,.05); }
-  .thg-op   { background: transparent; }
+  .thg-op   { background: transparent; border-right: none; }
   .stbl th { padding-bottom: 10px; }
 
   /* ── Quadrant in KPI card: fix alignment ────────────────────── */
@@ -399,16 +398,16 @@
 <div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
 <div class="card ai-commentary-card" style="margin-bottom:20px;">
   <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>SELL OFF confirmado: con solo 20.7% de stocks acumulando y 54.9% bajo SMA50, el mercado no ofrece condiciones para nuevas posiciones largas; el capital debe mantenerse en efectivo o coberturas.</p>
+<p>SELL OFF confirmado con solo 1 de 11 sectores en territorio positivo; el entorno exige posición defensiva y preservación de capital como prioridad absoluta.</p>
 <p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>La mejora intradía es técnica, no estructural: el % bajo EMA20 cayó 25.2pp y los distribuidores bajaron 5.6pp, posiblemente un rebote de oversold tras capitulación puntual, no reversión de tendencia.</li>
-<li>La dispersión sectorial baja (0.312) con solo 1 sector positivo confirma liquidación sistémica, no rotación selectiva — el mercado vende indiscriminadamente.</li>
-<li>ATR mediano 5d en 3.38% con apenas 5.3% de stocks comprimidos: volatilidad alta y sin bases técnicas formadas; el universo operable es efectivamente cero (los 5 top scores marcan NO operable).</li>
-<li>Real Estate (-0.98, 73% dist.) y Utilities (-0.87, 77% dist.) muestran distribución extrema — sectores defensivos siendo liquidados sugiere margin calls y desapalancamiento forzado.</li>
+<li>La mejora intradía es técnica, no estructural: el % bajo EMA20 cayó 25pp (50.5%→25.3%) y la distribución cedió 5.6pp, pero con 54.9% del universo bajo SMA50 y 47.6% bajo SMA200, el daño de mediano plazo permanece intacto.</li>
+<li>La baja dispersión sectorial (std 0.312) con solo un sector positivo señala capitulación generalizada, no rotación: el mercado cae en bloque sin refugios claros.</li>
+<li>Real Estate (Net20d -0.98, 73% distribuyendo) y Utilities (Net20d -0.87, 77% distribuyendo) lideran la debacle, sectores históricamente defensivos, lo que indica liquidación forzada no selectiva.</li>
+<li>Los 5 mejores scores (55-65) están todos marcados como NO operables; la lista de candidatos VCP está prácticamente vacía, confirmando ausencia de setups válidos.</li>
 <p><strong>SECTORES</strong></p>
-<p>Financial Services es el único sector con Net20d positivo (+0.06) y mayor ratio acumulación/distribución (32%/25%), señal de acumulación relativa que merece seguimiento estricto si el régimen mejora. El resto del universo está en distribución activa.</p>
+<p>Financial Services es el único sector con Net20d positivo (+0.06) y menor porcentaje distribuidor (25%), sugiriendo acumulación relativa marginal. El resto exhibe distribución institucional homogénea y amplia.</p>
 <p><strong>FOCO OPERATIVO</strong></p>
-<p>Monitorear si la mejora de hoy en breadth (+0.19 en Net20d, -5.6pp en distribuidores) sostiene por segunda sesión consecutiva como primera condición para reclasificación hacia DETERIORATION; sin esa confirmación, cash 100%.</p></div>
+<p>Mantener caja, monitorear si Financial Services sostiene su divergencia positiva en los próximos 2-3 sesiones como potencial indicador adelantado de estabilización, sin ejecutar posiciones hasta confirmar cambio de régimen.</p></div>
 </div>
 <!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
@@ -571,7 +570,7 @@
             <th colspan="4"  class="thg thg-acc">Accumulation / Distribution</th>
             <th colspan="4"  class="thg thg-vol">Volatility &amp; Moving Averages</th>
             <th colspan="3"  class="thg thg-perf">Volume &amp; Performance</th>
-            <th colspan="1"  class="thg thg-op"></th>
+            <th colspan="1"  class="thg thg-op">&nbsp;</th>
           </tr>
           <tr>
             <th class="lft sortable" onclick="sortBy('rank')">Rank</th>
