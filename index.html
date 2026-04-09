@@ -291,14 +291,20 @@
 
   /* ── Stock table: better header ──────────────────────────────── */
   .stbl thead tr { border-bottom: 1px solid var(--rule2); }
-  .thead-groups th { border-bottom: 1px solid rgba(255,255,255,0.04) !important; padding: 6px 6px 5px; font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; text-align: center; white-space: nowrap; }
-  .thg { border-right: 1px solid rgba(255,255,255,0.07); border-left: 1px solid rgba(255,255,255,0.07); }
-  .thg-id   { color: #8899aa; background: rgba(136,153,170,.05); border-left: none; }
-  .thg-rs   { color: #f59e0b; background: rgba(245,158,11,.08);  }
-  .thg-acc  { color: #00e5cc; background: rgba(0,229,204,.06);   }
-  .thg-vol  { color: #8899aa; background: rgba(136,153,170,.05); }
-  .thg-perf { color: #8899aa; background: rgba(136,153,170,.05); }
-  .thg-op   { background: transparent; border-right: none; }
+  .thead-groups th { padding: 6px 8px 5px; font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; text-align: left; white-space: nowrap; border-bottom: 2px solid transparent !important; }
+  .thg-id   { color: #8899aa; border-bottom-color: #8899aa !important; }
+  .thg-rs   { color: #f59e0b; border-bottom-color: #f59e0b !important; }
+  .thg-acc  { color: #00e5cc; border-bottom-color: #00e5cc !important; }
+  .thg-vol  { color: #8899aa; border-bottom-color: #8899aa !important; }
+  .thg-perf { color: #8899aa; border-bottom-color: #8899aa !important; }
+  .thg-op   { color: transparent; border-bottom-color: transparent !important; }
+  /* Group separator — left border on first col of each group */
+  .grp-sep { border-left: 1px solid rgba(255,255,255,0.12) !important; }
+  .grp-sep-rs   { border-left: 2px solid rgba(245,158,11,0.5) !important; }
+  .grp-sep-acc  { border-left: 2px solid rgba(0,229,204,0.4) !important; }
+  .grp-sep-vol  { border-left: 1px solid rgba(255,255,255,0.10) !important; }
+  .grp-sep-perf { border-left: 1px solid rgba(255,255,255,0.10) !important; }
+  .grp-sep-op   { border-left: 1px solid rgba(255,255,255,0.08) !important; }
   .stbl th { padding-bottom: 10px; }
 
   /* ── Quadrant in KPI card: fix alignment ────────────────────── */
@@ -398,16 +404,16 @@
 <div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
 <div class="card ai-commentary-card" style="margin-bottom:20px;">
   <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>SELL OFF confirmado con solo 1 de 11 sectores en territorio positivo; el entorno exige posición defensiva y preservación de capital como prioridad absoluta.</p>
+<p>SELL OFF confirmado: con solo 20.7% de acciones acumulando y 54.9% bajo SMA50, el mercado no ofrece condiciones para exposición larga; postura defensiva o caja obligatoria.</p>
 <p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>La mejora intradía es técnica, no estructural: el % bajo EMA20 cayó 25pp (50.5%→25.3%) y la distribución cedió 5.6pp, pero con 54.9% del universo bajo SMA50 y 47.6% bajo SMA200, el daño de mediano plazo permanece intacto.</li>
-<li>La baja dispersión sectorial (std 0.312) con solo un sector positivo señala capitulación generalizada, no rotación: el mercado cae en bloque sin refugios claros.</li>
-<li>Real Estate (Net20d -0.98, 73% distribuyendo) y Utilities (Net20d -0.87, 77% distribuyendo) lideran la debacle, sectores históricamente defensivos, lo que indica liquidación forzada no selectiva.</li>
-<li>Los 5 mejores scores (55-65) están todos marcados como NO operables; la lista de candidatos VCP está prácticamente vacía, confirmando ausencia de setups válidos.</li>
+<li>La mejora intradía es notable pero no estructural: el % bajo EMA20 colapsó 25.2pp y la distribución cedió 5.6pp — señales de rebote técnico, no de reversión de tendencia.</li>
+<li>La amplitud sigue rota: solo 1 sector en positivo (Financial Services, Net20d +0.06) sobre 11, con dispersión sectorial baja (0.312), indicando caída sincronizada, no rotación.</li>
+<li>Utilities y Real Estate lideran la destrucción institucional: Net20d de -0.87 y -0.98 respectivamente, con 73-77% de acciones en distribución activa — capitulación sectorial en curso.</li>
+<li>Los 5 mejores scores del universo son todos NO operables; incluso los relativos outperformers no presentan setups válidos bajo volatilidad actual (ATR mediano 3.38%).</li>
 <p><strong>SECTORES</strong></p>
-<p>Financial Services es el único sector con Net20d positivo (+0.06) y menor porcentaje distribuidor (25%), sugiriendo acumulación relativa marginal. El resto exhibe distribución institucional homogénea y amplia.</p>
+<p>La distribución institucional es prácticamente universal; Financial Services es el único sector con flujo marginalmente positivo, pero insuficiente para justificar exposición. Consumer Defensive y Real Estate muestran distribución severa pese a su perfil defensivo histórico.</p>
 <p><strong>FOCO OPERATIVO</strong></p>
-<p>Mantener caja, monitorear si Financial Services sostiene su divergencia positiva en los próximos 2-3 sesiones como potencial indicador adelantado de estabilización, sin ejecutar posiciones hasta confirmar cambio de régimen.</p></div>
+<p>Monitorear si el rebote técnico de hoy sostiene el % bajo EMA20 por debajo de 35% en las próximas 2-3 sesiones como condición mínima previa a reevaluar cualquier exposición larga.</p></div>
 </div>
 <!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
@@ -563,6 +569,27 @@
     </div>
     <div class="tbl-wrap">
       <table class="stbl">
+        <colgroup>
+          <col style="width:36px">   <!-- Rank -->
+          <col style="width:48px">   <!-- Ticker -->
+          <col style="width:160px">  <!-- Empresa -->
+          <col style="width:110px">  <!-- Sector -->
+          <col style="width:130px">  <!-- Industry -->
+          <col style="width:90px">   <!-- RS-MC -->
+          <col style="width:58px">   <!-- Grade -->
+          <col style="width:70px">   <!-- Score -->
+          <col style="width:58px">   <!-- Net 50d -->
+          <col style="width:58px">   <!-- Net 20d -->
+          <col style="width:52px">   <!-- Net 5d -->
+          <col style="width:58px">   <!-- ATR 5% -->
+          <col style="width:68px">   <!-- ATR ratio -->
+          <col style="width:68px">   <!-- EMA20% -->
+          <col style="width:68px">   <!-- SMA50% -->
+          <col style="width:68px">   <!-- Vol ratio -->
+          <col style="width:62px">   <!-- Perf 1D -->
+          <col style="width:68px">   <!-- Perf 6M -->
+          <col style="width:62px">   <!-- Operable -->
+        </colgroup>
         <thead>
           <tr class="thead-groups">
             <th colspan="5"  class="thg thg-id">Symbol Data &amp; Industry</th>
@@ -578,20 +605,20 @@
             <th class="lft">Empresa</th>
             <th class="lft">Sector</th>
             <th class="lft">Industry</th>
-            <th class="sortable" onclick="sortBy('rsmc',-1)" style="white-space:nowrap">RS-MC</th>
+            <th class="sortable grp-sep-rs" onclick="sortBy('rsmc',-1)" style="white-space:nowrap">RS-MC</th>
             <th class="sortable" onclick="sortBy('rsGrade',-1)">Grade</th>
-            <th class="sortable" onclick="sortBy('score')">Score</th>
+            <th class="sortable grp-sep-acc" onclick="sortBy('score')">Score</th>
             <th class="sortable" onclick="sortBy('net50')">Net 50d</th>
             <th class="sortable" onclick="sortBy('net20')">Net 20d</th>
             <th class="sortable" onclick="sortBy('net5')">Net 5d</th>
-            <th class="sortable" onclick="sortBy('atr5')">ATR 5%</th>
+            <th class="sortable grp-sep-vol" onclick="sortBy('atr5')">ATR 5%</th>
             <th class="sortable" onclick="sortBy('atrRatio')">ATR ratio</th>
             <th class="sortable" onclick="sortBy('ema20')">EMA20%</th>
             <th class="sortable" onclick="sortBy('sma50')">SMA50%</th>
-            <th class="sortable" onclick="sortBy('volRatio')">Vol ratio</th>
+            <th class="sortable grp-sep-perf" onclick="sortBy('volRatio')">Vol ratio</th>
             <th class="sortable" onclick="sortBy('perf1d')">Perf 1D</th>
             <th class="sortable" onclick="sortBy('perf6m')">Perf 6M</th>
-            <th>Operable</th>
+            <th class="grp-sep-op">Operable</th>
           </tr>
         </thead>
         <tbody id="stocksBody"></tbody>
@@ -847,23 +874,23 @@ function renderStocks() {
       <td class="lft"><span class="co-name" title="${s.desc}">${s.desc}</span></td>
       <td class="lft"><span class="sector-tag" title="${s.sector}">${s.sector}</span></td>
       <td class="lft"><span class="industry-tag" title="${s.industry}">${s.industry}</span></td>
-      <td><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.rsmc||0)*0.5}px;background:${rsmcColor(s.rsmc)}"></div></div><span class="rsmc-num" style="color:${rsmcColor(s.rsmc)}">${s.rsmc||'-'}</span></div></td>
+      <td style="border-left:2px solid rgba(245,158,11,0.45)"><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.rsmc||0)*0.5}px;background:${rsmcColor(s.rsmc)}"></div></div><span class="rsmc-num" style="color:${rsmcColor(s.rsmc)}">${s.rsmc||'-'}</span></div></td>
       <td><span class="grade-badge ${rsmcGradeClass(s.rsGrade)}">${s.rsGrade||'-'}</span></td>
-      <td><div class="s-bar-wrap">
+      <td style="border-left:2px solid rgba(0,229,204,0.35)"><div class="s-bar-wrap">
         <div class="s-bar"><div class="s-fill" style="width:${s.score}%;background:${sc}"></div></div>
         <span style="color:${sc};font-weight:700;min-width:20px;display:inline-block;text-align:right">${s.score}</span>
       </div></td>
       <td style="color:${nc(s.net50)};font-weight:${fw(s.net50)}">${sign(s.net50)}${s.net50}</td>
       <td style="color:${nc(s.net20)};font-weight:${fw(s.net20)}">${sign(s.net20)}${s.net20}</td>
       <td style="color:${nc(s.net5)};font-weight:${fw(s.net5)}">${sign(s.net5)}${s.net5}</td>
-      <td style="color:#8899aa">${fmt(s.atr5)}%</td>
+      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.10)">${fmt(s.atr5)}%</td>
       <td class="${ar}">${fmt(s.atrRatio,3)}</td>
       <td style="color:${nc(s.ema20)};font-weight:${fw(s.ema20)}">${sign(s.ema20)}${fmt(s.ema20)}%</td>
       <td style="color:${nc(s.sma50)};font-weight:${fw(s.sma50)}">${sign(s.sma50)}${fmt(s.sma50)}%</td>
-      <td style="color:#8899aa">${fmt(s.volRatio,1)}%</td>
+      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.10)">${fmt(s.volRatio,1)}%</td>
       <td style="color:${nc(s.perf1d)};font-weight:${fw(s.perf1d)}">${sign(s.perf1d)}${fmt(s.perf1d)}%</td>
       <td style="color:${nc(s.perf6m)};font-weight:${fw(s.perf6m)}">${sign(s.perf6m)}${fmt(s.perf6m)}%</td>
-      <td><span class="${s.operable==='YES'?'op-yes':'op-no'}">${s.operable}</span></td>
+      <td style="border-left:1px solid rgba(255,255,255,0.08)"><span class="${s.operable==='YES'?'op-yes':'op-no'}">${s.operable}</span></td>
     </tr>`;
   }).join('');
   const typeLabel = {all:'ALL', operable:'OPERABLE', volOk:'VOLAT OK', extOk:'NOT EXTENDED'}[filterMode] || 'ALL';
