@@ -300,12 +300,10 @@
   .thg-op   { color: transparent; }
   /* Línea horizontal continua bajo la fila de títulos */
   .thead-groups { border-bottom: 1px solid rgba(255,255,255,0.15) !important; }
-  /* Separadores verticales — mismos colores en header y datos */
-  .grp-sep-rs   { border-left: 2px solid rgba(245,158,11,0.45) !important; }
-  .grp-sep-acc  { border-left: 2px solid rgba(0,229,204,0.35) !important; }
-  .grp-sep-vol  { border-left: 1px solid rgba(255,255,255,0.12) !important; }
-  .grp-sep-perf { border-left: 1px solid rgba(255,255,255,0.12) !important; }
-  .grp-sep-op   { border-left: 1px solid rgba(255,255,255,0.08) !important; }
+  /* Separadores verticales — color uniforme sutil en todas las secciones */
+  .grp-sep-rs, .grp-sep-acc, .grp-sep-vol, .grp-sep-perf, .grp-sep-op {
+    border-left: 1px solid rgba(255,255,255,0.12) !important;
+  }
   .stbl th { padding-bottom: 10px; }
 
   /* ── Quadrant in KPI card: fix alignment ────────────────────── */
@@ -405,16 +403,16 @@
 <div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
 <div class="card ai-commentary-card" style="margin-bottom:20px;">
   <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>SELL OFF confirmado con solo 1 de 11 sectores en terreno positivo; el entorno exige postura defensiva estricta y cero exposición larga de convicción.</p>
+<p>SELL OFF confirmado: con solo 20.7% de acciones acumulando y M1 negativo, el entorno no soporta posiciones largas; el capital debe priorizarse en efectivo o cobertura.</p>
 <p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>La mejora intrasesional es técnica, no estructural: el % bajo EMA20 cayó 25pp hasta 25.3%, pero con 54.9% bajo SMA50 y 47.6% bajo SMA200, el daño de mediano plazo permanece intacto.</li>
-<li>Distribución amplia y homogénea: dispersión sectorial de 0.312 indica venta indiscriminada sin rotación defensiva genuina, lo cual es característico de desapalancamiento institucional.</li>
-<li>Real Estate (Net20d -0.98, 73% distribuyendo) y Utilities (Net20d -0.87, 77% distribuyendo) muestran presión inusual en sectores típicamente defensivos — señal de liquidación forzada, no reposicionamiento.</li>
-<li>Los 5 mejores scores (max 65) están marcados como NO operables; el pipeline de setups válidos es efectivamente nulo.</li>
+<li>La variación vs. sesión anterior muestra un rebote técnico relevante: el porcentaje bajo EMA20 colapsó 25.2pp en una sesión, señal de sobreextensión a la baja y posible oversold de corto plazo, no de reversión de tendencia.</li>
+<li>A pesar de la mejora intradiaria, 54.9% del Russell 1000 cotiza bajo SMA50 y 47.6% bajo SMA200 — el daño estructural es significativo y no se repara en una sesión.</li>
+<li>ATR mediano en 3.38% con solo 5.3% de acciones en compresión: el mercado está en expansión de rango bajista, no en base constructiva; el riesgo de ejecución es elevado.</li>
+<li>Los 5 mejores scores (máx. 65) tienen todos Operable: NO, confirmando que no existen setups de entrada válidos dentro del universo monitoreado.</li>
 <p><strong>SECTORES</strong></p>
-<p>Financial Services es el único sector con Net20d positivo (+0.06) y menor proporción de distribución (25%), sugiriendo acumulación marginal o simplemente menor daño relativo — insuficiente para operar largo. La distribución institucional está concentrada en Real Estate, Utilities y Consumer Defensive.</p>
+<p>Real Estate (-0.98) y Utilities (-0.87) lideran la distribución con 73% y 77% de acciones en fase vendedora respectivamente; Financial Services es el único sector con Net20d positivo (+0.06), pero con señal demasiado débil para constituir liderazgo sectorial.</p>
 <p><strong>FOCO OPERATIVO</strong></p>
-<p>Monitorear si Financial Services sostiene Net20d positivo en sesiones sucesivas como primera señal de liderazgo potencial en eventual recuperación, sin tomar posición hasta que M1 cruce sobre cero con amplitud >40% acumulando.</p></div>
+<p>Monitorear si el rebote en breadth (EMA20) tiene continuidad mañana; sin confirmación de M1 positivo y Operable en al menos un top scorer, mantener exposición neta en cero.</p></div>
 </div>
 <!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
@@ -594,10 +592,10 @@
         <thead>
           <tr class="thead-groups">
             <th colspan="5"  class="thg thg-id">Symbol Data &amp; Industry</th>
-            <th colspan="2"  class="thg thg-rs grp-sep-rs">Relative Strength Momentum</th>
-            <th colspan="4"  class="thg thg-acc grp-sep-acc">Accumulation / Distribution</th>
-            <th colspan="4"  class="thg thg-vol grp-sep-vol">Volatility &amp; Moving Averages</th>
-            <th colspan="3"  class="thg thg-perf grp-sep-perf">Volume &amp; Performance</th>
+            <th colspan="2"  class="thg thg-rs">Relative Strength Momentum</th>
+            <th colspan="4"  class="thg thg-acc">Accumulation / Distribution</th>
+            <th colspan="4"  class="thg thg-vol">Volatility &amp; Moving Averages</th>
+            <th colspan="3"  class="thg thg-perf">Volume &amp; Performance</th>
             <th colspan="1"  class="thg thg-op">&nbsp;</th>
           </tr>
           <tr>
@@ -875,23 +873,23 @@ function renderStocks() {
       <td class="lft"><span class="co-name" title="${s.desc}">${s.desc}</span></td>
       <td class="lft"><span class="sector-tag" title="${s.sector}">${s.sector}</span></td>
       <td class="lft"><span class="industry-tag" title="${s.industry}">${s.industry}</span></td>
-      <td style="border-left:2px solid rgba(245,158,11,0.45)"><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.rsmc||0)*0.5}px;background:${rsmcColor(s.rsmc)}"></div></div><span class="rsmc-num" style="color:${rsmcColor(s.rsmc)}">${s.rsmc||'-'}</span></div></td>
+      <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.rsmc||0)*0.5}px;background:${rsmcColor(s.rsmc)}"></div></div><span class="rsmc-num" style="color:${rsmcColor(s.rsmc)}">${s.rsmc||'-'}</span></div></td>
       <td><span class="grade-badge ${rsmcGradeClass(s.rsGrade)}">${s.rsGrade||'-'}</span></td>
-      <td style="border-left:2px solid rgba(0,229,204,0.35)"><div class="s-bar-wrap">
+      <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="s-bar-wrap">
         <div class="s-bar"><div class="s-fill" style="width:${s.score}%;background:${sc}"></div></div>
         <span style="color:${sc};font-weight:700;min-width:20px;display:inline-block;text-align:right">${s.score}</span>
       </div></td>
       <td style="color:${nc(s.net50)};font-weight:${fw(s.net50)}">${sign(s.net50)}${s.net50}</td>
       <td style="color:${nc(s.net20)};font-weight:${fw(s.net20)}">${sign(s.net20)}${s.net20}</td>
       <td style="color:${nc(s.net5)};font-weight:${fw(s.net5)}">${sign(s.net5)}${s.net5}</td>
-      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.10)">${fmt(s.atr5)}%</td>
+      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5)}%</td>
       <td class="${ar}">${fmt(s.atrRatio,3)}</td>
       <td style="color:${nc(s.ema20)};font-weight:${fw(s.ema20)}">${sign(s.ema20)}${fmt(s.ema20)}%</td>
       <td style="color:${nc(s.sma50)};font-weight:${fw(s.sma50)}">${sign(s.sma50)}${fmt(s.sma50)}%</td>
-      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.10)">${fmt(s.volRatio,1)}%</td>
+      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.volRatio,1)}%</td>
       <td style="color:${nc(s.perf1d)};font-weight:${fw(s.perf1d)}">${sign(s.perf1d)}${fmt(s.perf1d)}%</td>
       <td style="color:${nc(s.perf6m)};font-weight:${fw(s.perf6m)}">${sign(s.perf6m)}${fmt(s.perf6m)}%</td>
-      <td style="border-left:1px solid rgba(255,255,255,0.08)"><span class="${s.operable==='YES'?'op-yes':'op-no'}">${s.operable}</span></td>
+      <td style="border-left:1px solid rgba(255,255,255,0.12)"><span class="${s.operable==='YES'?'op-yes':'op-no'}">${s.operable}</span></td>
     </tr>`;
   }).join('');
   const typeLabel = {all:'ALL', operable:'OPERABLE', volOk:'VOLAT OK', extOk:'NOT EXTENDED'}[filterMode] || 'ALL';
