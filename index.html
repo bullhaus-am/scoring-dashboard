@@ -390,16 +390,16 @@
 <div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
 <div class="card ai-commentary-card" style="margin-bottom:20px;">
   <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>SELL OFF confirmado con solo 1 de 11 sectores en positivo; el entorno es de liquidación generalizada y la postura operativa es defensiva sin excepciones.</p>
+<p>SELL OFF confirmado con breadth severamente deteriorada: solo 20.7% de acciones en acumulación. Operativamente, exposición larga debe mantenerse en cero o mínima hasta reversión sostenida del régimen.</p>
 <p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>La mejora intradía es técnica, no estructural: el rebote en % bajo EMA20 (-25.2pp) y la reducción de distribuidores (-5.6pp) sugieren un bounce de sobreventa, no reversión de tendencia con el M1 aún en -0.38.</li>
-<li>La amplitud sigue destruida: solo 20.7% acumulando contra 44.6% distribuyendo; con 54.9% bajo SMA50 y 47.6% bajo SMA200, la base estructural está comprometida.</li>
-<li>ATR mediano 5d en 3.38% con apenas 5.3% de compresión: el mercado opera con volatilidad elevada y sin setup de breakout válido; el riesgo por posición se amplifica.</li>
-<li>Los 5 mejores scores (máx. 65) están todos marcados NO Operable, señal de que incluso los líderes relativos no ofrecen condiciones de entrada con riesgo controlado.</li>
+<li>La mejora intrasesional es técnica, no estructural: el porcentaje bajo EMA20 cayó 25pp (50.5% → 25.3%) y la distribución retrocedió 5.6pp, sugiriendo rebote de oversold, no cambio de tendencia.</li>
+<li>ATR mediano 5d en 3.38% con solo 5.3% de acciones comprimidas indica volatilidad expansiva generalizada: entorno de alta dispersión intradiaria, desfavorable para setups VCP.</li>
+<li>Los 5 stocks con mayor score están marcados como NO operables, señal de que incluso los mejores perfiles técnicos carecen de estructura de entrada válida.</li>
+<li>Real Estate (-0.98) y Utilities (-0.87) muestran distribución extrema (73% y 77% respectivamente), sectores típicamente defensivos bajo presión: inusual y bearish.</li>
 <p><strong>SECTORES</strong></p>
-<p>Financial Services es el único sector con Net20d positivo (+0.06) y menor distribución (25%), pero su señal es marginal. Real Estate (-0.98, 73% distribuyendo) y Utilities (-0.87, 77% distribuyendo) lideran la presión vendedora institucional.</p>
+<p>Financial Services es el único sector positivo (Net20d +0.06, 32% acumulando vs 25% distribuyendo), pero con señal marginal insuficiente para justificar exposición. La acumulación institucional está virtualmente ausente en todos los sectores.</p>
 <p><strong>FOCO OPERATIVO</strong></p>
-<p>Monitorear si el rebote en breadth (EMA20) tiene continuidad mañana con soporte en M1 > -0.30; sin esa confirmación, mantener exposición en cero y preservar capital.</p></div>
+<p>Monitorear si el rebote de hoy en breadth (EMA20, distribución) tiene continuidad mañana como primera condición necesaria para considerar una transición de régimen hacia CAUTION.</p></div>
 </div>
 <!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
@@ -561,7 +561,7 @@
             <th class="lft">Ticker</th>
             <th class="lft">Empresa</th>
             <th class="lft">Sector</th>
-            <th class="lft">Industry</th>
+            <th class="lft">Industry</th><th onclick="sortBy('rsmc',-1)" style="cursor:pointer">RS-MC</th><th onclick="sortBy('rsGrade',-1)" style="cursor:pointer">Grade</th>
             <th class="sortable" onclick="sortBy('score')">Score</th>
             <th class="sortable" onclick="sortBy('net50')">Net 50d</th>
             <th class="sortable" onclick="sortBy('net20')">Net 20d</th>
@@ -592,6 +592,19 @@ const SECTORS = [{"name": "Energy", "n": 37, "score": 27.3, "net20": -0.243, "pc
 const INDUSTRIES = [{"name": "Apparel Manufacturing", "n": 5, "score": 37.0, "net20": 1.4, "pct": 100.0, "distPct": 0.0, "pct5": 80.0, "dist5": 0.0, "net5": 1.2, "net50": 1.4, "pct50": 80.0, "dist50": 20.0}, {"name": "Oil & Gas E&P", "n": 16, "score": 34.1, "net20": 0.062, "pct": 31.2, "distPct": 25.0, "pct5": 0.0, "dist5": 75.0, "net5": -0.81, "net50": 3.12, "pct50": 87.5, "dist50": 6.2}, {"name": "Telecom Services", "n": 10, "score": 33.5, "net20": -0.1, "pct": 10.0, "distPct": 40.0, "pct5": 10.0, "dist5": 10.0, "net5": 0.2, "net50": 2.1, "pct50": 80.0, "dist50": 10.0}, {"name": "Medical Care Facilities", "n": 7, "score": 32.9, "net20": -0.143, "pct": 28.6, "distPct": 42.9, "pct5": 42.9, "dist5": 14.3, "net5": 0.29, "net50": 1.57, "pct50": 71.4, "dist50": 14.3}, {"name": "Trucking", "n": 5, "score": 32.0, "net20": 0.4, "pct": 40.0, "distPct": 0.0, "pct5": 80.0, "dist5": 0.0, "net5": 0.8, "net50": 0.6, "pct50": 60.0, "dist50": 40.0}, {"name": "Communication Equipment", "n": 8, "score": 31.9, "net20": 0.875, "pct": 62.5, "distPct": 0.0, "pct5": 62.5, "dist5": 0.0, "net5": 0.88, "net50": 1.0, "pct50": 62.5, "dist50": 25.0}, {"name": "Farm & Heavy Construction Machinery", "n": 6, "score": 30.8, "net20": 0.333, "pct": 33.3, "distPct": 33.3, "pct5": 33.3, "dist5": 16.7, "net5": 0.17, "net50": 1.33, "pct50": 66.7, "dist50": 16.7}, {"name": "Lodging", "n": 5, "score": 30.0, "net20": 0.6, "pct": 60.0, "distPct": 0.0, "pct5": 60.0, "dist5": 0.0, "net5": 0.6, "net50": 0.8, "pct50": 40.0, "dist50": 0.0}, {"name": "Auto & Truck Dealerships", "n": 6, "score": 29.2, "net20": 0.5, "pct": 50.0, "distPct": 33.3, "pct5": 33.3, "dist5": 0.0, "net5": 0.5, "net50": -1.0, "pct50": 33.3, "dist50": 66.7}, {"name": "Industrial Distribution", "n": 11, "score": 29.1, "net20": 0.455, "pct": 54.5, "distPct": 27.3, "pct5": 54.5, "dist5": 0.0, "net5": 0.64, "net50": 0.27, "pct50": 45.5, "dist50": 45.5}];
 const HIST = [{"d": "03-06", "atrRatio": 1.161, "netAcc": -0.44, "pctAcc": 26.1, "pctDist": 47.4, "ema20": 68.1, "perf1d": null, "volRatio": 97.0, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-09", "atrRatio": 1.182, "netAcc": -0.57, "pctAcc": 23.3, "pctDist": 50.1, "ema20": 68.9, "perf1d": null, "volRatio": 107.4, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-10", "atrRatio": 1.16, "netAcc": -0.6, "pctAcc": 22.9, "pctDist": 49.8, "ema20": 73.8, "perf1d": -0.76, "volRatio": 91.8, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-11", "atrRatio": 1.12, "netAcc": -0.65, "pctAcc": 21.3, "pctDist": 50.2, "ema20": 75.2, "perf1d": -0.45, "volRatio": 84.1, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-12", "atrRatio": 1.118, "netAcc": -0.75, "pctAcc": 21.9, "pctDist": 53.3, "ema20": 79.7, "perf1d": -1.86, "volRatio": 97.8, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-13", "atrRatio": 1.086, "netAcc": -0.6, "pctAcc": 23.4, "pctDist": 49.1, "ema20": 79.8, "perf1d": -0.05, "volRatio": 82.3, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-17", "atrRatio": 1.007, "netAcc": -0.54, "pctAcc": 22.0, "pctDist": 48.0, "ema20": 73.5, "perf1d": 0.55, "volRatio": 77.2, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-18", "atrRatio": 0.989, "netAcc": -0.66, "pctAcc": 20.5, "pctDist": 50.3, "ema20": 79.6, "perf1d": -1.38, "volRatio": 83.9, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-19", "atrRatio": 0.991, "netAcc": -0.67, "pctAcc": 19.8, "pctDist": 50.0, "ema20": 78.9, "perf1d": -0.12, "volRatio": 88.3, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-20", "atrRatio": 0.985, "netAcc": -0.99, "pctAcc": 14.8, "pctDist": 60.9, "ema20": 87.6, "perf1d": -1.4, "volRatio": 164.8, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-23", "atrRatio": 1.02, "netAcc": -0.84, "pctAcc": 17.5, "pctDist": 58.1, "ema20": 78.4, "perf1d": 1.41, "volRatio": 92.6, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-24", "atrRatio": 1.025, "netAcc": -0.88, "pctAcc": 17.3, "pctDist": 59.0, "ema20": 76.4, "perf1d": 0.22, "volRatio": 82.8, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-25", "atrRatio": 1.021, "netAcc": -0.85, "pctAcc": 17.7, "pctDist": 59.3, "ema20": 70.0, "perf1d": 0.52, "volRatio": 77.1, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-26", "atrRatio": 0.995, "netAcc": -0.93, "pctAcc": 15.1, "pctDist": 60.9, "ema20": 75.4, "perf1d": -0.55, "volRatio": 75.0, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-27", "atrRatio": 0.987, "netAcc": -0.92, "pctAcc": 13.1, "pctDist": 60.3, "ema20": 84.0, "perf1d": -1.74, "volRatio": 80.2, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-30", "atrRatio": 0.976, "netAcc": -0.95, "pctAcc": 13.1, "pctDist": 60.3, "ema20": 81.4, "perf1d": 0.11, "volRatio": 84.2, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-31", "atrRatio": 1.013, "netAcc": -0.74, "pctAcc": 15.9, "pctDist": 56.0, "ema20": 62.2, "perf1d": 2.32, "volRatio": 95.3, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "04-01", "atrRatio": 0.99, "netAcc": -0.75, "pctAcc": 14.8, "pctDist": 55.8, "ema20": 56.1, "perf1d": 0.41, "volRatio": 83.9, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-02", "atrRatio": 1.013, "netAcc": -0.68, "pctAcc": 15.8, "pctDist": 54.6, "ema20": 51.8, "perf1d": 0.35, "volRatio": 72.0, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-06", "atrRatio": 0.961, "netAcc": -0.57, "pctAcc": 17.1, "pctDist": 50.5, "ema20": 48.2, "perf1d": 0.4, "volRatio": 61.8, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-07", "atrRatio": 0.938, "netAcc": -0.57, "pctAcc": 16.5, "pctDist": 50.2, "ema20": 50.5, "perf1d": -0.19, "volRatio": 72.0, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-08", "atrRatio": 1.028, "netAcc": -0.38, "pctAcc": 20.7, "pctDist": 44.6, "ema20": 25.3, "perf1d": 2.4, "volRatio": 95.0, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}];
 const DATA_DATE_YEAR = 2026;
+<style>
+.rsmc-bar-wrap{display:flex;align-items:center;gap:5px;}
+.rsmc-bar{width:50px;height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;flex-shrink:0;}
+.rsmc-fill{height:100%;border-radius:3px;transition:width .3s;}
+.rsmc-num{font-size:12px;font-weight:700;min-width:20px;font-family:'IBM Plex Mono',monospace;}
+.grade-badge{display:inline-block;padding:1px 7px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.5px;}
+.grade-aplus{background:rgba(245,158,11,.2);color:#f59e0b;border:1px solid rgba(245,158,11,.4);}
+.grade-a{background:rgba(0,229,204,.15);color:#00e5cc;border:1px solid rgba(0,229,204,.3);}
+.grade-b{background:rgba(59,130,246,.15);color:#3b82f6;border:1px solid rgba(59,130,246,.3);}
+.grade-c{background:rgba(136,153,170,.12);color:#8899aa;border:1px solid rgba(136,153,170,.25);}
+.grade-d{background:rgba(255,77,109,.12);color:#ff4d6d;border:1px solid rgba(255,77,109,.25);}
+.grade-e{background:rgba(255,77,109,.2);color:#ff4d6d;border:1px solid rgba(255,77,109,.4);}
+</style>
 
 function breadthColor(pct) {
   // Low % above MA = bearish = red; High % = bullish = green
@@ -752,7 +765,7 @@ function sortBy(col, forceDir) {
     sortCol = col; sortDir = -1;
   }
   document.querySelectorAll('.stbl th').forEach(th => th.classList.remove('sort-asc','sort-desc'));
-  const map = {rank:0,score:5,net50:6,net20:7,net5:8,atr5:9,atrRatio:10,ema20:11,sma50:12,volRatio:13,perf1d:14,perf6m:15};
+  const map = {rank:0,score:5,net50:6,net20:7,net5:8,atr5:9,atrRatio:10,ema20:11,sma50:12,volRatio:13,perf1d:14,perf6m:15,rsmc:16,rsGrade:17};
   const idx = map[col];
   if (idx !== undefined) document.querySelectorAll('.stbl th')[idx].classList.add(sortDir===-1?'sort-desc':'sort-asc');
   renderStocks();
@@ -762,6 +775,15 @@ function fmt(v, dec) {
   if (v === null || v === undefined) return '—';
   const n = parseFloat(v);
   return isNaN(n) ? '—' : n.toFixed(dec !== undefined ? dec : 2);
+}
+
+function rsmcColor(s) {
+  if (!s || s === 0) return '#4a5568';
+  if (s >= 90) return '#f59e0b';
+  if (s >= 70) return '#00e5cc';
+  if (s >= 50) return '#3b82f6';
+  if (s >= 30) return '#8899aa';
+  return '#ff4d6d';
 }
 
 function renderStocks() {
@@ -794,6 +816,8 @@ function renderStocks() {
       <td class="lft"><span class="co-name" title="${s.desc}">${s.desc}</span></td>
       <td class="lft"><span class="sector-tag" title="${s.sector}">${s.sector}</span></td>
       <td class="lft"><span class="industry-tag" title="${s.industry}">${s.industry}</span></td>
+      <td><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.rsmc||0)*0.5}px;background:${rsmcColor(s.rsmc)}"></div></div><span class="rsmc-num" style="color:${rsmcColor(s.rsmc)}">${s.rsmc||'—'}</span></div></td>
+      <td><span class="grade-badge grade-${(s.rsGrade||'').toLowerCase().replace('+','plus')}">${s.rsGrade||'—'}</span></td>
       <td><div class="s-bar-wrap">
         <div class="s-bar"><div class="s-fill" style="width:${s.score}%;background:${sc}"></div></div>
         <span style="color:${sc};font-weight:700;min-width:20px;display:inline-block;text-align:right">${s.score}</span>
