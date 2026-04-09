@@ -291,6 +291,15 @@
 
   /* ── Stock table: better header ──────────────────────────────── */
   .stbl thead tr { border-bottom: 1px solid var(--rule2); }
+  .thead-groups th { border-bottom: none !important; padding: 5px 4px 3px; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+  .thg { border-right: 1px solid rgba(255,255,255,0.06); }
+  .thg:last-child { border-right: none; }
+  .thg-id   { color: #8899aa; background: rgba(136,153,170,.05); }
+  .thg-rs   { color: #f59e0b; background: rgba(245,158,11,.07);  }
+  .thg-acc  { color: #00e5cc; background: rgba(0,229,204,.05);   }
+  .thg-vol  { color: #8899aa; background: rgba(136,153,170,.05); }
+  .thg-perf { color: #8899aa; background: rgba(136,153,170,.05); }
+  .thg-op   { background: transparent; }
   .stbl th { padding-bottom: 10px; }
 
   /* ── Quadrant in KPI card: fix alignment ────────────────────── */
@@ -390,16 +399,16 @@
 <div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
 <div class="card ai-commentary-card" style="margin-bottom:20px;">
   <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>SELL OFF confirmado: con solo 20.7% de acciones en acumulación y 54.9% por debajo del SMA50, el mercado no ofrece condiciones para exposición larga; el capital debe estar en efectivo o coberturas.</p>
+<p>SELL OFF confirmado: con solo 20.7% de stocks acumulando y 54.9% bajo SMA50, el mercado no ofrece condiciones para nuevas posiciones largas; el capital debe mantenerse en efectivo o coberturas.</p>
 <p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>La mejora intrasesional es técnica, no estructural: el % bajo EMA20 cayó 25pp pero refleja rebote dentro de tendencia bajista, no reversión confirmada.</li>
-<li>Distribución institucional dominante: 44.6% de acciones distribuyendo vs 20.7% acumulando — ratio 2.15:1 adverso, consistente con liquidación activa.</li>
-<li>ATR mediano del 3.38% señala volatilidad elevada sin compresión (solo 5.3% comprimido), entorno hostil para entries de baja volatilidad tipo VCP.</li>
-<li>Los 5 top scores son "NO Operable" — incluso las mejores ideas relativas carecen de estructura técnica ejecutable.</li>
+<li>La mejora intradía es técnica, no estructural: el % bajo EMA20 cayó 25.2pp y los distribuidores bajaron 5.6pp, posiblemente un rebote de oversold tras capitulación puntual, no reversión de tendencia.</li>
+<li>La dispersión sectorial baja (0.312) con solo 1 sector positivo confirma liquidación sistémica, no rotación selectiva — el mercado vende indiscriminadamente.</li>
+<li>ATR mediano 5d en 3.38% con apenas 5.3% de stocks comprimidos: volatilidad alta y sin bases técnicas formadas; el universo operable es efectivamente cero (los 5 top scores marcan NO operable).</li>
+<li>Real Estate (-0.98, 73% dist.) y Utilities (-0.87, 77% dist.) muestran distribución extrema — sectores defensivos siendo liquidados sugiere margin calls y desapalancamiento forzado.</li>
 <p><strong>SECTORES</strong></p>
-<p>Financial Services es el único sector en terreno positivo (Net20d +0.06), pero con acumulación débil (32%); Real Estate y Utilities lideran la distribución con Net20d de -0.98 y -0.87 respectivamente y >70% distribuyendo — rotación defensiva fallida, venta indiscriminada.</p>
+<p>Financial Services es el único sector con Net20d positivo (+0.06) y mayor ratio acumulación/distribución (32%/25%), señal de acumulación relativa que merece seguimiento estricto si el régimen mejora. El resto del universo está en distribución activa.</p>
 <p><strong>FOCO OPERATIVO</strong></p>
-<p>Monitorear si Financial Services mantiene Net20d positivo en próximas 2-3 sesiones como potencial señal de liderazgo temprano, sin ejecutar posiciones hasta que el régimen migre a mínimo CAUTION con breadth >35% acumulando.</p></div>
+<p>Monitorear si la mejora de hoy en breadth (+0.19 en Net20d, -5.6pp en distribuidores) sostiene por segunda sesión consecutiva como primera condición para reclasificación hacia DETERIORATION; sin esa confirmación, cash 100%.</p></div>
 </div>
 <!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
@@ -556,12 +565,22 @@
     <div class="tbl-wrap">
       <table class="stbl">
         <thead>
+          <tr class="thead-groups">
+            <th colspan="5"  class="thg thg-id">Symbol Data &amp; Industry</th>
+            <th colspan="2"  class="thg thg-rs">Relative Strength Momentum</th>
+            <th colspan="4"  class="thg thg-acc">Accumulation / Distribution</th>
+            <th colspan="4"  class="thg thg-vol">Volatility &amp; Moving Averages</th>
+            <th colspan="3"  class="thg thg-perf">Volume &amp; Performance</th>
+            <th colspan="1"  class="thg thg-op"></th>
+          </tr>
           <tr>
             <th class="lft sortable" onclick="sortBy('rank')">Rank</th>
             <th class="lft">Ticker</th>
             <th class="lft">Empresa</th>
             <th class="lft">Sector</th>
             <th class="lft">Industry</th>
+            <th class="sortable" onclick="sortBy('rsmc',-1)" style="white-space:nowrap">RS-MC</th>
+            <th class="sortable" onclick="sortBy('rsGrade',-1)">Grade</th>
             <th class="sortable" onclick="sortBy('score')">Score</th>
             <th class="sortable" onclick="sortBy('net50')">Net 50d</th>
             <th class="sortable" onclick="sortBy('net20')">Net 20d</th>
@@ -577,7 +596,7 @@
           </tr>
         </thead>
         <tbody id="stocksBody"></tbody>
-        <tfoot><tr><td colspan="17" id="tblFooter"></td></tr></tfoot>
+        <tfoot><tr><td colspan="19" id="tblFooter"></td></tr></tfoot>
       </table>
     </div>
   </div>
