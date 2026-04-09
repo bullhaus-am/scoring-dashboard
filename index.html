@@ -795,10 +795,10 @@ function sortBy(col, forceDir) {
   } else {
     sortCol = col; sortDir = -1;
   }
-  document.querySelectorAll('.stbl th').forEach(th => th.classList.remove('sort-asc','sort-desc'));
+  document.querySelectorAll('.stbl thead tr:last-child th').forEach(th => th.classList.remove('sort-asc','sort-desc'));
   const map = {rank:0,rsmc:5,rsGrade:6,score:7,net50:8,net20:9,net5:10,atr5:11,atrRatio:12,ema20:13,sma50:14,volRatio:15,perf1d:16,perf6m:17};
   const idx = map[col];
-  if (idx !== undefined) document.querySelectorAll('.stbl th')[idx].classList.add(sortDir===-1?'sort-desc':'sort-asc');
+  if (idx !== undefined) document.querySelectorAll('.stbl thead tr:last-child th')[idx].classList.add(sortDir===-1?'sort-desc':'sort-asc');
   renderStocks();
 }
 
@@ -841,7 +841,13 @@ function renderStocks() {
   else if (filterSector)    data = data.filter(s => s.sector === filterSector);
 
   const total = data.length;
-  data.sort((a,b) => ((a[sortCol]??-999)-(b[sortCol]??-999))*sortDir);
+  const gradeOrder = {'A+':6,'A':5,'B':4,'C':3,'D':2,'E':1,'-':0};
+  data.sort((a,b) => {
+    if (sortCol === 'rsGrade') {
+      return ((gradeOrder[a.rsGrade]||0) - (gradeOrder[b.rsGrade]||0)) * sortDir;
+    }
+    return ((a[sortCol]??-999)-(b[sortCol]??-999))*sortDir;
+  });
 
   // Unified color helper: >0 = teal, <0 = red, =0 = grey
   const nc = v => v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
