@@ -399,22 +399,6 @@
 
   </div>
 
-  <!-- AI COMMENTARY -->
-<div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
-<div class="card ai-commentary-card" style="margin-bottom:20px;">
-  <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>SELL OFF confirmado: con solo 20.7% de acciones acumulando y M1 negativo, el entorno no soporta posiciones largas; el capital debe priorizarse en efectivo o cobertura.</p>
-<p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>La variación vs. sesión anterior muestra un rebote técnico relevante: el porcentaje bajo EMA20 colapsó 25.2pp en una sesión, señal de sobreextensión a la baja y posible oversold de corto plazo, no de reversión de tendencia.</li>
-<li>A pesar de la mejora intradiaria, 54.9% del Russell 1000 cotiza bajo SMA50 y 47.6% bajo SMA200 — el daño estructural es significativo y no se repara en una sesión.</li>
-<li>ATR mediano en 3.38% con solo 5.3% de acciones en compresión: el mercado está en expansión de rango bajista, no en base constructiva; el riesgo de ejecución es elevado.</li>
-<li>Los 5 mejores scores (máx. 65) tienen todos Operable: NO, confirmando que no existen setups de entrada válidos dentro del universo monitoreado.</li>
-<p><strong>SECTORES</strong></p>
-<p>Real Estate (-0.98) y Utilities (-0.87) lideran la distribución con 73% y 77% de acciones en fase vendedora respectivamente; Financial Services es el único sector con Net20d positivo (+0.06), pero con señal demasiado débil para constituir liderazgo sectorial.</p>
-<p><strong>FOCO OPERATIVO</strong></p>
-<p>Monitorear si el rebote en breadth (EMA20) tiene continuidad mañana; sin confirmación de M1 positivo y Operable en al menos un top scorer, mantener exposición neta en cero.</p></div>
-</div>
-<!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
   <!-- ROW 1: Breadth + ATR/NetAcc + Perf chart -->
   <div class="sec-head"><span class="sec-label">Market breadth &amp; daily activity</span><div class="sec-line"></div></div>
@@ -812,7 +796,7 @@ function sortBy(col, forceDir) {
     sortCol = col; sortDir = -1;
   }
   document.querySelectorAll('.stbl th').forEach(th => th.classList.remove('sort-asc','sort-desc'));
-  const map = {rank:0,score:5,net50:6,net20:7,net5:8,atr5:9,atrRatio:10,ema20:11,sma50:12,volRatio:13,perf1d:14,perf6m:15,rsmc:16,rsGrade:17};
+  const map = {rank:0,rsmc:5,rsGrade:6,score:7,net50:8,net20:9,net5:10,atr5:11,atrRatio:12,ema20:13,sma50:14,volRatio:15,perf1d:16,perf6m:17};
   const idx = map[col];
   if (idx !== undefined) document.querySelectorAll('.stbl th')[idx].classList.add(sortDir===-1?'sort-desc':'sort-asc');
   renderStocks();
