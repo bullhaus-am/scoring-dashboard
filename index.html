@@ -204,7 +204,14 @@
   .fbtn { font-size: 10px; padding: 4px 11px; border-radius: 4px; border: 1px solid var(--rule2); background: transparent; color: var(--smoke); cursor: pointer; font-family: var(--font); transition: all 0.12s; letter-spacing: 0.5px; }
   .fbtn:hover { border-color: var(--teal); color: var(--teal); }
   .fbtn.active { background: var(--teal2); color: var(--teal); border-color: rgba(0,229,204,.4); }
-  .fselect { font-size: 10px; padding: 4px 26px 4px 9px; border-radius: 4px; border: 1px solid var(--rule2); background-color: var(--bg); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%238899aa'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; color: var(--smoke); cursor: pointer; font-family: var(--font); transition: all 0.12s; letter-spacing: 0.5px; appearance: none; -webkit-appearance: none; }
+  .fselect-grade option[value="A+"] { color: #f59e0b; }
+  .fselect-grade option[value="A"]  { color: #00e5cc; }
+  .fselect-grade option[value="B"]  { color: #3b82f6; }
+  .fselect-grade option[value="C"]  { color: #8899aa; }
+  .fselect-grade option[value="D"]  { color: #ff4d6d; }
+  .fselect-grade option[value="E"]  { color: #ff4d6d; }
+  .fselect-grade.active { border-color: rgba(245,158,11,.5); color: #f59e0b; }
+    .fselect { font-size: 10px; padding: 4px 26px 4px 9px; border-radius: 4px; border: 1px solid var(--rule2); background-color: var(--bg); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%238899aa'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; color: var(--smoke); cursor: pointer; font-family: var(--font); transition: all 0.12s; letter-spacing: 0.5px; appearance: none; -webkit-appearance: none; }
   .fselect:focus { outline: none; border-color: var(--teal); color: var(--teal); }
   .fselect.active { background-color: var(--teal2); color: var(--teal); border-color: rgba(0,229,204,.4); }
   .fselect option { background: #0f1923; color: var(--white); }
@@ -311,12 +318,7 @@
   #q-defensive, #q-healthy, #q-selloff, #q-rally { transition: opacity 0.2s; }
 
   /* ── Stock table column group separators ────────────────────── */
-  .stbl td:nth-child(6),
-  .stbl th:nth-child(6) { border-left: 1px solid var(--rule2); padding-left: 12px; }
-  .stbl td:nth-child(10),
-  .stbl th:nth-child(10) { border-left: 1px solid var(--rule2); padding-left: 12px; }
-  .stbl td:nth-child(14),
-  .stbl th:nth-child(14) { border-left: 1px solid var(--rule2); padding-left: 12px; }
+  /* Group separators handled via .grp-sep-* classes on specific th/td elements */
 
   /* ── Card hover lift (refined) ─────────────────────────────── */
   .card { transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s; }
@@ -542,6 +544,15 @@
         <button class="fbtn" onclick="setFilter('operable',this)">Operable</button>
         <button class="fbtn" onclick="setFilter('volOk',this)">Volat OK</button>
         <button class="fbtn" onclick="setFilter('extOk',this)">Not Extended</button>
+        <select class="fselect fselect-grade" id="gradeDropdown" onchange="setFilterGrade(this)">
+          <option value="">Grade</option>
+          <option value="A+">A+</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+          <option value="E">E</option>
+        </select>
         <select class="fselect" id="sectorDropdown" onchange="setFilterSector(this)">
           <option value="">Sector</option>
         </select>
@@ -712,7 +723,7 @@ function renderIndustries() {
 
 // ── Stock table ───────────────────────────────────────────────────────────────
 let sortCol = 'rank', sortDir = 1, filterMode = 'all';
-let filterSector = '', filterIndustry = '', filterTicker = '';
+let filterSector = '', filterIndustry = '', filterTicker = '', filterGrade = '';
 
 // Populate dropdowns from ALL_STOCKS data
 function initDropdowns() {
@@ -787,6 +798,12 @@ function setFilterTicker(input) {
   renderStocks();
 }
 
+function setFilterGrade(sel) {
+  filterGrade = sel.value;
+  sel.classList.toggle('active', !!filterGrade);
+  renderStocks();
+}
+
 function sortBy(col, forceDir) {
   if (forceDir !== undefined) {
     sortCol = col; sortDir = forceDir;
@@ -835,7 +852,10 @@ function renderStocks() {
   else if (filterMode === 'volOk')     data = data.filter(s => s.volOk === 'YES');
   else if (filterMode === 'extOk')     data = data.filter(s => s.extOk === 'YES');
 
-  // 2) Scope filter (dropdowns / ticker) - combines with type
+  // 2) Grade filter — independent, combines with all others
+  if (filterGrade) data = data.filter(s => s.rsGrade === filterGrade);
+
+  // 3) Scope filter (dropdowns / ticker) - combines with type and grade
   if      (filterTicker)    data = data.filter(s => s.sym.toUpperCase().includes(filterTicker));
   else if (filterIndustry)  data = data.filter(s => s.industry === filterIndustry);
   else if (filterSector)    data = data.filter(s => s.sector === filterSector);
@@ -883,8 +903,10 @@ function renderStocks() {
     </tr>`;
   }).join('');
   const typeLabel = {all:'ALL', operable:'OPERABLE', volOk:'VOLAT OK', extOk:'NOT EXTENDED'}[filterMode] || 'ALL';
+  const gradeLabel = filterGrade ? `GRADE: ${filterGrade}` : '';
   const scopeLabel = filterTicker ? `TICKER: ${filterTicker}` : filterIndustry ? `INDUSTRY: ${filterIndustry}` : filterSector ? `SECTOR: ${filterSector}` : '';
-  const filterDesc = scopeLabel ? `${typeLabel} · ${scopeLabel}` : typeLabel;
+  const parts = [typeLabel, gradeLabel, scopeLabel].filter(Boolean);
+  const filterDesc = parts.join(' · ');
   document.getElementById('tblFooter').textContent =
     `SHOWING ${Math.min(50, total)} OF ${total} STOCKS  ·  ${filterDesc}  ·  SORTED BY ${sortCol.toUpperCase()} ${sortDir===-1?'↓':'↑'}`;
 }
