@@ -318,6 +318,23 @@
   #q-defensive, #q-healthy, #q-selloff, #q-rally { transition: opacity 0.2s; }
 
   /* ── Stock table column group separators ────────────────────── */
+  /* ── Watchlist / Favorites ─────────────────────────────────────────────── */
+  .fav-th { width:32px; text-align:center; padding:4px 0; }
+  .fav-star { background:none; border:none; cursor:pointer; font-size:14px; color:rgba(255,255,255,0.2); padding:0; line-height:1; transition:color .15s, transform .1s; }
+  .fav-star:hover { color:#f59e0b; transform:scale(1.2); }
+  .fav-star.active { color:#f59e0b; }
+  .watchlist-section { margin-bottom:0; }
+  .watchlist-header { display:flex; align-items:center; gap:8px; padding:8px 12px 6px; background:rgba(245,158,11,0.06); border-bottom:1px solid rgba(245,158,11,0.2); cursor:pointer; user-select:none; }
+  .watchlist-header-label { font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#f59e0b; font-family:var(--font-sans); }
+  .watchlist-header-count { font-size:9px; color:rgba(245,158,11,0.6); font-family:var(--font-sans); }
+  .watchlist-header-chevron { font-size:10px; color:rgba(245,158,11,0.5); margin-left:auto; transition:transform .2s; }
+  .watchlist-header-chevron.collapsed { transform:rotate(-90deg); }
+  .watchlist-divider { height:1px; background:rgba(255,255,255,0.06); margin:0; }
+  .watchlist-empty { padding:10px 12px; font-size:10px; color:var(--mist); font-family:var(--font-sans); font-style:italic; }
+  #watchlistRows tr td:first-child, #stocksBody tr td:first-child { text-align:center; padding:4px 0; }
+
+  /* ── Watchlist section above tbody ──────────────────────────────────────── */
+
   /* Group separators handled via .grp-sep-* classes on specific th/td elements */
 
   /* ── Card hover lift (refined) ─────────────────────────────── */
@@ -405,16 +422,16 @@
 <div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
 <div class="card ai-commentary-card" style="margin-bottom:20px;">
   <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>SELL OFF confirmado con solo 1 de 11 sectores en territorio positivo; el mercado no es operable en largo bajo ningún criterio Minervini/O'Neil hasta reconfirmación de régimen.</p>
+<p>SELL OFF confirmado con solo 1 de 11 sectores en territorio positivo; el entorno NO-GO exige posición defensiva máxima y ausencia de nuevas entradas largas.</p>
 <p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>La mejora intradía es notable pero no estructural: el % bajo EMA20 colapsó 25.2pp a 25.3% y los distribuyendo cayeron 5.6pp, sugiriendo un rebote técnico violento desde sobreventa extrema, no reversión de tendencia.</li>
-<li>Breadth sigue destruida: solo 20.7% de acciones acumulan vs 44.6% distribuyendo; 54.9% cotiza bajo SMA50, confirmando daño técnico de mediano plazo.</li>
-<li>ATR mediano 5d en 3.39% con solo 5.1% de acciones en compresión indica volatilidad expansiva activa — el mercado sigue en modo "daño", no construcción de bases.</li>
-<li>Los 5 stocks con mayor score son todos NO OPERABLES; acumulación en Net50d positiva pero insuficiente para calificar como setup válido en este régimen.</li>
+<li>La mejora intradía es estadísticamente significativa: el porcentaje bajo EMA20 colapsó 25.2pp en una sesión, señal de rebote técnico de corto plazo, no de reversión de tendencia.</li>
+<li>La distribución sigue dominando estructuralmente: 44.6% de stocks distribuyendo vs. solo 20.7% acumulando; el ratio es 2.1:1 en favor de vendedores.</li>
+<li>ATR mediano 5d en 3.39% con solo 5.1% de compresión confirma volatilidad activa y spread de oferta/demanda elevado — entorno hostil para stops precisos.</li>
+<li>Los top 5 por score (máx. 65) tienen todos Operable: NO; incluso los nombres con mejor acumulación relativa no reúnen condiciones de entrada.</li>
 <p><strong>SECTORES</strong></p>
-<p>Distribución institucional más agresiva concentrada en Real Estate (-0.98, 73% dist), Utilities (-0.87, 77% dist) y Consumer Defensive (-0.79) — sectores defensivos siendo vendidos activamente, señal de liquidación forzada, no rotación selectiva. Financial Services es el único sector en verde (+0.06) con la distribución más contenida (25%).</p>
+<p>Financial Services es el único sector con Net20d positivo (+0.06) y mejor ratio Acc/Dist (32%/25%); Real Estate y Utilities lideran la distribución con Net20d -0.98 y -0.87 respectivamente, con >70% de sus stocks distribuyendo activamente.</p>
 <p><strong>FOCO OPERATIVO</strong></p>
-<p>Monitorear si Financial Services sostiene acumulación neta y si el rebote de EMA20 se confirma en volumen institucional mañana antes de considerar cualquier reducción del sesgo bajista.</p></div>
+<p>Monitorear si la contracción del porcentaje bajo EMA20 sostiene continuidad mañana — si no se consolida, el rebote fue un evento de un día y el deterioro estructural retoma dominancia.</p></div>
 </div>
 <!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
@@ -580,6 +597,7 @@
     <div class="tbl-wrap">
       <table class="stbl">
         <colgroup>
+          <col style="width:32px">   <!-- Fav -->
           <col style="width:36px">   <!-- Rank -->
           <col style="width:48px">   <!-- Ticker -->
           <col style="width:160px">  <!-- Empresa -->
@@ -603,7 +621,7 @@
         </colgroup>
         <thead>
           <tr class="thead-groups">
-            <th colspan="5"  class="thg thg-id">Symbol Data &amp; Industry</th>
+            <th colspan="6"  class="thg thg-id">Symbol Data &amp; Industry</th>
             <th colspan="2"  class="thg thg-rs">Relative Strength Momentum</th>
             <th colspan="5"  class="thg thg-acc">Accumulation / Distribution</th>
             <th colspan="4"  class="thg thg-vol">Volatility &amp; Moving Averages</th>
@@ -611,6 +629,7 @@
             <th colspan="1"  class="thg thg-op">&nbsp;</th>
           </tr>
           <tr>
+            <th class="fav-th" title="Watchlist"></th>
             <th class="lft sortable" onclick="sortBy('rank')">Rank</th>
             <th class="lft">Ticker</th>
             <th class="lft">Empresa</th>
@@ -633,8 +652,27 @@
             <th class="grp-sep-op">Operable</th>
           </tr>
         </thead>
+        <tbody id="watchlistSection">
+          <tr id="watchlistHeaderRow" onclick="toggleWatchlist()">
+            <td colspan="21" class="watchlist-header" style="padding:0">
+              <div class="watchlist-header" style="margin:0">
+                <span style="font-size:13px;color:#f59e0b;">★</span>
+                <span class="watchlist-header-label">Watchlist</span>
+                <span class="watchlist-header-count" id="watchlistCount"></span>
+                <span class="watchlist-header-chevron" id="watchlistChevron">▾</span>
+              </div>
+            </td>
+          </tr>
+          <tr id="watchlistEmptyRow" style="display:none">
+            <td colspan="21" class="watchlist-empty">No hay tickers en watchlist — hacé click en ★ para agregar</td>
+          </tr>
+        </tbody>
+        <tbody id="watchlistRows"></tbody>
+        <tbody id="watchlistDivider" style="display:none">
+          <tr><td colspan="21" class="watchlist-divider" style="padding:0;height:1px;background:rgba(255,255,255,0.08)"></td></tr>
+        </tbody>
         <tbody id="stocksBody"></tbody>
-        <tfoot><tr><td colspan="20" id="tblFooter"></td></tr></tfoot>
+        <tfoot><tr><td colspan="21" id="tblFooter"></td></tr></tfoot>
       </table>
     </div>
   </div>
@@ -831,7 +869,7 @@ function sortBy(col, forceDir) {
     sortCol = col; sortDir = -1;
   }
   document.querySelectorAll('.stbl thead tr:last-child th').forEach(th => th.classList.remove('sort-asc','sort-desc'));
-  const map = {rank:0,rsmc:5,rsGrade:6,score:7,net50:8,net20:9,net5:10,netClose:11,atr5:12,atrRatio:13,ema20:14,sma50:15,volRatio:16,perf1d:17,perf6m:18};
+  const map = {rank:1,rsmc:6,rsGrade:7,score:8,net50:9,net20:10,net5:11,netClose:12,atr5:13,atrRatio:14,ema20:15,sma50:16,volRatio:17,perf1d:18,perf6m:19};
   const idx = map[col];
   if (idx !== undefined) document.querySelectorAll('.stbl thead tr:last-child th')[idx].classList.add(sortDir===-1?'sort-desc':'sort-asc');
   renderStocks();
@@ -841,6 +879,100 @@ function fmt(v, dec) {
   if (v === null || v === undefined) return '-';
   const n = parseFloat(v);
   return isNaN(n) ? '-' : n.toFixed(dec !== undefined ? dec : 2);
+}
+
+// ── Watchlist (localStorage) ──────────────────────────────────────────────────
+const WL_KEY = 'bullhaus_watchlist';
+
+function getWatchlist() {
+  try { return JSON.parse(localStorage.getItem(WL_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+function saveWatchlist(arr) {
+  try { localStorage.setItem(WL_KEY, JSON.stringify(arr)); } catch(e) {}
+}
+function isFav(sym) { return getWatchlist().includes(sym); }
+
+function toggleFav(sym, btn) {
+  let wl = getWatchlist();
+  if (wl.includes(sym)) {
+    wl = wl.filter(s => s !== sym);
+    btn.classList.remove('active');
+  } else {
+    wl.push(sym);
+    btn.classList.add('active');
+  }
+  saveWatchlist(wl);
+  renderWatchlist();
+}
+
+let watchlistOpen = true;
+function toggleWatchlist() {
+  watchlistOpen = !watchlistOpen;
+  document.getElementById('watchlistRows').style.display = watchlistOpen ? '' : 'none';
+  document.getElementById('watchlistDivider').style.display = watchlistOpen ? '' : 'none';
+  const chev = document.getElementById('watchlistChevron');
+  if (chev) chev.classList.toggle('collapsed', !watchlistOpen);
+}
+
+function buildRow(s) {
+  const ar = s.atrRatio < 1.0 ? 'col-teal' : (s.atrRatio > 1.3 ? 'col-red' : '');
+  const sc = scoreColor(s.score);
+  const nc = v => v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
+  const fw = v => v !== 0 ? '700' : '400';
+  const sign = v => v > 0 ? '+' : '';
+  return `<tr>
+      <td><button class="fav-star active" onclick="toggleFav('${s.sym}',this)" title="Quitar de watchlist">★</button></td>
+      <td style="color:#4a5568">${s.rank}</td>
+      <td class="lft"><span class="sym">${s.sym}</span></td>
+      <td class="lft"><span class="co-name" title="${s.desc}">${s.desc}</span></td>
+      <td class="lft"><span class="sector-tag" title="${s.sector}">${s.sector}</span></td>
+      <td class="lft"><span class="industry-tag" title="${s.industry}">${s.industry}</span></td>
+      <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.rsmc||0)*0.5}px;background:${rsmcColor(s.rsmc)}"></div></div><span class="rsmc-num" style="color:${rsmcColor(s.rsmc)}">${s.rsmc||'-'}</span></div></td>
+      <td><span class="grade-badge ${rsmcGradeClass(s.rsGrade)}">${s.rsGrade||'-'}</span></td>
+      <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="s-bar-wrap">
+        <div class="s-bar"><div class="s-fill" style="width:${s.score}%;background:${sc}"></div></div>
+        <span style="color:${sc};font-weight:700;min-width:20px;display:inline-block;text-align:right">${s.score}</span>
+      </div></td>
+      <td style="color:${nc(s.net50)};font-weight:${fw(s.net50)}">${sign(s.net50)}${s.net50}</td>
+      <td style="color:${nc(s.net20)};font-weight:${fw(s.net20)}">${sign(s.net20)}${s.net20}</td>
+      <td style="color:${nc(s.net5)};font-weight:${fw(s.net5)}">${sign(s.net5)}${s.net5}</td>
+      <td style="color:${nc(s.netClose)};font-weight:${fw(s.netClose)}">${sign(s.netClose)}${s.netClose??0}</td>
+      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5)}%</td>
+      <td class="${ar}">${fmt(s.atrRatio,3)}</td>
+      <td style="color:${nc(s.ema20)};font-weight:${fw(s.ema20)}">${sign(s.ema20)}${fmt(s.ema20)}%</td>
+      <td style="color:${nc(s.sma50)};font-weight:${fw(s.sma50)}">${sign(s.sma50)}${fmt(s.sma50)}%</td>
+      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.volRatio,1)}%</td>
+      <td style="color:${nc(s.perf1d)};font-weight:${fw(s.perf1d)}">${sign(s.perf1d)}${fmt(s.perf1d)}%</td>
+      <td style="color:${nc(s.perf6m)};font-weight:${fw(s.perf6m)}">${sign(s.perf6m)}${fmt(s.perf6m)}%</td>
+      <td style="border-left:1px solid rgba(255,255,255,0.08)"><span class="${s.operable==='YES'?'op-yes':'op-no'}">${s.operable}</span></td>
+    </tr>`;
+}
+
+function renderWatchlist() {
+  const wl = getWatchlist();
+  const wlRows = document.getElementById('watchlistRows');
+  const wlEmpty = document.getElementById('watchlistEmptyRow');
+  const wlDivider = document.getElementById('watchlistDivider');
+  const wlCount = document.getElementById('watchlistCount');
+  const wlSection = document.getElementById('watchlistSection');
+
+  if (!wlRows) return;
+
+  if (wl.length === 0) {
+    wlRows.innerHTML = '';
+    if (wlEmpty) wlEmpty.style.display = '';
+    if (wlDivider) wlDivider.style.display = 'none';
+    if (wlCount) wlCount.textContent = '';
+    if (wlSection) wlSection.style.display = '';
+  } else {
+    if (wlEmpty) wlEmpty.style.display = 'none';
+    if (wlCount) wlCount.textContent = `(${wl.length})`;
+    const favStocks = wl.map(sym => ALL_STOCKS.find(s => s.sym === sym)).filter(Boolean);
+    wlRows.innerHTML = favStocks.map(s => buildRow(s)).join('');
+    if (wlDivider) wlDivider.style.display = watchlistOpen ? '' : 'none';
+    if (wlSection) wlSection.style.display = '';
+  }
 }
 
 function rsmcGradeClass(g) {
@@ -896,6 +1028,7 @@ function renderStocks() {
     const ar = s.atrRatio < 1.0 ? 'col-teal' : (s.atrRatio > 1.3 ? 'col-red' : '');
     const sc = scoreColor(s.score);
     return `<tr>
+      <td><button class="fav-star ${isFav(s.sym)?'active':''}" onclick="toggleFav('${s.sym}',this)" title="Agregar a watchlist">★</button></td>
       <td style="color:#4a5568">${s.rank}</td>
       <td class="lft"><span class="sym">${s.sym}</span></td>
       <td class="lft"><span class="co-name" title="${s.desc}">${s.desc}</span></td>
@@ -1026,6 +1159,7 @@ function initCharts() {
 renderSectors();
 renderIndustries();
 initDropdowns();
+renderWatchlist();
 sortBy('rank', 1);
 
 // ── Dynamic KPI card accents based on actual M1/M2 pass/fail ──────────────
