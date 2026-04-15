@@ -1208,54 +1208,97 @@ function initCharts() {
   });
 }
 
-// ── RS Grade Performance Table ────────────────────────────────────────────────
+// ── RS Grade Performance Table — Multi-Day ────────────────────────────────────
 function renderRsGradePerf() {
   const el = document.getElementById('rsGradePerfTable');
-  if (!el || !RS_GRADE_PERF || RS_GRADE_PERF.length === 0) {
-    if (el) el.innerHTML = '<div style="color:var(--mist);font-size:10px;padding:8px 0;">Sin datos del día anterior</div>';
+  if (!el) return;
+
+  // RS_GRADE_PERF_MULTI: [{date, label, rows:[{grade,n,med_perf,net_acc1d,sum_acc,sum_dist}]}]
+  // Fallback a RS_GRADE_PERF legacy (formato flat, un solo día)
+  let data = (typeof RS_GRADE_PERF_MULTI !== 'undefined' && RS_GRADE_PERF_MULTI && RS_GRADE_PERF_MULTI.length)
+    ? RS_GRADE_PERF_MULTI
+    : (typeof RS_GRADE_PERF !== 'undefined' && RS_GRADE_PERF && RS_GRADE_PERF.length)
+      ? [{ date: '', label: 'T', rows: RS_GRADE_PERF }]
+      : [];
+
+  if (!data.length) {
+    el.innerHTML = '<div style="color:var(--mist);font-size:10px;padding:8px 0;">Sin datos del día anterior</div>';
     return;
   }
 
-  const gradeColors = {
-    'A/A+': '#f59e0b',
-    'B':    '#00e5cc',
-    'C':    '#8899aa',
-    'D':    '#ff4d6d',
-    'E':    '#ff4d6d',
+  const gradeColors = { 'A/A+': '#f59e0b', 'B': '#00e5cc', 'C': '#8899aa', 'D': '#ff4d6d', 'E': '#ff4d6d' };
+  const grades      = ['A/A+', 'B', 'C', 'D', 'E'];
+  const nc          = v => (v === null || v === undefined) ? '#8899aa' : v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
+  const fmtP        = v => (v === null || v === undefined) ? '<span style="color:var(--mist)">—</span>' : `<span style="color:${nc(v)}">${v >= 0 ? '+' : ''}${v.toFixed(2)}%</span>`;
+  const fmtN        = (v, acc, dist) => {
+    if (v === null || v === undefined) return '<span style="color:var(--mist)">—</span>';
+    const adStr = (acc !== null && acc !== undefined && dist !== null && dist !== undefined)
+      ? ` <span style="font-size:8.5px;color:var(--mist);">(<span style="color:#4dd9be">${acc}</span>/<span style="color:#ff8fa3">${dist}</span>)</span>`
+      : '';
+    return `<span style="color:${nc(v)}">${v >= 0 ? '+' : ''}${v}</span>${adStr}`;
   };
+  const fmtDate = s => { try { const d = new Date(s + 'T12:00:00'); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); } catch(e){ return s ? s.slice(5) : ''; } };
+  const opacities   = [1, 0.88, 0.72];
+  const dateClasses = ['today', 't1', 't2'];
+  const todayColor  = '#00e5cc';
 
-  const nc = v => v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
-  const sign = v => v > 0 ? '+' : '';
-  const fmt1 = v => v === null || v === undefined ? '—' : (v > 0 ? '+' : '') + v.toFixed(2);
-  const fmtI = v => v === null || v === undefined ? '—' : (v > 0 ? '+' : '') + v;
-
-  // Header
-  let html = `
-  <div style="display:grid;grid-template-columns:52px 32px 72px 60px 40px 40px;gap:0;margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid var(--rule2);">
-    <div style="font-size:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mist);font-family:var(--font-sans);">Grade</div>
-    <div style="font-size:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mist);font-family:var(--font-sans);text-align:right;">N</div>
-    <div style="font-size:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mist);font-family:var(--font-sans);text-align:right;">Perf 1D</div>
-    <div style="font-size:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mist);font-family:var(--font-sans);text-align:right;">Net Acc</div>
-    <div style="font-size:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mist);font-family:var(--font-sans);text-align:right;">Acc</div>
-    <div style="font-size:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--mist);font-family:var(--font-sans);text-align:right;">Dist</div>
-  </div>`;
-
-  // Rows
-  RS_GRADE_PERF.forEach((row, i) => {
-    const gc   = gradeColors[row.grade] || '#8899aa';
-    const bg   = i % 2 === 1 ? 'background:rgba(255,255,255,0.02);' : '';
-    const perf = row.med_perf;
-    const net  = row.net_acc1d;
-    html += `
-  <div style="display:grid;grid-template-columns:52px 32px 72px 60px 40px 40px;gap:0;padding:7px 0;border-bottom:1px solid var(--rule);${bg}align-items:center;">
-    <div style="font-size:13px;font-weight:700;color:${gc};font-family:var(--font);">${row.grade}</div>
-    <div style="font-size:11px;color:var(--mist);text-align:right;font-family:var(--font);">${row.n}</div>
-    <div style="font-size:13px;font-weight:700;color:${nc(perf)};text-align:right;font-family:var(--font);">${fmt1(perf)}%</div>
-    <div style="font-size:13px;font-weight:700;color:${nc(net)};text-align:right;font-family:var(--font);">${fmtI(net)}</div>
-    <div style="font-size:11px;color:var(--teal);text-align:right;font-family:var(--font);">${row.sum_acc ?? '—'}</div>
-    <div style="font-size:11px;color:var(--red);text-align:right;font-family:var(--font);">${row.sum_dist ?? '—'}</div>
-  </div>`;
+  // Header row
+  let html = `<table style="width:100%;border-collapse:separate;border-spacing:0;font-family:var(--font);">`;
+  html += `<thead><tr><th style="width:52px;border-right:1px solid rgba(255,255,255,0.06);"></th>`;
+  data.forEach((day, i) => {
+    const isToday = day.label === 'T';
+    const lbl     = isToday ? 'T &nbsp;<span style="font-size:7.5px;opacity:0.7">(hoy)</span>' : day.label;
+    const date    = day.date ? fmtDate(day.date) : '';
+    const col     = isToday ? todayColor : 'var(--mist)';
+    const bdrCol  = isToday ? todayColor : i === 1 ? 'rgba(136,151,170,0.7)' : 'rgba(136,151,170,0.5)';
+    const bdrW    = isToday ? '2px' : '1.5px';
+    const op      = opacities[i] || 0.5;
+    html += `<th style="padding:0 6px 7px 10px;text-align:left;border-bottom:${bdrW} solid ${bdrCol};opacity:${op};">
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:${col};">${lbl}</div>
+      ${date ? `<div style="font-size:8.5px;color:var(--mist);margin-top:1px;">${date}</div>` : ''}
+    </th>`;
   });
+  html += `</tr></thead><tbody>`;
+
+  grades.forEach((grade, gi) => {
+    const gc  = gradeColors[grade] || '#8899aa';
+    const bg  = gi % 2 === 1 ? 'background:rgba(255,255,255,0.018);' : '';
+    const bdr = gi < grades.length - 1 ? 'border-bottom:1px solid var(--rule);' : '';
+    html += `<tr style="${bg}${bdr}">`;
+    html += `<td style="padding:9px 10px;vertical-align:middle;border-right:1px solid rgba(255,255,255,0.06);">
+      <span style="font-size:13px;font-weight:700;color:${gc};">${grade}</span></td>`;
+
+    data.forEach((day, di) => {
+      const row = (day.rows || []).find(r => r.grade === grade);
+      const op  = opacities[di] !== undefined ? opacities[di] : 0.5;
+      const sep = di < data.length - 1 ? 'border-right:1px solid rgba(255,255,255,0.04);' : '';
+      html += `<td style="padding:8px 8px 8px 10px;vertical-align:middle;opacity:${op};${sep}">`;
+      if (!row || row.n === 0) {
+        html += `<span style="color:var(--mist);font-size:9.5px;">—</span>`;
+      } else {
+        html += `<div style="display:flex;flex-direction:column;gap:2px;">
+          <div style="display:flex;align-items:baseline;gap:5px;">
+            <span style="font-size:8px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--mist);width:42px;flex-shrink:0;">Perf 1D</span>
+            <span style="font-size:12px;font-weight:700;">${fmtP(row.med_perf)}</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:5px;">
+            <span style="font-size:8px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--mist);width:42px;flex-shrink:0;">Net Acc</span>
+            <span style="font-size:12px;font-weight:700;">${fmtN(row.net_acc1d, row.sum_acc, row.sum_dist)}</span>
+          </div>
+        </div>`;
+      }
+      html += `</td>`;
+    });
+    html += `</tr>`;
+  });
+
+  html += `</tbody></table>`;
+  html += `<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.06);">
+    <div style="font-size:8px;color:var(--mist);display:flex;align-items:center;gap:4px;">
+      <span style="width:5px;height:5px;border-radius:50%;background:#00e5cc;display:inline-block;"></span>Perf 1D: mediana del grupo</div>
+    <div style="font-size:8px;color:var(--mist);display:flex;align-items:center;gap:4px;">
+      <span style="width:5px;height:5px;border-radius:50%;background:#3b82f6;display:inline-block;"></span>Net Acc = Acc − Dist &nbsp;·&nbsp; entre paréntesis: Acc / Dist individuales</div>
+  </div>`;
 
   el.innerHTML = html;
 }
