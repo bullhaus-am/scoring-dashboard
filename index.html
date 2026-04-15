@@ -423,10 +423,10 @@
   <!-- BREADTH_SECTION_START -->
   <!-- ROW 1: Breadth + ATR/NetAcc + Perf chart -->
   <div class="sec-head"><span class="sec-label">Market breadth &amp; daily activity</span><div class="sec-line"></div></div>
-  <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) minmax(0,1.5fr);gap:12px;margin-bottom:20px;align-items:start;">
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) minmax(0,1.5fr);gap:12px;margin-bottom:20px;align-items:stretch;">
 
     <!-- CARD 1: Breadth + Quadrant + RS Grade Perf -->
-    <div class="card">
+    <div class="card" style="display:flex;flex-direction:column;">
       <!-- Sector Rotation Quadrant -->
       <div class="card-tag" style="margin-bottom:8px;">Sector Rotation Quadrant</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;margin-bottom:14px;">
@@ -467,24 +467,24 @@
         </div>
       </div>
       <!-- RS Grade Performance -->
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);">
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);flex:1;">
         <div class="card-tag" style="margin-bottom:8px;">RS Grade — Perf &amp; Acc/Dist · Últimas 3 sesiones</div>
         <div id="rsGradePerfTable" style="width:100%"></div>
       </div>
     </div>
 
     <!-- CARD 2: ATR + Net Acc -->
-    <div class="card">
+    <div class="card" style="display:flex;flex-direction:column;">
       <div class="card-tag">ATR ratio trend</div>
-      <div style="position:relative;height:220px;margin-bottom:14px;"><canvas id="atrChart"></canvas></div>
-      <div style="padding-top:12px;border-top:1px solid var(--rule);">
+      <div style="position:relative;flex:1;min-height:180px;margin-bottom:14px;"><canvas id="atrChart"></canvas></div>
+      <div style="padding-top:12px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
         <div class="card-tag" style="margin-bottom:8px;">Net accumulation 20d trend</div>
-        <div style="position:relative;height:200px;"><canvas id="accChart"></canvas></div>
+        <div style="position:relative;flex:1;min-height:160px;"><canvas id="accChart"></canvas></div>
       </div>
     </div>
 
     <!-- CARD 3: Daily Perf & Volume + Quadrant -->
-    <div class="card">
+    <div class="card" style="display:flex;flex-direction:column;">
       <div class="card-tag">% stocks above key moving averages</div>
       <div class="br-row">
         <div class="br-meta">
@@ -509,9 +509,9 @@
       </div>
 
       <!-- Daily Performance chart -->
-      <div style="padding-top:14px;border-top:1px solid var(--rule);">
+      <div style="padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
         <div class="card-tag" id="perfChartTitle" style="margin-bottom:8px;">Daily performance &amp; volume ratio</div>
-        <div style="position:relative;height:260px;"><canvas id="perfChart"></canvas></div>
+        <div style="position:relative;flex:1;min-height:260px;"><canvas id="perfChart"></canvas></div>
       </div>
     </div>
   </div>
