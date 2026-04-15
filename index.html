@@ -465,7 +465,7 @@
       </div>
       <!-- Inline Quadrant Widget -->
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);">
-        <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mist);margin-bottom:8px;">Sector Rotation Quadrant</div>
+        <div class="card-tag" style="margin-bottom:8px;">Sector Rotation Quadrant</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;">
           <div id="q-defensive" style="border-radius:5px;padding:8px 10px;border:1px solid;position:relative;background:rgba(245,158,11,0.13);border-color:rgba(245,158,11,0.45);">
             <div style="font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:3px;font-family:'IBM Plex Sans',sans-serif;">Defensive Rot.</div>
@@ -492,7 +492,7 @@
       </div>
       <!-- RS Grade Performance -->
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);">
-        <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mist);margin-bottom:8px;">RS Grade — Perf &amp; Acc/Dist · Últimas 3 sesiones</div>
+        <div class="card-tag" style="margin-bottom:8px;">RS Grade — Perf &amp; Acc/Dist · Últimas 3 sesiones</div>
         <div id="rsGradePerfTable" style="width:100%"></div>
       </div>
     </div>
@@ -1220,7 +1220,7 @@ function renderRsGradePerf() {
   const fmtP        = v => (v === null || v === undefined) ? '<span style="color:var(--mist)">—</span>' : `<span style="color:${nc(v)}">${v >= 0 ? '+' : ''}${v.toFixed(2)}%</span>`;
   const fmtN        = v => (v === null || v === undefined) ? '<span style="color:var(--mist)">—</span>' : `<span style="color:${nc(v)}">${v >= 0 ? '+' : ''}${v}</span>`;
   const fmtDate     = s => { try { const d = new Date(s + 'T12:00:00'); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); } catch(e){ return s ? s.slice(5) : ''; } };
-  const opacities   = [1, 0.72, 0.48];
+  const opacities   = [1, 0.88, 0.72];
   const dateClasses = ['today', 't1', 't2'];
   const todayColor  = '#00e5cc';
   const dimColor    = 'var(--mist)';
@@ -1244,8 +1244,8 @@ function renderRsGradePerf() {
     const bdr     = isToday
       ? `border-bottom:2px solid ${todayColor};`
       : i === 1
-        ? 'border-bottom:1.5px solid rgba(136,151,170,0.4);'
-        : 'border-bottom:1px solid rgba(136,151,170,0.2);';
+        ? 'border-bottom:1.5px solid rgba(136,151,170,0.7);'
+        : 'border-bottom:1px solid rgba(136,151,170,0.5);';
     const op      = `opacity:${opacities[i] || 0.4};`;
     html += `<th style="padding:0 6px 7px 10px;text-align:left;${bdr}${op}">
       <div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:${col};">${lbl}</div>
