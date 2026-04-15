@@ -423,7 +423,7 @@
   <!-- BREADTH_SECTION_START -->
   <!-- ROW 1: Breadth + ATR/NetAcc + Perf chart -->
   <div class="sec-head"><span class="sec-label">Market breadth &amp; daily activity</span><div class="sec-line"></div></div>
-  <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.5fr);gap:12px;margin-bottom:20px;">
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.5fr);gap:12px;margin-bottom:20px;align-items:stretch;">
 
     <!-- CARD 1: Breadth + Quadrant + RS Grade Perf -->
     <div class="card">
@@ -465,7 +465,7 @@
       </div>
       <!-- Inline Quadrant Widget -->
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);">
-        <div class="card-tag" style="margin-bottom:8px;">Sector Rotation Quadrant</div>
+        <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mist);margin-bottom:8px;">Sector Rotation Quadrant</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:4px;">
           <div id="q-defensive" style="border-radius:5px;padding:8px 10px;border:1px solid;position:relative;background:rgba(245,158,11,0.13);border-color:rgba(245,158,11,0.45);">
             <div style="font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:3px;font-family:'IBM Plex Sans',sans-serif;">Defensive Rot.</div>
@@ -492,18 +492,18 @@
       </div>
       <!-- RS Grade Performance -->
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);">
-        <div class="card-tag" style="margin-bottom:8px;">RS Grade — Perf &amp; Acc/Dist · Últimas 3 sesiones</div>
+        <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--mist);margin-bottom:5px;">RS Grade (ayer) — Perf &amp; Acc/Dist hoy</div>
         <div id="rsGradePerfTable" style="width:100%"></div>
       </div>
     </div>
 
     <!-- CARD 2: ATR + Net Acc -->
-    <div class="card">
+    <div class="card" style="display:flex;flex-direction:column;">
       <div class="card-tag">ATR ratio trend</div>
-      <div style="position:relative;height:280px;margin-bottom:14px;"><canvas id="atrChart"></canvas></div>
-      <div style="padding-top:12px;border-top:1px solid var(--rule);">
+      <div style="position:relative;flex:1;min-height:240px;margin-bottom:14px;"><canvas id="atrChart"></canvas></div>
+      <div style="padding-top:12px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
         <div class="card-tag" style="margin-bottom:8px;">Net accumulation 20d trend</div>
-        <div style="position:relative;height:240px;"><canvas id="accChart"></canvas></div>
+        <div style="position:relative;flex:1;min-height:200px;"><canvas id="accChart"></canvas></div>
       </div>
     </div>
 
