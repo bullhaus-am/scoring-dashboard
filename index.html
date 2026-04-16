@@ -1306,10 +1306,30 @@ function renderRsGradePerf() {
       const totalDist = rows.reduce((s, r) => s + (r.sum_dist || 0), 0);
       const totalNet  = totalAcc - totalDist;
       const nc = v => v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
+
+      // Buscar mediana de perf1d en HIST usando la fecha del día
+      // HIST[i].d = 'MM-DD', day.date = 'YYYY-MM-DD'
+      let medPerf = null;
+      if (day.date && typeof HIST !== 'undefined') {
+        const daySlice = day.date.slice(5); // 'MM-DD'
+        const histEntry = HIST.find(h => h.d === daySlice);
+        if (histEntry && histEntry.perf1d !== null && histEntry.perf1d !== undefined) {
+          medPerf = histEntry.perf1d;
+        }
+      }
+
+      html += `<div style="display:flex;flex-direction:column;gap:2px;">`;
+      if (medPerf !== null) {
+        html += `<div style="display:flex;align-items:baseline;gap:5px;">
+          <span style="font-size:8px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--mist);width:42px;flex-shrink:0;">Perf 1D</span>
+          <span style="font-size:12px;font-weight:700;color:${nc(medPerf)};">${medPerf >= 0 ? '+' : ''}${medPerf.toFixed(2)}%</span>
+        </div>`;
+      }
       html += `<div style="display:flex;align-items:baseline;gap:5px;">
         <span style="font-size:8px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--mist);width:42px;flex-shrink:0;">Net Acc</span>
         <span style="font-size:12px;font-weight:700;color:${nc(totalNet)};">${totalNet >= 0 ? '+' : ''}${totalNet}</span>
         <span style="font-size:8.5px;color:var(--mist);">(<span style="color:#4dd9be">${totalAcc}</span>/<span style="color:#ff8fa3">${totalDist}</span>)</span>
+      </div>
       </div>`;
     }
     html += `</td>`;
