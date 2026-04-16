@@ -636,28 +636,28 @@
           </tr>
           <tr>
             <th class="fav-th" title="Watchlist"></th>
-            <th class="lft sortable" onclick="sortBy('rank')">Rank</th>
+            <th class="lft sortable" onclick="sortBy('rank')" data-col="rank">Rank</th>
             <th class="lft">Ticker</th>
             <th class="lft">Empresa</th>
             <th class="lft">Sector</th>
             <th class="lft">Industry</th>
-            <th class="sortable grp-sep-rs" onclick="sortBy('rsmc',-1)" style="white-space:nowrap;text-align:center">RS Rating</th>
-            <th class="sortable" onclick="sortBy('rsGrade',-1)">RS Grade</th>
-            <th onclick="sortBy('blueDot',-1)" style="white-space:nowrap;cursor:pointer" title="RS Line within 5% of 52w high">Blue Dot</th>
-            <th class="sortable grp-sep-acc" onclick="sortBy('score')">ACC Score</th>
-            <th class="sortable" onclick="sortBy('accGrade',-1)">ACC Grade</th>
-            <th class="sortable" onclick="sortBy('net50')">Net 50d</th>
-            <th class="sortable" onclick="sortBy('net20')">Net 20d</th>
-            <th class="sortable" onclick="sortBy('net5')">Net 5d</th>
-            <th class="sortable" onclick="sortBy('net1d')">Net 1d</th>
-            <th class="sortable" onclick="sortBy('netClose')">Net Close</th>
-            <th class="sortable grp-sep-vol" onclick="sortBy('atr5')">ATR 5%</th>
-            <th class="sortable" onclick="sortBy('atrRatio')">ATR ratio</th>
-            <th class="sortable" onclick="sortBy('ema20')">EMA20%</th>
-            <th class="sortable" onclick="sortBy('sma50')">SMA50%</th>
-            <th class="sortable grp-sep-perf" onclick="sortBy('volRatio')">Vol ratio</th>
-            <th class="sortable" onclick="sortBy('perf1d')">Perf 1D</th>
-            <th class="sortable" onclick="sortBy('perf6m')">Perf 6M</th>
+            <th class="sortable grp-sep-rs" onclick="sortBy('rsmc',-1)" data-col="rsmc" style="white-space:nowrap;text-align:center">RS Rating</th>
+            <th class="sortable" onclick="sortBy('rsGrade',-1)" data-col="rsGrade">RS Grade</th>
+            <th onclick="sortBy('blueDot',-1)" data-col="blueDot" style="white-space:nowrap;cursor:pointer" title="RS Line within 5% of 52w high">Blue Dot</th>
+            <th class="sortable grp-sep-acc" onclick="sortBy('score')" data-col="score">ACC Score</th>
+            <th class="sortable" onclick="sortBy('accGrade',-1)" data-col="accGrade">ACC Grade</th>
+            <th class="sortable" onclick="sortBy('net50')" data-col="net50">Net 50d</th>
+            <th class="sortable" onclick="sortBy('net20')" data-col="net20">Net 20d</th>
+            <th class="sortable" onclick="sortBy('net5')" data-col="net5">Net 5d</th>
+            <th class="sortable" onclick="sortBy('net1d')" data-col="net1d">Net 1d</th>
+            <th class="sortable" onclick="sortBy('netClose')" data-col="netClose">Net Close</th>
+            <th class="sortable grp-sep-vol" onclick="sortBy('atr5')" data-col="atr5">ATR 5%</th>
+            <th class="sortable" onclick="sortBy('atrRatio')" data-col="atrRatio">ATR ratio</th>
+            <th class="sortable" onclick="sortBy('ema20')" data-col="ema20">EMA20%</th>
+            <th class="sortable" onclick="sortBy('sma50')" data-col="sma50">SMA50%</th>
+            <th class="sortable grp-sep-perf" onclick="sortBy('volRatio')" data-col="volRatio">Vol ratio</th>
+            <th class="sortable" onclick="sortBy('perf1d')" data-col="perf1d">Perf 1D</th>
+            <th class="sortable" onclick="sortBy('perf6m')" data-col="perf6m">Perf 6M</th>
             <th class="grp-sep-op">Operable</th>
           </tr>
         </thead>
@@ -896,10 +896,9 @@ function sortBy(col, forceDir) {
   } else {
     sortCol = col; sortDir = -1;
   }
-  document.querySelectorAll('.stbl thead tr:last-child th').forEach(th => th.classList.remove('sort-asc','sort-desc'));
-  const map = {rank:1,rsmc:6,rsGrade:7,blueDot:8,score:9,accGrade:10,net50:11,net20:12,net5:13,net1d:14,netClose:15,atr5:16,atrRatio:17,ema20:18,sma50:19,volRatio:20,perf1d:21,perf6m:22};
-  const idx = map[col];
-  if (idx !== undefined) document.querySelectorAll('.stbl thead tr:last-child th')[idx].classList.add(sortDir===-1?'sort-desc':'sort-asc');
+  document.querySelectorAll('.stbl thead th[data-col]').forEach(th => th.classList.remove('sort-asc','sort-desc'));
+  const th = document.querySelector(`.stbl thead th[data-col="${col}"]`);
+  if (th) th.classList.add(sortDir===-1?'sort-desc':'sort-asc');
   renderStocks();
   renderWatchlist();
 }
