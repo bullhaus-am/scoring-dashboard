@@ -922,18 +922,14 @@ function sortBy(col, forceDir) {
 
   const existing = sortKeys.findIndex(k => k.col === col);
 
-  if (existing === -1) {
-    // New column not in sort — add as sort 1, demote current 1 to 2 (max 2)
-    const prev = sortKeys[0] || null;
-    sortKeys = [{col, dir: -1}];
-    if (prev) sortKeys.push(prev);
-  } else if (existing === 0) {
-    // Already sort 1 — toggle direction
-    sortKeys[0].dir *= -1;
-  } else {
-    // Already sort 2 — toggle direction
-    sortKeys[1].dir *= -1;
+  if (existing !== -1) {
+    // Already in sort — toggle direction only
+    sortKeys[existing].dir *= -1;
+  } else if (sortKeys.length < 2) {
+    // Slot available — add as next sort (1 or 2)
+    sortKeys.push({col, dir: -1});
   }
+  // If already have 2 sorts and clicking a new column — ignore (must reset first)
 
   _updateSortBadges();
   renderStocks();
