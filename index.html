@@ -420,21 +420,6 @@
 
   </div>
 
-  <!-- AI COMMENTARY -->
-<div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
-<div class="card ai-commentary-card" style="margin-bottom:20px;">
-  <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong> — NO-GO en cuadrante SELL OFF con el breadth deteriorándose sesión a sesión: la distribución neta promedio se profundiza a -0.22, el porcentaje de stocks distribuyendo sube a 41.4% (+1.6pp) y los que operan bajo EMA20 saltan a 30.8% (+2.7pp en un día). Solo 1 de 11 sectores mantiene acumulación neta positiva. Operativamente esto significa cero exposición larga nueva; el mercado está en fase activa de liquidación institucional donde incluso los líderes de momentum están siendo vendidos.</p>
-<p><strong>OBSERVACIONES CLAVE</strong></p>
-<li><strong>La distribución se acelera, no se estabiliza.</strong> El delta de -0.02 en Net Acc 20d y +1.6pp en stocks distribuyendo confirman que la presión vendedora no encontró piso esta sesión. Cuando el deterioro es incremental pero consistente, señala liquidación metódica institucional — no pánico retail — lo cual es más difícil de revertir.</li>
-<li><strong>Rotación inversa perfecta: líderes vendidos, rezagados comprados.</strong> Los stocks RS A/A+ cayeron -0.39% con Net Acc 1d de -6, mientras los RS E subieron +0.86% con Net Acc de +13. Esta inversión clásica de momentum indica que el dinero institucional está cerrando posiciones ganadoras para cubrir pérdidas o reducir riesgo, no rotando hacia oportunidad. Es comportamiento defensivo de fin de ciclo.</li>
-<li><strong>46.6% bajo SMA200 marca daño estructural.</strong> Casi la mitad del Russell 1000 opera bajo su media de 200 días, nivel que coincide con el porcentaje bajo SMA50 (46.1%). Esta convergencia indica que el quiebre fue rápido y reciente — muchos stocks perdieron ambas medias en pocas semanas, confirmando un sell-off coordinado, no disperso.</li>
-<li><strong>Los 5 mejores stocks del scoring son todos NO operables.</strong> A pesar de RS-MC entre 92-99 y acumulación neta positiva en 50 días, ninguno cumple criterios de operabilidad. CAR destaca con NetClose5d de +5, señal de cierres consistentes en tercio superior, pero su entorno sectorial y de mercado invalida cualquier setup. La calidad existe pero el contexto la neutraliza.</li>
-<li><strong>ATR mediano en 2.99% con solo 10.2% en compresión</strong> confirma un mercado volátil con rangos amplios. La volatilidad expandida sin compresión significa que no hay formación de bases; los stocks se mueven pero no consolidan, condición incompatible con entradas VCP.</li>
-<p><strong>SECTORES E INDUSTRIAS</strong> — Financial Services es el único sector positivo (Net20d +0.39, 42% acumulando) y funciona como refugio relativo, no como líder de expansión. En el extremo opuesto, Utilities (-0.92, 87% distribuyendo) y Real Estate (-0.80, 70% distribuyendo) sufren liquidación masiva consistente con un entorno de tasas adverso. La divergencia temporal es notable: Apparel Manufacturing muestra Net20d de +1.60 con 80% acumulando — una isla de acumulación genuina dentro de Consumer Cyclical que en agregado distribuye (-0.12). Esta industria de 5 stocks merece watchlist pero no acción hasta que el régimen cambie. Technology (-0.38) y Energy (-0.49) confirman que los sectores de beta alto lideran la caída.</p>
-<p><strong>RS MOMENTUM vs ACUMULACIÓN HOY</strong> — La tabla revela una divergencia anti-momentum extrema y sin ambigüedad. Los RS A/A+ registran la peor combinación: performance negativa (-0.39%) con distribución neta fuerte (-6), confirmando que las manos institucionales están deshaciendo precisamente las posiciones con mayor fuerza relativa acumulada. Los RS E muestran +0.86% con Net Acc de +13 (18 días acumulación vs 5 distribución), lo cual parece rebote técnico de sobreventa con volumen real detrás — pero en régimen SELL OFF estos rebotes suelen ser coberturas de cortos, no acumulación genuina para posiciones largas. El grupo C en mediana 0.00% con distribución neta de -3 actúa como bisagra: ni rebote ni liquidación, confirmando que el mercado no tiene zona de indiferencia estable.</p>
-<p><strong>FOCO OPERATIVO</strong> — (1) Monitorear si el Net Acc 1d de los RS A/A+ pasa de -6 a territorio neutro o positivo mañana: cualquier sesión donde los líderes dejen de ser distribuidos es</p></div>
-</div>
-<!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
   <!-- ROW 1: Breadth + ATR/NetAcc + Perf chart -->
   <div class="sec-head"><span class="sec-label">Market breadth &amp; daily activity</span><div class="sec-line"></div></div>
@@ -1303,6 +1288,33 @@ function renderRsGradePerf() {
     });
     html += `</tr>`;
   });
+
+  // ── Fila TOTAL ──────────────────────────────────────────────────────────
+  html += `<tr style="border-top:2px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.025);">`;
+  html += `<td style="padding:9px 10px;vertical-align:middle;border-right:1px solid rgba(255,255,255,0.06);">
+    <span style="font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--smoke);">Total</span></td>`;
+
+  data.forEach((day, di) => {
+    const rows = (day.rows || []).filter(r => r.sum_acc !== null && r.sum_acc !== undefined);
+    const op  = opacities[di] !== undefined ? opacities[di] : 0.5;
+    const sep = di < data.length - 1 ? 'border-right:1px solid rgba(255,255,255,0.04);' : '';
+    html += `<td style="padding:8px 8px 8px 10px;vertical-align:middle;opacity:${op};${sep}">`;
+    if (!rows.length) {
+      html += `<span style="color:var(--mist);font-size:9.5px;">—</span>`;
+    } else {
+      const totalAcc  = rows.reduce((s, r) => s + (r.sum_acc  || 0), 0);
+      const totalDist = rows.reduce((s, r) => s + (r.sum_dist || 0), 0);
+      const totalNet  = totalAcc - totalDist;
+      const nc = v => v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
+      html += `<div style="display:flex;align-items:baseline;gap:5px;">
+        <span style="font-size:8px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--mist);width:42px;flex-shrink:0;">Net Acc</span>
+        <span style="font-size:12px;font-weight:700;color:${nc(totalNet)};">${totalNet >= 0 ? '+' : ''}${totalNet}</span>
+        <span style="font-size:8.5px;color:var(--mist);">(<span style="color:#4dd9be">${totalAcc}</span>/<span style="color:#ff8fa3">${totalDist}</span>)</span>
+      </div>`;
+    }
+    html += `</td>`;
+  });
+  html += `</tr>`;
 
   html += `</tbody></table>`;
   html += `<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,0.06);">
