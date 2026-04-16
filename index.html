@@ -179,14 +179,16 @@
   .stbl th.lft { text-align: left; }
   .stbl th.sortable { cursor: pointer; }
   .stbl th.sortable:hover { color: var(--teal); }
+  .stbl thead th { position: relative; }
   .sort-badge {
-    display: inline-flex; align-items: center; gap: 1px;
-    font-size: 8px; font-weight: 700; line-height: 1;
-    background: var(--teal); color: #0a1628;
-    border-radius: 3px; padding: 1px 3px; margin-left: 3px;
-    vertical-align: middle; white-space: nowrap;
+    display: block;
+    text-align: center;
+    font-size: 8px; font-weight: 700; line-height: 1.2;
+    color: var(--teal);
+    margin-top: 2px;
+    white-space: nowrap;
   }
-  .sort-badge.sort-2 { background: rgba(0,229,204,0.45); color: var(--teal); }
+  .sort-badge.sort-2 { color: rgba(0,229,204,0.5); }
   .stbl td { padding: 5px 6px; border-bottom: 1px solid var(--rule); color: var(--smoke); vertical-align: middle; text-align: right; white-space: nowrap; }
   .stbl td.lft { text-align: left; }
   .stbl tr:last-child td { border-bottom: none; }
@@ -924,16 +926,14 @@ function sortBy(col, forceDir) {
 }
 
 function _updateSortBadges() {
-  // Clear all existing badges
   document.querySelectorAll('.stbl thead .sort-badge').forEach(b => b.remove());
-  // Draw new badges
   sortKeys.forEach((k, i) => {
     const th = document.querySelector(`.stbl thead th[data-col="${k.col}"]`);
     if (!th) return;
     const arrow = k.dir === -1 ? '↓' : '↑';
-    const badge = document.createElement('span');
+    const badge = document.createElement('div');
     badge.className = 'sort-badge' + (i === 1 ? ' sort-2' : '');
-    badge.textContent = (i + 1) + arrow;
+    badge.textContent = (i + 1) + ' ' + arrow;
     th.appendChild(badge);
   });
 }
