@@ -168,7 +168,7 @@
   .tbl-card { background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r); padding: 18px 8px; margin-bottom: 0; }
   .tbl-top  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
   .tbl-wrap { overflow-x: auto; width: 100%; }
-  .stbl { width: 100%; min-width: 1461px; border-collapse: collapse; font-size: 11px; table-layout: fixed; }
+  .stbl { width: 100%; min-width: 1493px; border-collapse: collapse; font-size: 11px; table-layout: fixed; }
   .stbl th {
     font-size: 9px; font-weight: 600; color: var(--mist);
     letter-spacing: 2px; text-transform: uppercase;
@@ -627,23 +627,23 @@
           <col style="width:95px">   <!-- Sector -->
           <col style="width:130px">  <!-- Industry -->
           <col style="width:82px">   <!-- RS Rating -->
-          <col style="width:50px">   <!-- RS Grade -->
-          <col style="width:46px">   <!-- Blue Dot -->
+          <col style="width:52px">   <!-- RS Grade -->
+          <col style="width:52px">   <!-- Blue Dot -->
           <col style="width:64px">   <!-- ACC Score -->
-          <col style="width:50px">   <!-- ACC Grade -->
+          <col style="width:52px">   <!-- ACC Grade -->
           <col style="width:52px">   <!-- Net 50d -->
           <col style="width:52px">   <!-- Net 20d -->
-          <col style="width:44px">   <!-- Net 5d -->
-          <col style="width:40px">   <!-- Net 1d -->
-          <col style="width:52px">   <!-- Net Close -->
+          <col style="width:46px">   <!-- Net 5d -->
+          <col style="width:42px">   <!-- Net 1d -->
+          <col style="width:56px">   <!-- Net Close -->
           <col style="width:52px">   <!-- ATR 5% -->
-          <col style="width:62px">   <!-- ATR ratio -->
-          <col style="width:62px">   <!-- EMA20% -->
-          <col style="width:62px">   <!-- SMA50% -->
-          <col style="width:62px">   <!-- Vol ratio -->
-          <col style="width:56px">   <!-- Perf 1D -->
-          <col style="width:62px">   <!-- Perf 6M -->
-          <col style="width:56px">   <!-- Operable -->
+          <col style="width:64px">   <!-- ATR ratio -->
+          <col style="width:64px">   <!-- EMA20% -->
+          <col style="width:64px">   <!-- SMA50% -->
+          <col style="width:64px">   <!-- Vol ratio -->
+          <col style="width:58px">   <!-- Perf 1D -->
+          <col style="width:64px">   <!-- Perf 6M -->
+          <col style="width:58px">   <!-- Operable -->
         </colgroup>
         <thead>
           <tr class="thead-groups">
@@ -820,7 +820,7 @@ function renderIndustries() {
 }
 
 // ── Stock table ───────────────────────────────────────────────────────────────
-let sortKeys = [{col:'rank', dir:1}]; // multi-sort array, max 2
+let sortKeys = []; // multi-sort array, max 2 — empty until user clicks
 let filterMode = 'all';
 // Compat shims used by legacy code paths
 Object.defineProperty(window, 'sortCol', { get: () => sortKeys[0]?.col || 'rank' });
@@ -937,7 +937,7 @@ function sortBy(col, forceDir) {
 }
 
 function resetSort() {
-  sortKeys = [{col: 'rank', dir: 1}];
+  sortKeys = [];
   _updateSortBadges();
   renderStocks();
   renderWatchlist();
@@ -948,7 +948,7 @@ function _updateSortBadges() {
   // Update reset button visibility
   const resetBtn = document.getElementById('sortResetBtn');
   if (resetBtn) {
-    const isDefault = sortKeys.length === 1 && sortKeys[0].col === 'rank' && sortKeys[0].dir === 1;
+    const isDefault = sortKeys.length === 0;
     resetBtn.style.display = isDefault ? 'none' : 'inline-flex';
     if (!isDefault) {
       const parts = sortKeys.map((k,i) => `${i+1}: ${k.col} ${k.dir===-1?'↓':'↑'}`);
@@ -1070,8 +1070,9 @@ function renderWatchlist() {
     const gradeOrder2 = {'A+':6,'A':5,'B':4,'C':3,'D':2,'E':1,'-':0};
     const _cmp2 = (a,b,col) => (col==='rsGrade'||col==='accGrade') ? (gradeOrder2[a[col]]||0)-(gradeOrder2[b[col]]||0) : (a[col]??-999)-(b[col]??-999);
     const favStocks = wl.map(sym => ALL_STOCKS.find(s => s.sym === sym)).filter(Boolean);
+    const _activeSorts2 = sortKeys.length ? sortKeys : [{col:'rank', dir:1}];
     favStocks.sort((a, b) => {
-      for (const k of sortKeys) {
+      for (const k of _activeSorts2) {
         const v = _cmp2(a, b, k.col) * k.dir;
         if (v !== 0) return v;
       }
@@ -1126,8 +1127,9 @@ function renderStocks() {
         return (gradeOrder[a[col]]||0) - (gradeOrder[b[col]]||0);
       return (a[col]??-999) - (b[col]??-999);
     };
+  const _activeSorts = sortKeys.length ? sortKeys : [{col:'rank', dir:1}];
   data.sort((a, b) => {
-    for (const k of sortKeys) {
+    for (const k of _activeSorts) {
       const v = _cmpField(a, b, k.col) * k.dir;
       if (v !== 0) return v;
     }
@@ -1438,7 +1440,7 @@ renderIndustries();
 renderRsGradePerf();
 initDropdowns();
 renderWatchlist();
-sortBy('rank', 1);
+// No initial sortBy call — sortKeys starts empty, rank asc is the fallback
 renderStocks();
 renderWatchlist();
 
