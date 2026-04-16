@@ -168,7 +168,7 @@
   .tbl-card { background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r); padding: 18px 8px; margin-bottom: 0; }
   .tbl-top  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
   .tbl-wrap { overflow-x: auto; width: 100%; }
-  .stbl { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .stbl { width: 100%; min-width: 1461px; border-collapse: collapse; font-size: 11px; table-layout: fixed; }
   .stbl th {
     font-size: 9px; font-weight: 600; color: var(--mist);
     letter-spacing: 2px; text-transform: uppercase;
@@ -1006,13 +1006,14 @@ function renderWatchlist() {
     if (wlEmpty) wlEmpty.style.display = 'none';
     if (wlCount) wlCount.textContent = `(${wl.length})`;
     const gradeOrder = {'A+':6,'A':5,'B':4,'C':3,'D':2,'E':1,'-':0};
+    const _secSort2 = {net1d:['accGrade','net5','score'],net5:['net1d','accGrade','score'],net20:['accGrade','net5','score'],net50:['accGrade','net20','score'],netClose:['accGrade','net5','score'],score:['accGrade','net1d','net5'],accGrade:['score','net1d','net5'],rsmc:['rsGrade','score','net1d'],rsGrade:['rsmc','score','net1d'],perf1d:['net1d','accGrade','score'],perf6m:['accGrade','score','net1d'],atrRatio:['accGrade','score','net1d'],ema20:['accGrade','net1d','score'],sma50:['accGrade','net1d','score']};
+    const _cmp2 = (a,b,col) => (col==='rsGrade'||col==='accGrade') ? (gradeOrder[a[col]]||0)-(gradeOrder[b[col]]||0) : (a[col]??-999)-(b[col]??-999);
     const favStocks = wl.map(sym => ALL_STOCKS.find(s => s.sym === sym)).filter(Boolean);
     favStocks.sort((a, b) => {
-      if (sortCol === 'rsGrade' || sortCol === 'accGrade') {
-        const key = sortCol === 'rsGrade' ? 'rsGrade' : 'accGrade';
-        return ((gradeOrder[a[key]]||0) - (gradeOrder[b[key]]||0)) * sortDir;
-      }
-      return ((a[sortCol]??-999) - (b[sortCol]??-999)) * sortDir;
+      const pri = _cmp2(a,b,sortCol)*sortDir;
+      if (pri!==0) return pri;
+      for (const s of (_secSort2[sortCol]||[])) { const sv=_cmp2(a,b,s)*-1; if(sv!==0) return sv; }
+      return 0;
     });
     wlRows.innerHTML = favStocks.map(s => buildRow(s)).join('');
     if (wlDivider) wlDivider.style.display = watchlistOpen ? '' : 'none';
@@ -1057,13 +1058,37 @@ function renderStocks() {
   else if (filterSector)    data = data.filter(s => s.sector === filterSector);
 
   const total = data.length;
-  const gradeOrder = {'A+':6,'A':5,'B':4,'C':3,'D':2,'E':1,'-':0};
-  data.sort((a,b) => {
-    if (sortCol === 'rsGrade' || sortCol === 'accGrade') {
-      const key = sortCol === 'rsGrade' ? 'rsGrade' : 'accGrade';
-      return ((gradeOrder[a[key]]||0) - (gradeOrder[b[key]]||0)) * sortDir;
+    const gradeOrder = {'A+':6,'A':5,'B':4,'C':3,'D':2,'E':1,'-':0};
+    const _secSort = {
+      net1d:    ['accGrade','net5','score'],
+      net5:     ['net1d','accGrade','score'],
+      net20:    ['accGrade','net5','score'],
+      net50:    ['accGrade','net20','score'],
+      netClose: ['accGrade','net5','score'],
+      score:    ['accGrade','net1d','net5'],
+      accGrade: ['score','net1d','net5'],
+      rsmc:     ['rsGrade','score','net1d'],
+      rsGrade:  ['rsmc','score','net1d'],
+      perf1d:   ['net1d','accGrade','score'],
+      perf6m:   ['accGrade','score','net1d'],
+      atrRatio: ['accGrade','score','net1d'],
+      ema20:    ['accGrade','net1d','score'],
+      sma50:    ['accGrade','net1d','score'],
+    };
+    const _cmpField = (a, b, col) => {
+      if (col === 'rsGrade' || col === 'accGrade')
+        return (gradeOrder[a[col]]||0) - (gradeOrder[b[col]]||0);
+      return (a[col]??-999) - (b[col]??-999);
+    };
+  data.sort((a, b) => {
+    const pri = _cmpField(a, b, sortCol) * sortDir;
+    if (pri !== 0) return pri;
+    const secs = _secSort[sortCol] || [];
+    for (const s of secs) {
+      const sv = _cmpField(a, b, s) * -1; // secondary always desc
+      if (sv !== 0) return sv;
     }
-    return ((a[sortCol]??-999)-(b[sortCol]??-999))*sortDir;
+    return 0;
   });
 
   // Unified color helper: >0 = teal, <0 = red, =0 = grey
