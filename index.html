@@ -438,23 +438,6 @@
 
   </div>
 
-  <!-- AI COMMENTARY -->
-<div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
-<div class="card ai-commentary-card" style="margin-bottom:20px;">
-  <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>GO en cuadrante HEALTHY ROTATION con M1 apenas positivo en +0.02 y ATR ratio en 0.984. La mejora respecto a la sesión anterior es notable (Δ +0.17 en Net Acc 20d, caída de 3.9pp en distribución y 7.7pp en stocks bajo EMA20), lo que indica una sesión de reversión amplia tras presión vendedora previa. Operativamente, el régimen es técnicamente válido pero frágil: M1 está en el umbral mínimo y solo 35.9% del universo es operable, lo que exige selectividad extrema y confirmación antes de comprometer capital nuevo.</p>
-<p><strong>OBSERVACIONES CLAVE</strong></p>
-<li><strong>La sesión fue un rally de breadth generalizado, no selectivo.</strong> Las medianas de performance del grupo D (+1.99%) y E (+1.88%) superaron a las de A/A+ (+1.65%), señalando un short-covering o mean-reversion masivo en rezagados más que demanda institucional genuina por líderes. Esto es típico de rebotes post-selloff que necesitan confirmación en las sesiones subsiguientes.</li>
-<li><strong>La acumulación neta de hoy se concentró abrumadoramente en los grupos más débiles.</strong> El grupo E registró Net Acc 1d de +44 (46 acumulados vs solo 2 distribuidos), mientras A/A+ apenas logró +4. Esto sugiere que el dinero institucional está rotando hacia nombres oversold o rebalanceando, no persiguiendo momentum. La divergencia es significativa y potencialmente transitoria.</li>
-<li><strong>La dispersión sectorial alta (0.586) con solo 5 de 11 sectores positivos confirma rotación genuina, no beta indiscriminado.</strong> Financial Services lidera con Net20d +0.62 y 47% acumulando contra solo 14% distribuyendo — una asimetría institucional limpia. En contraste, Energy (-1.35, 73% distribuyendo) y Utilities (-0.92, 87% distribuyendo) están en liquidación activa.</li>
-<li><strong>Los top 5 stocks por score muestran acumulación persistente (Net50d entre +5 y +7) con cierres en tercio superior (NetClose5d +2 en 4 de 5), pero ninguno es operable.</strong> Esto indica que los nombres con mejor perfil técnico-fundamental ya extendieron sus movimientos y no ofrecen puntos de entrada con risk/reward favorable. El pipeline está vacío.</li>
-<li><strong>La compresión de volatilidad es baja (solo 8.1% con ATR <0.80) con ATR mediano de 3.06%.</strong> El mercado aún opera con rangos amplios, lo que dificulta la formación de bases tipo VCP. Los setups de contracción aún no están madurando en cantidad suficiente para alimentar una nueva ola de breakouts.</li>
-<p><strong>SECTORES E INDUSTRIAS</strong></p>
-<p>Financial Services es el claro líder estructural con la mejor combinación de acumulación neta (+0.62), porcentaje de stocks acumulando (47%) y mínima distribución (14%). Industrials y Consumer Cyclical acompañan con +0.30 cada uno pero con mayor dispersión interna. La divergencia crítica está en Technology: Net20d de -0.22 con 40% distribuyendo — en un mercado que supuestamente rota hacia crecimiento, Tech sigue bajo presión institucional, lo que limita el potencial de rally sostenido. A nivel industria, Apparel Manufacturing y Airlines muestran acumulación perfecta (100%, 0% distribución), pero son nichos de 5 stocks cada uno; Auto & Truck Dealerships con 67% acumulando y cero distribución ofrece mayor profundidad. Estas tres industrias reflejan una apuesta institucional por consumo cíclico/movilidad, consistente con el liderazgo de Consumer Cyclical.</p>
-<p><strong>RS MOMENTUM vs ACUMULACIÓN HOY</strong></p>
-<p>Los líderes de momentum (A/A+) NO fueron los receptores principales de flujo hoy: +4 de Net Acc frente a +44 del grupo E y +28 de B y D. La performance mediana de A/A+ (+1.65%) fue la más baja del universo. Esto es una divergencia clara: el mercado no confirmó institucionalmente a los líderes de RS sino que redistribuyó hacia rezagados. La pregunta es si el grupo E muestra acumulación real o simplemente rebote mecánico — con 46 de 48 stocks netos acumulando en un día de rally generalizado, el sesgo es más beta que convicción. Los top stocks (MRVL, SMMT, IRDM) con RS-MC 96-99 mantienen calidad de cierre (+2) pero su Net</p></div>
-</div>
-<!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
   <!-- ROW 1: Breadth + ATR/NetAcc + Perf chart -->
   <div class="sec-head"><span class="sec-label">Market breadth &amp; daily activity</span><div class="sec-line"></div></div>
@@ -468,7 +451,6 @@
         <div id="q-defensive" style="border-radius:5px;padding:8px 10px;border:1px solid;position:relative;background:rgba(245,158,11,0.13);border-color:rgba(245,158,11,0.45);">
           <div style="font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#f59e0b;margin-bottom:3px;font-family:'IBM Plex Sans',sans-serif;">Defensive Rot.</div>
           <div style="font-size:8px;color:var(--white);line-height:1.4;font-family:'IBM Plex Sans',sans-serif;opacity:0.8;">Alta dispersión · Nivel neg.</div>
-          <div style="position:absolute;top:7px;right:8px;width:6px;height:6px;border-radius:50%;background:#f59e0b;box-shadow:0 0 6px rgba(245,158,11,0.8);"></div>
         </div>
         <div id="q-healthy" style="border-radius:5px;padding:8px 10px;border:1px solid;background:rgba(34,197,94,0.06);border-color:rgba(34,197,94,0.2);">
           <div style="font-size:8.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(34,197,94,0.4);margin-bottom:3px;font-family:'IBM Plex Sans',sans-serif;">Healthy Rot.</div>
@@ -1489,23 +1471,23 @@ renderIndustries();
   // Styles for active vs inactive states
   const styles = {
     'q-defensive': {
-      active:   'background:rgba(245,158,11,0.13);border-color:rgba(245,158,11,0.45);',
-      inactive: 'background:rgba(245,158,11,0.03);border-color:rgba(245,158,11,0.12);opacity:0.45;',
+      active:   'background:rgba(245,158,11,0.22);border-color:rgba(245,158,11,0.75);',
+      inactive: 'background:rgba(245,158,11,0.02);border-color:rgba(245,158,11,0.08);opacity:0.3;',
       dotColor: '#f59e0b',
     },
     'q-healthy': {
-      active:   'background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.45);',
-      inactive: 'background:rgba(34,197,94,0.03);border-color:rgba(34,197,94,0.12);opacity:0.45;',
+      active:   'background:rgba(34,197,94,0.22);border-color:rgba(34,197,94,0.75);',
+      inactive: 'background:rgba(34,197,94,0.02);border-color:rgba(34,197,94,0.08);opacity:0.3;',
       dotColor: '#22c55e',
     },
     'q-rally': {
-      active:   'background:rgba(0,229,204,0.12);border-color:rgba(0,229,204,0.45);',
-      inactive: 'background:rgba(0,229,204,0.03);border-color:rgba(0,229,204,0.12);opacity:0.45;',
+      active:   'background:rgba(0,229,204,0.22);border-color:rgba(0,229,204,0.75);',
+      inactive: 'background:rgba(0,229,204,0.02);border-color:rgba(0,229,204,0.08);opacity:0.3;',
       dotColor: '#00e5cc',
     },
     'q-selloff': {
-      active:   'background:rgba(255,77,109,0.12);border-color:rgba(255,77,109,0.45);',
-      inactive: 'background:rgba(255,77,109,0.03);border-color:rgba(255,77,109,0.12);opacity:0.45;',
+      active:   'background:rgba(255,77,109,0.22);border-color:rgba(255,77,109,0.75);',
+      inactive: 'background:rgba(255,77,109,0.02);border-color:rgba(255,77,109,0.08);opacity:0.3;',
       dotColor: '#ff4d6d',
     },
   };
