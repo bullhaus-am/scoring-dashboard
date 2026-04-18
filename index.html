@@ -432,6 +432,15 @@
   .fd-chip-label { font-size: 9px; color: var(--mist); text-transform: uppercase; letter-spacing: .08em; margin-right: 4px; font-family: var(--font-sans); }
 
   .fund-detail-body { padding: 24px 28px; display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; }
+
+  /* Data Quality info banner (solo aparece si DQ != High) */
+  .fd-dq-banner {
+    padding: 11px 28px; display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-sans); font-size: 11.5px;
+  }
+  .fd-dq-icon { font-size: 14px; font-weight: 700; flex-shrink: 0; }
+  .fd-dq-label { font-weight: 700; letter-spacing: .3px; text-transform: uppercase; font-size: 10px; flex-shrink: 0; }
+  .fd-dq-text { color: var(--smoke); line-height: 1.5; }
   .fd-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: .12em; color: #a78bfa; font-weight: 700; margin-bottom: 10px; font-family: var(--font-sans); }
   .fd-table { width: 100%; border-collapse: collapse; font-size: 11.5px; font-family: var(--font); }
   .fd-table th { text-align: right; padding: 8px 10px; font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--mist); border-bottom: 1px solid var(--rule2); font-family: var(--font-sans); }
@@ -1366,6 +1375,22 @@ function showFundDetail(ticker) {
   const pctilColor = fundPctilColor(pctil);
   const dqClass = dqBadgeClass(dq);
 
+  // DQ issue banner: solo si DQ != High y hay detalle real
+  const dqDetail = (s.fundDqDetail || '').trim();
+  const showDqBanner = dq && dq !== 'High' && dq !== 'N/A' && dqDetail && dqDetail.toLowerCase() !== 'completo';
+  const dqBannerColor = dq === 'Low' ? '#ff4d6d' : (dq === 'Foreign' ? '#8899aa' : '#f59e0b');
+  const dqBannerBg    = dq === 'Low' ? 'rgba(255,77,109,0.08)' : (dq === 'Foreign' ? 'rgba(136,153,170,0.06)' : 'rgba(245,158,11,0.08)');
+  const dqBannerBorder= dq === 'Low' ? 'rgba(255,77,109,0.25)' : (dq === 'Foreign' ? 'rgba(136,153,170,0.25)' : 'rgba(245,158,11,0.25)');
+  const dqBannerIcon  = dq === 'Low' ? '⚠' : (dq === 'Foreign' ? 'ℹ' : 'ⓘ');
+  const dqBannerLabel = dq === 'Low' ? 'Limitación de datos' : (dq === 'Foreign' ? 'Tipo de filer' : 'Observación');
+  const dqBannerHtml = showDqBanner ? `
+    <div class="fd-dq-banner" style="background:${dqBannerBg};border-top:1px solid ${dqBannerBorder};border-bottom:1px solid ${dqBannerBorder};">
+      <span class="fd-dq-icon" style="color:${dqBannerColor}">${dqBannerIcon}</span>
+      <span class="fd-dq-label" style="color:${dqBannerColor}">${dqBannerLabel}:</span>
+      <span class="fd-dq-text">${dqDetail.replace(/\|/g, '·')}</span>
+    </div>
+  ` : '';
+
   ov.innerHTML = `
     <div class="fund-detail-panel">
       <div class="fund-detail-header">
@@ -1380,6 +1405,7 @@ function showFundDetail(ticker) {
           <div><span class="fd-chip-label">Data Quality</span><span class="dq-badge ${dqClass}" title="${(s.fundDqDetail || '').replace(/"/g,'&quot;')}">${dqBadgeText(dq)}</span></div>
         </div>
       </div>
+      ${dqBannerHtml}
       <div class="fund-detail-body">
         <div>
           <div class="fd-section-title">Detalle Trimestral — últimos ${s.fundQ ? s.fundQ.length : 0} trimestres</div>
