@@ -1147,9 +1147,11 @@ function rsmcColor(s) {
 }
 
 // ── Fundamental Rating helpers ─────────────────────────────────────────────────
+// Color scale matches rsmcColor() exactly so Fund Rating y RS Rating tienen
+// la misma codificación visual (≥90 ámbar, ≥70 teal, ≥50 azul, ≥30 gris, <30 rojo).
 function fundPctilColor(p) {
   if (p == null) return '#4a5568';
-  if (p >= 90) return '#a78bfa';
+  if (p >= 90) return '#f59e0b';
   if (p >= 70) return '#00e5cc';
   if (p >= 50) return '#3b82f6';
   if (p >= 30) return '#8899aa';
