@@ -168,7 +168,7 @@
   .tbl-card { background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r); padding: 18px 8px; margin-bottom: 0; }
   .tbl-top  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
   .tbl-wrap { overflow-x: auto; width: 100%; }
-  .stbl { width: 100%; min-width: 1950px; border-collapse: collapse; font-size: 11px; table-layout: fixed; }
+  .stbl { width: 100%; min-width: 1960px; border-collapse: collapse; font-size: 11px; table-layout: fixed; }
   .stbl th {
     font-size: 9px; font-weight: 600; color: var(--mist);
     letter-spacing: 2px; text-transform: uppercase;
@@ -645,7 +645,7 @@
           <col style="width:52px">   <!-- Net 20d -->
           <col style="width:46px">   <!-- Net 5d -->
           <col style="width:42px">   <!-- Net 1d -->
-          <col style="width:60px">   <!-- Net Close -->
+          <col style="width:68px">   <!-- Net Close 5D -->
           <col style="width:70px">   <!-- Fund Rating -->
           <col style="width:64px">   <!-- Fund Grade -->
           <col style="width:52px">   <!-- ATR 5% -->
@@ -683,7 +683,7 @@
             <th class="sortable" onclick="sortBy('net20')" data-col="net20">Net 20d</th>
             <th class="sortable" onclick="sortBy('net5')" data-col="net5">Net 5d</th>
             <th class="sortable" onclick="sortBy('net1d')" data-col="net1d">Net 1d</th>
-            <th class="sortable" onclick="sortBy('netClose')" data-col="netClose">Net Close</th>
+            <th class="sortable" onclick="sortBy('netClose')" data-col="netClose">Net Close 5D</th>
             <th class="sortable grp-sep-fund" onclick="sortBy('fundPctil')" data-col="fundPctil">Fund Rating</th>
             <th class="sortable" onclick="sortBy('fundGrade')" data-col="fundGrade">Fund Grade</th>
             <th class="sortable grp-sep-vol" onclick="sortBy('atr5')" data-col="atr5">ATR 5%</th>
