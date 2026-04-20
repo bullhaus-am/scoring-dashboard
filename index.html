@@ -599,6 +599,14 @@
         <div class="br-track"><div class="br-fill" id="sma200-bar"></div></div>
       </div>
 
+      <!-- MA breadth history chart -->
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);">
+        <div class="card-tag" id="maBreadthChartTitle" style="margin-bottom:8px;">% Above key MAs</div>
+        <div style="position:relative;height:180px;width:100%;">
+          <canvas id="maBreadthChart"></canvas>
+        </div>
+      </div>
+
       <!-- Daily Performance chart -->
       <div style="padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
         <div class="card-tag" id="perfChartTitle" style="margin-bottom:8px;">Daily performance &amp; volume ratio</div>
@@ -1671,6 +1679,110 @@ function initCharts() {
       y:{...base.scales.y, ticks:{...base.scales.y.ticks, callback:v=>v.toFixed(1)}}
     }}
   });
+
+  // ── MA Breadth History (% above EMA20 / SMA50 / SMA200) ────────────────────
+  // 3 líneas con puntos: verde teal (EMA20), amber (SMA50), azul (SMA200).
+  // Los valores del HIST están guardados como "% below" (pct_ema20), así que
+  // los invertimos: aboveEMA20 = 100 - h.ema20.
+  const maBreadthEl = document.getElementById('maBreadthChart');
+  if (maBreadthEl) {
+    const titleEl = document.getElementById('maBreadthChartTitle');
+    if (titleEl) titleEl.textContent = `% Above key MAs — ${HIST.length} sessions`;
+
+    const ema20Above  = HIST.map(h => h.ema20  != null ? +(100 - h.ema20).toFixed(1)  : null);
+    const sma50Above  = HIST.map(h => h.sma50  != null ? +(100 - h.sma50).toFixed(1)  : null);
+    const sma200Above = HIST.map(h => h.sma200 != null ? +(100 - h.sma200).toFixed(1) : null);
+
+    new Chart(maBreadthEl, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: 'Above EMA20',
+            data: ema20Above,
+            borderColor: '#00e5cc',
+            backgroundColor: 'rgba(0,229,204,0.05)',
+            borderWidth: 1.5,
+            pointRadius: 2.2,
+            pointBackgroundColor: '#00e5cc',
+            pointBorderColor: '#00e5cc',
+            fill: false,
+            tension: 0.3,
+          },
+          {
+            label: 'Above SMA50',
+            data: sma50Above,
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245,158,11,0.05)',
+            borderWidth: 1.5,
+            pointRadius: 2.2,
+            pointBackgroundColor: '#f59e0b',
+            pointBorderColor: '#f59e0b',
+            fill: false,
+            tension: 0.3,
+          },
+          {
+            label: 'Above SMA200',
+            data: sma200Above,
+            borderColor: '#3b82f6',
+            backgroundColor: 'rgba(59,130,246,0.05)',
+            borderWidth: 1.5,
+            pointRadius: 2.2,
+            pointBackgroundColor: '#3b82f6',
+            pointBorderColor: '#3b82f6',
+            fill: false,
+            tension: 0.3,
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: {
+            display: true, position: 'top', align: 'end',
+            labels: {
+              color: '#8899aa',
+              font: { family: "'IBM Plex Sans',sans-serif", size: 9 },
+              boxWidth: 10, boxHeight: 10, padding: 8,
+              usePointStyle: true, pointStyle: 'line',
+            }
+          },
+          tooltip: {
+            mode: 'index', intersect: false,
+            backgroundColor: '#111827', borderColor: '#1e2d45', borderWidth: 1,
+            titleColor: '#e8f0fe', bodyColor: '#8899aa', padding: 10,
+            callbacks: {
+              label: (ctx) => {
+                const v = ctx.parsed.y;
+                if (v == null) return `${ctx.dataset.label}: —`;
+                return `${ctx.dataset.label}: ${v.toFixed(1)}%`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: grid, display: false },
+            ticks: { color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 }
+          },
+          y: {
+            min: 0, max: 100,
+            grid: {
+              color: ctx => ctx.tick.value === 50 ? 'rgba(255,255,255,0.15)' : grid,
+              lineWidth: ctx => ctx.tick.value === 50 ? 1.2 : 1,
+            },
+            ticks: {
+              color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 },
+              stepSize: 25,
+              callback: v => v + '%'
+            }
+          }
+        }
+      }
+    });
+  }
 
   // ── Acc/Dist History (últimos 30 días) ─────────────────────────────────────
   // Barras: # Accumulating (verde, arriba) + # Distributing (rojo, abajo reflejado)
