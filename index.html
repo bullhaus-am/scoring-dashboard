@@ -574,41 +574,16 @@
       </div>
     </div>
 
-    <!-- CARD 3: Daily Perf & Volume + Quadrant -->
+    <!-- CARD 3: Breadth charts (% Above MAs + Daily Perf) -->
     <div class="card" style="display:flex;flex-direction:column;">
-      <div class="card-tag">% stocks above key moving averages</div>
-      <div class="br-row">
-        <div class="br-meta">
-          <span>Above EMA20</span>
-          <span id="ema20-val" style="font-weight:700"></span>
-        </div>
-        <div class="br-track"><div class="br-fill" id="ema20-bar"></div></div>
-      </div>
-      <div class="br-row">
-        <div class="br-meta">
-          <span>Above SMA50</span>
-          <span id="sma50-val" style="font-weight:700"></span>
-        </div>
-        <div class="br-track"><div class="br-fill" id="sma50-bar"></div></div>
-      </div>
-      <div class="br-row" style="margin-bottom:0">
-        <div class="br-meta">
-          <span>Above SMA200</span>
-          <span id="sma200-val" style="font-weight:700"></span>
-        </div>
-        <div class="br-track"><div class="br-fill" id="sma200-bar"></div></div>
-      </div>
-
       <!-- MA breadth history chart -->
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);">
+      <div style="display:flex;flex-direction:column;flex:1;">
         <div class="card-tag" id="maBreadthChartTitle" style="margin-bottom:8px;">% Above key MAs</div>
-        <div style="position:relative;height:180px;width:100%;">
-          <canvas id="maBreadthChart"></canvas>
-        </div>
+        <div style="position:relative;flex:1;min-height:260px;"><canvas id="maBreadthChart"></canvas></div>
       </div>
 
       <!-- Daily Performance chart -->
-      <div style="padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
         <div class="card-tag" id="perfChartTitle" style="margin-bottom:8px;">Daily performance &amp; volume ratio</div>
         <div style="position:relative;flex:1;min-height:260px;"><canvas id="perfChart"></canvas></div>
       </div>
@@ -859,10 +834,12 @@ function breadthColor(pct) {
   return '#ff4d6d';
 }
 function setBreadth(barId, valId, pct) {
+  const bar = document.getElementById(barId);
+  const el  = document.getElementById(valId);
+  if (!bar || !el) return;   // barra eliminada del DOM: no-op
   const color = breadthColor(pct);
-  document.getElementById(barId).style.width = pct + '%';
-  document.getElementById(barId).style.background = color;
-  const el = document.getElementById(valId);
+  bar.style.width = pct + '%';
+  bar.style.background = color;
   el.textContent = pct.toFixed(1) + '%';
   el.style.color = color;
 }
@@ -1684,6 +1661,7 @@ function initCharts() {
   // 3 líneas con puntos: verde teal (EMA20), amber (SMA50), azul (SMA200).
   // Los valores del HIST están guardados como "% below" (pct_ema20), así que
   // los invertimos: aboveEMA20 = 100 - h.ema20.
+  // Al lado del último punto se muestra el valor actual con el color de la línea.
   const maBreadthEl = document.getElementById('maBreadthChart');
   if (maBreadthEl) {
     const titleEl = document.getElementById('maBreadthChartTitle');
@@ -1692,6 +1670,34 @@ function initCharts() {
     const ema20Above  = HIST.map(h => h.ema20  != null ? +(100 - h.ema20).toFixed(1)  : null);
     const sma50Above  = HIST.map(h => h.sma50  != null ? +(100 - h.sma50).toFixed(1)  : null);
     const sma200Above = HIST.map(h => h.sma200 != null ? +(100 - h.sma200).toFixed(1) : null);
+
+    // Plugin inline: dibuja el último valor de cada serie al lado del punto final.
+    // Usa texto monoespaciado con el color de cada línea.
+    const lastValueLabelPlugin = {
+      id: 'lastValueLabels',
+      afterDatasetsDraw: (chart) => {
+        const { ctx } = chart;
+        ctx.save();
+        ctx.font = "600 11px 'IBM Plex Mono', monospace";
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        chart.data.datasets.forEach((ds, dsIdx) => {
+          const meta = chart.getDatasetMeta(dsIdx);
+          if (!meta || !meta.data || meta.data.length === 0) return;
+          // Último punto no-null
+          let lastIdx = ds.data.length - 1;
+          while (lastIdx >= 0 && ds.data[lastIdx] == null) lastIdx--;
+          if (lastIdx < 0) return;
+          const pt = meta.data[lastIdx];
+          if (!pt) return;
+          const value = ds.data[lastIdx];
+          const text = value.toFixed(1) + '%';
+          ctx.fillStyle = ds.borderColor;
+          ctx.fillText(text, pt.x + 8, pt.y);
+        });
+        ctx.restore();
+      }
+    };
 
     new Chart(maBreadthEl, {
       type: 'line',
@@ -1736,9 +1742,12 @@ function initCharts() {
           }
         ]
       },
+      plugins: [lastValueLabelPlugin],
       options: {
         responsive: true, maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
+        // Padding derecho para que las etiquetas de último valor no se corten
+        layout: { padding: { right: 52 } },
         plugins: {
           legend: {
             display: true, position: 'top', align: 'end',
