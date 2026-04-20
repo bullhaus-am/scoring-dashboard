@@ -219,6 +219,8 @@
 
   .fbar { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
   .fbar-lbl { font-size: 9px; color: var(--mist); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-right: 4px; font-family: var(--font-sans); }
+  .fbar-sep { display: inline-block; width: 1px; height: 18px; background: var(--rule2); margin: 0 4px; opacity: 0.6; }
+  .fgroup { display: inline-flex; gap: 5px; align-items: center; flex-wrap: wrap; }
   .fbtn { font-size: 10px; padding: 4px 11px; border-radius: 4px; border: 1px solid var(--rule2); background: transparent; color: var(--smoke); cursor: pointer; font-family: var(--font); transition: all 0.12s; letter-spacing: 0.5px; }
   .fbtn:hover { border-color: var(--teal); color: var(--teal); }
   .fbtn.active { background: var(--teal2); color: var(--teal); border-color: rgba(0,229,204,.4); }
@@ -646,44 +648,64 @@
       </div>
       <div class="fbar">
         <span class="fbar-lbl">Filter</span>
+
+        <!-- Sección 1: Ticker search -->
         <input class="fticker" id="tickerSearch" type="text" placeholder="Ticker..." maxlength="10" oninput="setFilterTicker(this)" autocomplete="off" spellcheck="false">
-        <button class="fbtn active" onclick="setFilter('all',this)">All</button>
-        <button class="fbtn" onclick="setFilter('operable',this)">Operable</button>
-        <button class="fbtn" onclick="setFilter('volOk',this)">Volat OK</button>
-        <button class="fbtn" onclick="setFilter('extOk',this)">Not Extended</button>
-        <select class="fselect fselect-grade" id="gradeDropdown" onchange="setFilterGrade(this)">
-          <option value="">RS Grade</option>
-          <option value="A+">A+</option>
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="C">C</option>
-          <option value="D">D</option>
-          <option value="E">E</option>
-        </select>
-        <select class="fselect fselect-grade" id="accGradeDropdown" onchange="setFilterAccGrade(this)">
-          <option value="">ACC Grade</option>
-          <option value="A+">A+</option>
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="C">C</option>
-          <option value="D">D</option>
-          <option value="E">E</option>
-        </select>
-        <select class="fselect fselect-grade" id="fundGradeDropdown" onchange="setFilterFundGrade(this)">
-          <option value="">Fund Grade</option>
-          <option value="A+">A+</option>
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="C">C</option>
-          <option value="D">D</option>
-          <option value="E">E</option>
-        </select>
-        <select class="fselect" id="sectorDropdown" onchange="setFilterSector(this)">
-          <option value="">Sector</option>
-        </select>
-        <select class="fselect" id="industryDropdown" onchange="setFilterIndustry(this)">
-          <option value="">Industria</option>
-        </select>
+
+        <span class="fbar-sep"></span>
+
+        <!-- Sección 2: Type filters -->
+        <div class="fgroup">
+          <button class="fbtn active" onclick="setFilter('all',this)">All</button>
+          <button class="fbtn" onclick="setFilter('operable',this)">Operable</button>
+          <button class="fbtn" onclick="setFilter('volOk',this)">Volat OK</button>
+          <button class="fbtn" onclick="setFilter('extOk',this)">Not Extended</button>
+        </div>
+
+        <span class="fbar-sep"></span>
+
+        <!-- Sección 3: Grades -->
+        <div class="fgroup">
+          <select class="fselect fselect-grade" id="gradeDropdown" onchange="setFilterGrade(this)">
+            <option value="">RS Grade</option>
+            <option value="A+">A+</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+          <select class="fselect fselect-grade" id="accGradeDropdown" onchange="setFilterAccGrade(this)">
+            <option value="">ACC Grade</option>
+            <option value="A+">A+</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+          <select class="fselect fselect-grade" id="fundGradeDropdown" onchange="setFilterFundGrade(this)">
+            <option value="">Fund Grade</option>
+            <option value="A+">A+</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+            <option value="E">E</option>
+          </select>
+        </div>
+
+        <span class="fbar-sep"></span>
+
+        <!-- Sección 4: Scope (sector + industry) -->
+        <div class="fgroup">
+          <select class="fselect" id="sectorDropdown" onchange="setFilterSector(this)">
+            <option value="">Sector</option>
+          </select>
+          <select class="fselect" id="industryDropdown" onchange="setFilterIndustry(this)">
+            <option value="">Industria</option>
+          </select>
+        </div>
       </div>
     </div>
     <div class="tbl-wrap">
