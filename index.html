@@ -226,6 +226,11 @@
   .fbtn { font-size: 10px; padding: 4px 11px; border-radius: 4px; border: 1px solid var(--rule2); background: transparent; color: var(--smoke); cursor: pointer; font-family: var(--font); transition: all 0.12s; letter-spacing: 0.5px; }
   .fbtn:hover { border-color: var(--teal); color: var(--teal); }
   .fbtn.active { background: var(--teal2); color: var(--teal); border-color: rgba(0,229,204,.4); }
+  /* Clear all button — gris cuando no hay filtros, ámbar cuando hay algo para limpiar */
+  .fbtn.fclear { color: var(--mist); opacity: 0.5; transition: all 0.12s; }
+  .fbtn.fclear:hover { opacity: 1; }
+  .fbtn.fclear.has-filters { color: #f59e0b; border-color: rgba(245,158,11,.4); opacity: 1; }
+  .fbtn.fclear.has-filters:hover { background: rgba(245,158,11,.12); border-color: #f59e0b; }
   .fselect-grade option[value="A+"] { color: #f59e0b; }
   .fselect-grade option[value="A"]  { color: #00e5cc; }
   .fselect-grade option[value="B"]  { color: #3b82f6; }
@@ -759,6 +764,13 @@
             <option value="">Industria</option>
           </select>
         </div>
+
+        <span class="fbar-sep"></span>
+
+        <!-- Sección 5: Clear all -->
+        <button class="fbtn fclear" id="clearAllBtn" type="button" onclick="clearAllFilters()" title="Limpiar todos los filtros">
+          ✕ Clear all
+        </button>
       </div>
     </div>
     <div class="tbl-wrap">
@@ -1058,6 +1070,64 @@ function setFilterTicker(input) {
   const inds = [...new Set(ALL_STOCKS.map(s => s.industry).filter(Boolean))].sort();
   inds.forEach(i => { const o = document.createElement('option'); o.value = i; o.textContent = i; id.appendChild(o); });
   renderStocks();
+}
+
+// ── Clear all filters ─────────────────────────────────────────────────────────
+// Devuelve el dashboard al estado inicial: sin ticker, type=all,
+// sin grades seleccionados, sin sector ni industry.
+function clearAllFilters() {
+  // 1. Ticker search
+  filterTicker = '';
+  const ti = document.getElementById('tickerSearch');
+  if (ti) { ti.value = ''; ti.classList.remove('active'); }
+
+  // 2. Type buttons → 'all'
+  filterMode = 'all';
+  document.querySelectorAll('.fbar .fbtn').forEach(b => b.classList.remove('active'));
+  // El primer botón es siempre "All" — lo marcamos activo
+  const allBtn = document.querySelector('.fbar .fgroup .fbtn');
+  if (allBtn) allBtn.classList.add('active');
+
+  // 3. Grade multi-selects (RS / ACC / Fund) — vaciar Sets y desmarcar checks
+  ['rs', 'acc', 'fund'].forEach(k => {
+    GMS[k].set.clear();
+    const panel = document.getElementById(`fmulti-panel-${k}`);
+    if (panel) panel.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    gmsUpdateButton(k);
+  });
+
+  // 4. Sector + Industry
+  filterSector = '';
+  filterIndustry = '';
+  const secEl = document.getElementById('sectorDropdown');
+  const indEl = document.getElementById('industryDropdown');
+  if (secEl) { secEl.value = ''; secEl.classList.remove('active'); }
+  if (indEl) {
+    indEl.value = '';
+    indEl.classList.remove('active');
+    // Repopulate industry list completa (puede haber sido filtrada por sector)
+    indEl.innerHTML = '<option value="">Industria</option>';
+    const inds = [...new Set(ALL_STOCKS.map(s => s.industry).filter(Boolean))].sort();
+    inds.forEach(i => { const o = document.createElement('option'); o.value = i; o.textContent = i; indEl.appendChild(o); });
+  }
+
+  renderStocks();
+}
+
+// Verifica si hay algún filtro activo y resalta visualmente el botón Clear all.
+function _updateClearAllVisibility() {
+  const btn = document.getElementById('clearAllBtn');
+  if (!btn) return;
+  const hasFilters = (
+    filterTicker !== '' ||
+    filterMode !== 'all' ||
+    GMS.rs.set.size > 0 ||
+    GMS.acc.set.size > 0 ||
+    GMS.fund.set.size > 0 ||
+    filterSector !== '' ||
+    filterIndustry !== ''
+  );
+  btn.classList.toggle('has-filters', hasFilters);
 }
 
 // ── Grade multi-select component (RS / ACC / Fund) ─────────────────────────
@@ -1771,6 +1841,7 @@ function renderStocks() {
   const filterDesc = parts.join(' · ');
   document.getElementById('tblFooter').textContent =
     `SHOWING ${Math.min(50, total)} OF ${total} STOCKS  ·  ${filterDesc}  ·  SORTED BY ${sortCol.toUpperCase()} ${sortDir===-1?'↓':'↑'}`;
+  _updateClearAllVisibility();
 }
 
 // ── Charts ─────────────────────────────────────────────────────────────────────
