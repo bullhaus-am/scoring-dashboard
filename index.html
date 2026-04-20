@@ -1188,12 +1188,17 @@ function renderWatchlist() {
     const dqOrder2 = {'High':4, 'Medium':3, 'Low':2, 'Foreign':1};
     const gradeRank2 = g => gradeOrder2[g] != null ? [0, gradeOrder2[g]] : [1, 0];
     const dqRank2 = d => dqOrder2[d] != null ? [0, dqOrder2[d]] : [1, 0];
+    const GRADE_TIEBREAKER2 = {'rsGrade':'rsmc','accGrade':'score','fundGrade':'fundPctil'};
     const _cmp2 = (a, b, col, dir) => {
       if (col==='rsGrade'||col==='accGrade'||col==='fundGrade') {
         const [ea, ra] = gradeRank2(a[col]);
         const [eb, rb] = gradeRank2(b[col]);
         if (ea !== eb) return (ea - eb) * dir;
-        return ra - rb;
+        if (ra !== rb) return ra - rb;
+        const tbKey = GRADE_TIEBREAKER2[col];
+        const av = a[tbKey] ?? -1;
+        const bv = b[tbKey] ?? -1;
+        return av - bv;
       }
       if (col==='fundDq') {
         const [ea, ra] = dqRank2(a[col]);
@@ -1501,12 +1506,29 @@ function renderStocks() {
     const dqOrder = {'High':4, 'Medium':3, 'Low':2, 'Foreign':1};
     const gradeRank = g => gradeOrder[g] != null ? [0, gradeOrder[g]] : [1, 0];
     const dqRank = d => dqOrder[d] != null ? [0, dqOrder[d]] : [1, 0];
+    // Tiebreaker: cuando dos tickers tienen el mismo grade, desempata por el
+    // score numérico subyacente. Valor más alto = mejor, siempre.
+    // rsGrade   → rsmc (RS_MC_Score)
+    // accGrade  → score (total_score)
+    // fundGrade → fundPctil (percentil fundamental)
+    const GRADE_TIEBREAKER = {
+      'rsGrade':   'rsmc',
+      'accGrade':  'score',
+      'fundGrade': 'fundPctil',
+    };
     const _cmpField = (a, b, col, dir) => {
       if (col === 'rsGrade' || col === 'accGrade' || col === 'fundGrade') {
         const [ea, ra] = gradeRank(a[col]);
         const [eb, rb] = gradeRank(b[col]);
         if (ea !== eb) return (ea - eb) * dir;  // excluidos siempre al final
-        return ra - rb;
+        if (ra !== rb) return ra - rb;
+        // Empate de grade: desempatar con score subyacente.
+        // Valor más alto del score queda "mejor" en el orden del grade, así que
+        // lo tratamos igual que el rank (mismo signo que ra - rb implícito).
+        const tbKey = GRADE_TIEBREAKER[col];
+        const av = a[tbKey] ?? -1;
+        const bv = b[tbKey] ?? -1;
+        return av - bv;
       }
       if (col === 'fundDq') {
         const [ea, ra] = dqRank(a[col]);
