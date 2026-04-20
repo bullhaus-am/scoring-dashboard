@@ -551,7 +551,7 @@
 
       <!-- Acc/Dist history chart (últimos 30 días) -->
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);">
-        <div class="card-tag" style="margin-bottom:8px;">Acc / Dist — Últimos 30 días</div>
+        <div class="card-tag" style="margin-bottom:8px;">Acc / Dist Count — Últimos 30 días</div>
         <div style="position:relative;height:160px;width:100%;">
           <canvas id="accDistHistChart"></canvas>
         </div>
@@ -1672,17 +1672,46 @@ function initCharts() {
   });
 
   // ── Acc/Dist History (últimos 30 días) ─────────────────────────────────────
-  // Barras apiladas: % accumulating (verde, arriba) + % distributing (rojo, abajo)
-  // Línea del neto superpuesta (% acc - % dist) con color dinámico
+  // Barras: nAcc (verde, arriba) + nDist (rojo, abajo reflejado)
+  // Línea neto superpuesta = nAcc - nDist con color dinámico por signo.
+  // Para días sin cantidad real guardada (corridas anteriores), se aproxima
+  // como round(pct × nTotal / 100) usando el nTotal más reciente disponible
+  // o 985 como fallback final. Esto es imperceptible visualmente (±10 tickers).
   const accDistEl = document.getElementById('accDistHistChart');
   if (accDistEl) {
     const hist30 = HIST.slice(-30);
+
+    // Buscar el nTotal más reciente disponible para usar como referencia
+    // en días viejos que no tengan nTotal guardado
+    let fallbackTotal = 985;  // default Russell 1000
+    for (let i = HIST.length - 1; i >= 0; i--) {
+      if (HIST[i].nTotal != null && HIST[i].nTotal > 0) {
+        fallbackTotal = HIST[i].nTotal;
+        break;
+      }
+    }
+
     const labels30 = hist30.map(h => h.d);
-    const pctAccData  = hist30.map(h => h.pctAcc  != null ? h.pctAcc  : 0);
-    const pctDistData = hist30.map(h => h.pctDist != null ? -h.pctDist : 0);  // negativo para ir "abajo"
-    const netData     = hist30.map(h => {
-      if (h.pctAcc == null || h.pctDist == null) return null;
-      return +(h.pctAcc - h.pctDist).toFixed(1);
+    const nAccData  = hist30.map(h => {
+      if (h.nAcc != null)  return h.nAcc;
+      if (h.pctAcc != null) {
+        const total = h.nTotal || fallbackTotal;
+        return Math.round(h.pctAcc * total / 100);
+      }
+      return null;
+    });
+    const nDistData = hist30.map(h => {
+      if (h.nDist != null) return -h.nDist;  // negativo para dibujar "abajo"
+      if (h.pctDist != null) {
+        const total = h.nTotal || fallbackTotal;
+        return -Math.round(h.pctDist * total / 100);
+      }
+      return null;
+    });
+    const netData = hist30.map((h, i) => {
+      const a = nAccData[i], d = nDistData[i];
+      if (a == null || d == null) return null;
+      return a + d;   // d ya es negativo, así que esto es nAcc - nDist
     });
 
     new Chart(accDistEl, {
@@ -1691,8 +1720,8 @@ function initCharts() {
         labels: labels30,
         datasets: [
           {
-            label: '% Accumulating',
-            data: pctAccData,
+            label: '# Accumulating',
+            data: nAccData,
             backgroundColor: 'rgba(0, 229, 204, 0.65)',
             borderColor: 'rgba(0, 229, 204, 0.9)',
             borderWidth: 0,
@@ -1702,8 +1731,8 @@ function initCharts() {
             order: 2,
           },
           {
-            label: '% Distributing',
-            data: pctDistData,
+            label: '# Distributing',
+            data: nDistData,
             backgroundColor: 'rgba(255, 77, 109, 0.60)',
             borderColor: 'rgba(255, 77, 109, 0.85)',
             borderWidth: 0,
@@ -1738,17 +1767,13 @@ function initCharts() {
             labels: {
               color: '#8899aa', font: { family: "'IBM Plex Sans',sans-serif", size: 9 },
               boxWidth: 10, boxHeight: 10, padding: 8,
-              filter: (item) => item.text !== '% Distributing' || true,
-              generateLabels: (chart) => {
-                // Custom labels para que % Distributing se vea "arriba" aunque esté negativo
-                return chart.data.datasets.map((ds, i) => ({
-                  text: ds.label,
-                  fillStyle: ds.type === 'line' ? ds.borderColor : ds.backgroundColor,
-                  strokeStyle: ds.type === 'line' ? ds.borderColor : ds.backgroundColor,
-                  hidden: false,
-                  datasetIndex: i,
-                }));
-              }
+              generateLabels: (chart) => chart.data.datasets.map((ds, i) => ({
+                text: ds.label,
+                fillStyle: ds.type === 'line' ? ds.borderColor : ds.backgroundColor,
+                strokeStyle: ds.type === 'line' ? ds.borderColor : ds.backgroundColor,
+                hidden: false,
+                datasetIndex: i,
+              }))
             }
           },
           tooltip: {
@@ -1759,11 +1784,15 @@ function initCharts() {
               label: (ctx) => {
                 const v = ctx.parsed.y;
                 if (v == null) return `${ctx.dataset.label}: —`;
-                // Para dist mostramos el valor absoluto (ya que se dibuja negativo)
-                if (ctx.dataset.label === '% Distributing') {
-                  return `${ctx.dataset.label}: ${Math.abs(v).toFixed(1)}%`;
+                // # Distributing se guarda negativo para dibujarse abajo;
+                // mostramos el valor absoluto en el tooltip.
+                if (ctx.dataset.label === '# Distributing') {
+                  return `${ctx.dataset.label}: ${Math.abs(v)} tickers`;
                 }
-                return `${ctx.dataset.label}: ${v >= 0 ? '+' : ''}${v.toFixed(1)}${ctx.dataset.label.includes('%') ? '%' : ''}`;
+                if (ctx.dataset.label.startsWith('Neto')) {
+                  return `${ctx.dataset.label}: ${v >= 0 ? '+' : ''}${v} tickers`;
+                }
+                return `${ctx.dataset.label}: ${v} tickers`;
               }
             }
           }
@@ -1780,7 +1809,7 @@ function initCharts() {
             },
             ticks: {
               color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 },
-              callback: v => Math.abs(v) + '%'
+              callback: v => Math.abs(v)
             }
           }
         }
