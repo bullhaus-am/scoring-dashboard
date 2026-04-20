@@ -233,6 +233,63 @@
   .fselect-grade option[value="D"]  { color: #ff4d6d; }
   .fselect-grade option[value="E"]  { color: #ff4d6d; }
   .fselect-grade.active { border-color: rgba(245,158,11,.5); color: #f59e0b; }
+
+  /* Multi-select dropdowns (RS / ACC / Fund Grade) */
+  .fmulti { position: relative; display: inline-block; }
+  .fmulti-btn {
+    font-size: 10px; padding: 4px 9px 4px 9px; border-radius: 4px;
+    border: 1px solid var(--rule2); background: var(--bg); color: var(--smoke);
+    cursor: pointer; font-family: var(--font); transition: all 0.12s;
+    letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 6px;
+    min-width: 82px; justify-content: space-between;
+  }
+  .fmulti-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .fmulti.active .fmulti-btn {
+    background: var(--teal2); color: var(--teal);
+    border-color: rgba(0,229,204,.4);
+  }
+  .fmulti-caret { font-size: 8px; opacity: 0.7; transition: transform 0.15s; }
+  .fmulti.open .fmulti-caret { transform: rotate(180deg); }
+  .fmulti-panel {
+    position: absolute; top: calc(100% + 4px); left: 0; z-index: 1000;
+    min-width: 140px; background: #0f1923;
+    border: 1px solid var(--rule2); border-radius: 5px;
+    padding: 4px; display: none; flex-direction: column;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  }
+  .fmulti.open .fmulti-panel { display: flex; }
+  .fmulti-opt {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 9px; border-radius: 3px; cursor: pointer;
+    font-size: 11px; color: var(--smoke);
+    transition: background 0.1s;
+  }
+  .fmulti-opt:hover { background: rgba(255,255,255,0.05); }
+  .fmulti-opt.sel { color: var(--white); }
+  .fmulti-opt input[type="checkbox"] {
+    margin: 0; width: 13px; height: 13px; cursor: pointer;
+    accent-color: var(--teal);
+  }
+  .fmulti-opt .fmulti-grade-label {
+    font-weight: 600; min-width: 18px;
+  }
+  .fmulti-opt[data-g="A+"] .fmulti-grade-label { color: #f59e0b; }
+  .fmulti-opt[data-g="A"]  .fmulti-grade-label { color: #00e5cc; }
+  .fmulti-opt[data-g="B"]  .fmulti-grade-label { color: #3b82f6; }
+  .fmulti-opt[data-g="C"]  .fmulti-grade-label { color: #8899aa; }
+  .fmulti-opt[data-g="D"]  .fmulti-grade-label { color: #ff4d6d; }
+  .fmulti-opt[data-g="E"]  .fmulti-grade-label { color: #ff4d6d; }
+  .fmulti-footer {
+    border-top: 1px solid var(--rule2); margin-top: 4px;
+    padding: 5px 9px 3px; display: flex; justify-content: space-between;
+  }
+  .fmulti-clear {
+    background: transparent; border: none; color: var(--mist);
+    cursor: pointer; font-size: 10px; padding: 2px 4px;
+    font-family: var(--font); letter-spacing: 0.5px;
+    text-transform: uppercase; transition: color 0.12s;
+  }
+  .fmulti-clear:hover { color: var(--teal); }
     .fselect { font-size: 10px; padding: 4px 26px 4px 9px; border-radius: 4px; border: 1px solid var(--rule2); background-color: var(--bg); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%238899aa'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; color: var(--smoke); cursor: pointer; font-family: var(--font); transition: all 0.12s; letter-spacing: 0.5px; appearance: none; -webkit-appearance: none; }
   .fselect:focus { outline: none; border-color: var(--teal); color: var(--teal); }
   .fselect.active { background-color: var(--teal2); color: var(--teal); border-color: rgba(0,229,204,.4); }
@@ -666,35 +723,29 @@
 
         <span class="fbar-sep"></span>
 
-        <!-- Sección 3: Grades -->
+        <!-- Sección 3: Grades (multi-select) -->
         <div class="fgroup">
-          <select class="fselect fselect-grade" id="gradeDropdown" onchange="setFilterGrade(this)">
-            <option value="">RS Grade</option>
-            <option value="A+">A+</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-          </select>
-          <select class="fselect fselect-grade" id="accGradeDropdown" onchange="setFilterAccGrade(this)">
-            <option value="">ACC Grade</option>
-            <option value="A+">A+</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-          </select>
-          <select class="fselect fselect-grade" id="fundGradeDropdown" onchange="setFilterFundGrade(this)">
-            <option value="">Fund Grade</option>
-            <option value="A+">A+</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-          </select>
+          <div class="fmulti" id="fmulti-rs" data-filter="rs">
+            <button class="fmulti-btn" type="button" onclick="gmsToggle('rs')">
+              <span class="fmulti-label">RS Grade</span>
+              <span class="fmulti-caret">▾</span>
+            </button>
+            <div class="fmulti-panel" id="fmulti-panel-rs"></div>
+          </div>
+          <div class="fmulti" id="fmulti-acc" data-filter="acc">
+            <button class="fmulti-btn" type="button" onclick="gmsToggle('acc')">
+              <span class="fmulti-label">ACC Grade</span>
+              <span class="fmulti-caret">▾</span>
+            </button>
+            <div class="fmulti-panel" id="fmulti-panel-acc"></div>
+          </div>
+          <div class="fmulti" id="fmulti-fund" data-filter="fund">
+            <button class="fmulti-btn" type="button" onclick="gmsToggle('fund')">
+              <span class="fmulti-label">Fund Grade</span>
+              <span class="fmulti-caret">▾</span>
+            </button>
+            <div class="fmulti-panel" id="fmulti-panel-fund"></div>
+          </div>
         </div>
 
         <span class="fbar-sep"></span>
@@ -934,7 +985,7 @@ let filterMode = 'all';
 // Compat shims used by legacy code paths
 Object.defineProperty(window, 'sortCol', { get: () => sortKeys[0]?.col || 'rank' });
 Object.defineProperty(window, 'sortDir', { get: () => sortKeys[0]?.dir || 1  });
-let filterSector = '', filterIndustry = '', filterTicker = '', filterGrade = '', filterAccGrade = '', filterFundGrade = '';
+let filterSector = '', filterIndustry = '', filterTicker = '';
 
 // Populate dropdowns from ALL_STOCKS data
 function initDropdowns() {
@@ -1009,22 +1060,101 @@ function setFilterTicker(input) {
   renderStocks();
 }
 
-function setFilterGrade(sel) {
-  filterGrade = sel.value;
-  sel.classList.toggle('active', !!filterGrade);
+// ── Grade multi-select component (RS / ACC / Fund) ─────────────────────────
+// Estado: Set<string> por filtro. Set vacío = sin filtrar (mostrar todo).
+// Si el set tiene elementos, solo se muestran stocks con grade ∈ set.
+const GMS = {
+  rs:   { set: new Set(), label: 'RS Grade',   filterKey: 'rsGrade' },
+  acc:  { set: new Set(), label: 'ACC Grade',  filterKey: 'accGrade' },
+  fund: { set: new Set(), label: 'Fund Grade', filterKey: 'fundGrade' },
+};
+const GMS_GRADES = ['A+', 'A', 'B', 'C', 'D', 'E'];
+
+function gmsBuildPanel(key) {
+  const panel = document.getElementById(`fmulti-panel-${key}`);
+  if (!panel) return;
+  panel.innerHTML = GMS_GRADES.map(g => `
+    <label class="fmulti-opt" data-g="${g}" onclick="event.stopPropagation()">
+      <input type="checkbox" value="${g}" onchange="gmsOnChange('${key}', '${g}', this.checked)">
+      <span class="fmulti-grade-label">${g}</span>
+    </label>
+  `).join('') + `
+    <div class="fmulti-footer">
+      <button class="fmulti-clear" type="button" onclick="gmsClear('${key}')">Clear</button>
+    </div>
+  `;
+}
+
+function gmsToggle(key) {
+  const el = document.getElementById(`fmulti-${key}`);
+  if (!el) return;
+  const isOpen = el.classList.contains('open');
+  // Cerrar todos los demás antes de abrir este
+  document.querySelectorAll('.fmulti.open').forEach(e => e.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+function gmsOnChange(key, grade, checked) {
+  const state = GMS[key];
+  if (checked) state.set.add(grade);
+  else         state.set.delete(grade);
+  gmsUpdateButton(key);
   renderStocks();
 }
 
-function setFilterAccGrade(sel) {
-  filterAccGrade = sel.value;
-  sel.classList.toggle('active', !!filterAccGrade);
+function gmsClear(key) {
+  GMS[key].set.clear();
+  // Desmarcar checkboxes
+  const panel = document.getElementById(`fmulti-panel-${key}`);
+  if (panel) panel.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+  gmsUpdateButton(key);
   renderStocks();
 }
 
-function setFilterFundGrade(sel) {
-  filterFundGrade = sel.value;
-  sel.classList.toggle('active', !!filterFundGrade);
-  renderStocks();
+function gmsUpdateButton(key) {
+  const state = GMS[key];
+  const wrap = document.getElementById(`fmulti-${key}`);
+  const lbl  = wrap?.querySelector('.fmulti-label');
+  if (!wrap || !lbl) return;
+  const n = state.set.size;
+  if (n === 0) {
+    lbl.textContent = state.label;
+    wrap.classList.remove('active');
+  } else if (n === 1) {
+    const grade = [...state.set][0];
+    lbl.textContent = `${state.label}: ${grade}`;
+    wrap.classList.add('active');
+  } else {
+    // Ordenar por orden canónico de grades para mostrar compacto
+    const sorted = GMS_GRADES.filter(g => state.set.has(g));
+    lbl.textContent = `${state.label}: ${sorted.join(',')}`;
+    wrap.classList.add('active');
+  }
+}
+
+function gmsInit() {
+  ['rs', 'acc', 'fund'].forEach(k => { gmsBuildPanel(k); gmsUpdateButton(k); });
+  // Cerrar paneles al clickear afuera
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.fmulti')) {
+      document.querySelectorAll('.fmulti.open').forEach(el => el.classList.remove('open'));
+    }
+  });
+}
+
+// Helper para filtros: devuelve true si el grade pasa el filtro (set vacío = pasa todo)
+function gmsMatches(key, grade) {
+  const set = GMS[key].set;
+  if (set.size === 0) return true;
+  return set.has(grade);
+}
+
+// Helper para los labels del footer
+function gmsLabel(key) {
+  const state = GMS[key];
+  if (state.set.size === 0) return '';
+  const sorted = GMS_GRADES.filter(g => state.set.has(g));
+  return `${state.label.toUpperCase()}: ${sorted.join(',')}`;
 }
 
 function sortBy(col, forceDir) {
@@ -1516,10 +1646,13 @@ function renderStocks() {
   else if (filterMode === 'volOk')     data = data.filter(s => s.volOk === 'YES');
   else if (filterMode === 'extOk')     data = data.filter(s => s.extOk === 'YES');
 
-  // 2) Grade filter — independent, combines with all others
-  if (filterGrade)     data = data.filter(s => s.rsGrade === filterGrade);
-  if (filterAccGrade)  data = data.filter(s => s.accGrade === filterAccGrade);
-  if (filterFundGrade) data = data.filter(s => s.fundGrade === filterFundGrade);
+  // 2) Grade filters — independientes, se combinan con todo lo demás.
+  // Cada filtro permite multi-select (Set). Set vacío = sin filtrar.
+  data = data.filter(s =>
+    gmsMatches('rs',   s.rsGrade) &&
+    gmsMatches('acc',  s.accGrade) &&
+    gmsMatches('fund', s.fundGrade)
+  );
 
   // 3) Scope filter (dropdowns / ticker) - combines with type and grade
   if      (filterTicker)    data = data.filter(s => s.sym.toUpperCase().includes(filterTicker));
@@ -1630,9 +1763,9 @@ function renderStocks() {
     </tr>`;
   }).join('');
   const typeLabel = {all:'ALL', operable:'OPERABLE', volOk:'VOLAT OK', extOk:'NOT EXTENDED'}[filterMode] || 'ALL';
-  const gradeLabel    = filterGrade    ? `RS GRADE: ${filterGrade}`  : '';
-  const accGradeLabel = filterAccGrade ? `ACC GRADE: ${filterAccGrade}` : '';
-  const fundGradeLabel= filterFundGrade? `FUND GRADE: ${filterFundGrade}` : '';
+  const gradeLabel    = gmsLabel('rs');
+  const accGradeLabel = gmsLabel('acc');
+  const fundGradeLabel= gmsLabel('fund');
   const scopeLabel = filterTicker ? `TICKER: ${filterTicker}` : filterIndustry ? `INDUSTRY: ${filterIndustry}` : filterSector ? `SECTOR: ${filterSector}` : '';
   const parts = [typeLabel, gradeLabel, accGradeLabel, fundGradeLabel, scopeLabel].filter(Boolean);
   const filterDesc = parts.join(' · ');
@@ -2232,6 +2365,7 @@ renderIndustries();
 })();
 renderRsGradePerf();
 initDropdowns();
+gmsInit();
 renderWatchlist();
 // No initial sortBy call — sortKeys starts empty, rank asc is the fallback
 renderStocks();
