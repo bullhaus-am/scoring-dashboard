@@ -1672,46 +1672,21 @@ function initCharts() {
   });
 
   // ── Acc/Dist History (últimos 30 días) ─────────────────────────────────────
-  // Barras: nAcc (verde, arriba) + nDist (rojo, abajo reflejado)
-  // Línea neto superpuesta = nAcc - nDist con color dinámico por signo.
-  // Para días sin cantidad real guardada (corridas anteriores), se aproxima
-  // como round(pct × nTotal / 100) usando el nTotal más reciente disponible
-  // o 985 como fallback final. Esto es imperceptible visualmente (±10 tickers).
+  // Barras: # Accumulating (verde, arriba) + # Distributing (rojo, abajo reflejado)
+  // Línea neto = nAcc - nDist con color dinámico por signo.
+  // NOTA: los días anteriores a la integración de Acc 1D / Dist 1D en el
+  // Historical Series aparecen vacíos. A partir del primer día con data real,
+  // el chart se va llenando hasta alcanzar los 30 días completos.
   const accDistEl = document.getElementById('accDistHistChart');
   if (accDistEl) {
     const hist30 = HIST.slice(-30);
-
-    // Buscar el nTotal más reciente disponible para usar como referencia
-    // en días viejos que no tengan nTotal guardado
-    let fallbackTotal = 985;  // default Russell 1000
-    for (let i = HIST.length - 1; i >= 0; i--) {
-      if (HIST[i].nTotal != null && HIST[i].nTotal > 0) {
-        fallbackTotal = HIST[i].nTotal;
-        break;
-      }
-    }
-
-    const labels30 = hist30.map(h => h.d);
-    const nAccData  = hist30.map(h => {
-      if (h.nAcc != null)  return h.nAcc;
-      if (h.pctAcc != null) {
-        const total = h.nTotal || fallbackTotal;
-        return Math.round(h.pctAcc * total / 100);
-      }
-      return null;
-    });
-    const nDistData = hist30.map(h => {
-      if (h.nDist != null) return -h.nDist;  // negativo para dibujar "abajo"
-      if (h.pctDist != null) {
-        const total = h.nTotal || fallbackTotal;
-        return -Math.round(h.pctDist * total / 100);
-      }
-      return null;
-    });
-    const netData = hist30.map((h, i) => {
+    const labels30  = hist30.map(h => h.d);
+    const nAccData  = hist30.map(h => h.nAcc  != null ? h.nAcc  : null);
+    const nDistData = hist30.map(h => h.nDist != null ? -h.nDist : null);  // negativo para ir "abajo"
+    const netData   = hist30.map((h, i) => {
       const a = nAccData[i], d = nDistData[i];
       if (a == null || d == null) return null;
-      return a + d;   // d ya es negativo, así que esto es nAcc - nDist
+      return a + d;   // d ya es negativo → esto es nAcc - nDist
     });
 
     new Chart(accDistEl, {
