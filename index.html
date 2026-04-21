@@ -523,6 +523,74 @@
     .fund-detail-body { grid-template-columns: 1fr; }
   }
 
+  /* ── Group Info Icon (ⓘ en headers de grupo) ──────────────────── */
+  .thg-info {
+    display: inline-block; margin-left: 6px; cursor: pointer;
+    font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.35);
+    border: 1px solid rgba(255,255,255,0.25); border-radius: 50%;
+    width: 14px; height: 14px; line-height: 12px; text-align: center;
+    font-family: Georgia, serif; font-style: italic;
+    transition: all .15s; vertical-align: middle;
+    user-select: none;
+  }
+  .thg-info:hover { color: var(--white); border-color: var(--teal); background: rgba(0,229,204,0.15); }
+
+  /* ── Formula Info Modal ─────────────────────────────────────── */
+  #formulaInfoOverlay {
+    position: fixed; top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.78); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    z-index: 1100; display: none; overflow-y: auto; padding: 60px 20px;
+  }
+  #formulaInfoOverlay.visible { display: block; }
+  .fi-panel {
+    max-width: 760px; margin: 0 auto; background: var(--bg2); border-radius: 12px;
+    border: 1px solid var(--rule2); box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    overflow: hidden;
+  }
+  .fi-header {
+    padding: 20px 28px; border-bottom: 1px solid var(--rule2);
+    display: flex; align-items: center; gap: 16px;
+  }
+  .fi-title { font-size: 16px; font-weight: 700; color: var(--white); font-family: var(--font); letter-spacing: .3px; flex: 1; }
+  .fi-subtitle { font-size: 11px; color: var(--mist); font-family: var(--font-sans); margin-top: 2px; }
+  .fi-close-btn {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+    color: var(--smoke); padding: 6px 14px; border-radius: 6px; cursor: pointer;
+    font-size: 12px; font-weight: 600; font-family: var(--font-sans); letter-spacing: .3px;
+    transition: all .15s;
+  }
+  .fi-close-btn:hover { background: rgba(255,255,255,0.12); color: var(--white); }
+  .fi-body { padding: 22px 28px; font-family: var(--font-sans); font-size: 12.5px; color: var(--smoke); line-height: 1.6; }
+  .fi-body p { margin: 0 0 14px 0; }
+  .fi-body strong { color: var(--white); font-weight: 600; }
+  .fi-body code, .fi-formula {
+    font-family: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+    background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 3px;
+    color: #e6edf3; font-size: 11.5px;
+  }
+  .fi-formula {
+    display: block; padding: 14px 18px; margin: 12px 0 18px 0;
+    border-left: 3px solid var(--teal); background: rgba(0,229,204,0.04);
+    border-radius: 4px; line-height: 1.7;
+  }
+  .fi-section-title {
+    font-size: 10px; text-transform: uppercase; letter-spacing: .12em;
+    color: var(--teal); font-weight: 700; margin: 18px 0 8px 0;
+    font-family: var(--font-sans);
+  }
+  .fi-section-title:first-child { margin-top: 0; }
+  .fi-list { margin: 6px 0 14px 0; padding-left: 0; list-style: none; }
+  .fi-list li { padding: 4px 0; padding-left: 14px; position: relative; }
+  .fi-list li::before {
+    content: '·'; position: absolute; left: 4px; color: var(--teal);
+    font-weight: 700; font-size: 14px; line-height: 14px;
+  }
+  .fi-note {
+    background: rgba(245,158,11,0.06); border-left: 3px solid #f59e0b;
+    padding: 10px 14px; margin: 12px 0; border-radius: 4px;
+    font-size: 11.5px; color: var(--smoke);
+  }
+
 </style>
 </head>
 <body>
@@ -819,10 +887,10 @@
         <thead>
           <tr class="thead-groups">
             <th colspan="7"  class="thg thg-id">Symbol Data &amp; Industry</th>
-            <th colspan="2"  class="thg thg-comp">Composite</th>
-            <th colspan="3"  class="thg thg-rs">Relative Strength Momentum</th>
-            <th colspan="7"  class="thg thg-acc">Accumulation / Distribution</th>
-            <th colspan="4"  class="thg thg-fund" id="fundGroupHeader">Fundamental Rating</th>
+            <th colspan="2"  class="thg thg-comp">Composite<span class="thg-info" onclick="showFormulaInfo('comp')" title="Cómo se calcula">i</span></th>
+            <th colspan="3"  class="thg thg-rs">Relative Strength Momentum<span class="thg-info" onclick="showFormulaInfo('rs')" title="Cómo se calcula">i</span></th>
+            <th colspan="7"  class="thg thg-acc">Accumulation / Distribution<span class="thg-info" onclick="showFormulaInfo('acc')" title="Cómo se calcula">i</span></th>
+            <th colspan="4"  class="thg thg-fund" id="fundGroupHeader">Fundamental Rating<span class="thg-info" onclick="showFormulaInfo('fund')" title="Cómo se calcula">i</span></th>
             <th colspan="4"  class="thg thg-vol">Volatility &amp; Moving Averages</th>
             <th colspan="3"  class="thg thg-perf">Volume &amp; Performance</th>
             <th colspan="1"  class="thg thg-op">&nbsp;</th>
@@ -2517,6 +2585,158 @@ applyFundStaleWarning();
 })();
 document.addEventListener('DOMContentLoaded', initCharts);
 setTimeout(initCharts, 400);
+
+// ── Formula Info Modal (ⓘ en headers de grupo) ──────────────────────
+const FORMULA_INFO = {
+  comp: {
+    title: 'Composite Score',
+    subtitle: 'Métrica unificada de ranking · escala 1-99',
+    body: `
+      <p>Combina las tres dimensiones del análisis Bullhaus en un único score percentil sobre el universo Russell 1000. <strong>Es la métrica principal de ranking del dashboard</strong>: el orden de los tickers (Rank) y el indicador Δ Rank se calculan sobre este score.</p>
+
+      <div class="fi-section-title">Fórmula</div>
+      <code class="fi-formula">composite_raw = 0.40 · ACC_pct + 0.30 · RS_pct + 0.30 · Fund_pct<br>
+composite_score = rank(composite_raw) × 98 + 1     # 1-99 entero</code>
+
+      <p>Donde <code>ACC_pct</code>, <code>RS_pct</code> y <code>Fund_pct</code> son los percentiles 0-100 de cada métrica sobre el universo. El resultado se vuelve a re-rankear a 1-99 para garantizar distribución uniforme y misma escala que RS Rating.</p>
+
+      <div class="fi-section-title">Manejo de Fund missing</div>
+      <p>Si un ticker no tiene Fund Rating (foreign filers, datos stale, sin EPS en EDGAR), se aplica re-peso dinámico:</p>
+      <code class="fi-formula">composite_raw = 0.50 · ACC_pct + 0.50 · RS_pct</code>
+
+      <div class="fi-section-title">Composite Grade</div>
+      <p>Se calcula con quintiles del universo: <strong>A+</strong> top 5% · <strong>A</strong> 80-94% · <strong>B</strong> 60-79% · <strong>C</strong> 40-59% · <strong>D</strong> 20-39% · <strong>E</strong> 0-19%. Tiebreakers: composite_raw → ACC Score → RS Rating → Net Close 5d.</p>
+
+      <div class="fi-note"><strong>Interpretación:</strong> un Composite Score de 85 significa que el ticker está mejor que el 85% del universo combinando institucional, momentum y fundamentals.</div>
+    `,
+  },
+  rs: {
+    title: 'Relative Strength Momentum',
+    subtitle: 'Liderazgo relativo vs Russell 1000 · escala 1-99',
+    body: `
+      <p>Mide el <strong>momentum relativo</strong> de cada stock vs el universo Russell 1000 usando la metodología CANSLIM de O'Neil. Combina cuatro componentes inspirados en la fortaleza relativa del paper original. La arquitectura es en dos etapas: Pine Script calcula las métricas por ticker contra el benchmark IWB, y Python hace el ranking cross-sectional.</p>
+
+      <div class="fi-section-title">Fórmula</div>
+      <code class="fi-formula">composite_raw = 0.40 · rs_pct + 0.25 · accel_pct +<br>
+                0.20 · group_pct + 0.15 · trend_vol_pct<br>
+RS_MC_Score = rank(composite_raw) × 98 + 1     # 1-99</code>
+
+      <div class="fi-section-title">Componentes</div>
+      <ul class="fi-list">
+        <li><strong>RS Weighted (40%)</strong> — momentum ponderado vs IWB en 4 ventanas: 1M (40%) · 3M (30%) · 6M (20%) · 12M (10%).</li>
+        <li><strong>RS Acceleration (25%)</strong> — derivada del RS: ¿el momentum está acelerando o desacelerando? Diferencia entre RS de 1M vs 3M.</li>
+        <li><strong>Group Strength (20%)</strong> — fuerza de la industria/sector con <em>Hybrid Blend</em>: si la industria tiene <8 tickers, mezcla con el sector. Resuelve el self-referencing problem de industries chicas.</li>
+        <li><strong>Trend + Volume (15%)</strong> — Trend Score (0-4) por alineación de medias móviles + Volume Score (0-4) por up/down volume ratio. Es la confirmación técnica del setup.</li>
+      </ul>
+
+      <div class="fi-section-title">RS-MC Grade</div>
+      <p><strong>A+</strong> top 5% · <strong>A</strong> 80-94 · <strong>B</strong> 60-79 · <strong>C</strong> 40-59 · <strong>D</strong> 20-39 · <strong>E</strong> 1-19. Tiebreaker: Performance 6M.</p>
+
+      <div class="fi-note"><strong>Interpretación:</strong> un RS Rating de 90 indica liderazgo excepcional — el ticker pertenece al top 10% del Russell 1000 en momentum relativo, alineación técnica y fortaleza grupal combinados.</div>
+    `,
+  },
+  acc: {
+    title: 'Accumulation / Distribution',
+    subtitle: 'Presión institucional · escala 0-100 absoluta',
+    body: `
+      <p>Mide la <strong>presión compradora institucional</strong> (acumulación) vs la presión vendedora (distribución) sobre cada ticker, basado en el comportamiento volumen × precio diario. Es la métrica original del sistema Bullhaus y, a diferencia del RS Rating, opera en <strong>escala absoluta</strong>: un ACC Score de 80 siempre significa "alta presión institucional" independientemente del régimen del mercado.</p>
+
+      <div class="fi-section-title">Fórmula</div>
+      <code class="fi-formula">ACC Score = (sub_a · 0.50 + sub_b · 0.25 + sub_c · 0.25) · 100</code>
+
+      <div class="fi-section-title">Sub-scores</div>
+      <ul class="fi-list">
+        <li><strong>Sub-A — Net Acc/Dist 50d (peso 50%)</strong>: <code>clip(Net Acc 50d / 10, 0, 1)</code>. Captura la tendencia institucional de fondo en las últimas 10 semanas. Saturación a +10 días netos.</li>
+        <li><strong>Sub-B — Ausencia de distribución 20d (peso 25%)</strong>: <code>clip(1 - DistDays20 / 5, 0, 1)</code>. Penaliza la presencia de días de distribución recientes. 5+ días → 0.</li>
+        <li><strong>Sub-C — Acumulación reciente 5d (peso 25%)</strong>: <code>clip(AccumDays5 / 5, 0, 1)</code>. Confirmación de demanda en la última semana de trading.</li>
+      </ul>
+
+      <div class="fi-section-title">ACC Grade</div>
+      <p>Quintiles sobre el universo: <strong>A+</strong> top 5% · <strong>A</strong> 80-94% · <strong>B</strong> 60-79% · <strong>C</strong> 40-59% · <strong>D</strong> 20-39% · <strong>E</strong> 0-19%. Tiebreakers: Net Close 5d → Performance 6M.</p>
+
+      <div class="fi-note"><strong>Por qué es absoluta:</strong> el ACC Score forma parte de la lectura de régimen del mercado (M1/M2). Un promedio de mercado de 28 indica distribución generalizada incluso si los stocks individuales se ranquean entre sí — información que se perdería en escala percentil.</div>
+    `,
+  },
+  fund: {
+    title: 'Fundamental Rating',
+    subtitle: 'Calidad fundamental EPS + Revenue · escala 1-99',
+    body: `
+      <p>Mide la <strong>calidad fundamental</strong> de cada ticker combinando crecimiento trimestral reciente y solidez de largo plazo. Datos extraídos directamente de SEC EDGAR (XBRL API) sobre los últimos 16 trimestres y 5 años fiscales. Se actualiza típicamente con cada filing 10-Q (trimestral).</p>
+
+      <div class="fi-section-title">Fórmula</div>
+      <code class="fi-formula">Fundamental Score = 0.60 · C_score + 0.40 · A_score<br>
+Fund Pctil = rank(Fundamental Score) × 98 + 1     # 1-99</code>
+
+      <div class="fi-section-title">Componentes</div>
+      <ul class="fi-list">
+        <li><strong>C Score — Current quarterly growth (60%)</strong>: combina EPS YoY%, Revenue YoY%, aceleración del EPS último vs trimestre anterior, y validación de consistencia (varios trimestres con crecimiento positivo).</li>
+        <li><strong>A Score — Annual growth & quality (40%)</strong>: EPS anual YoY%, CAGR EPS 3 años, consistencia anual (años seguidos creciendo), ROE%, y estabilidad del ROE.</li>
+      </ul>
+
+      <div class="fi-section-title">Fund Grade</div>
+      <p>Cortes percentiles: <strong>A+</strong> ≥95 · <strong>A</strong> 90-94 · <strong>B+</strong> 80-89 · <strong>B</strong> 70-79 · <strong>C+</strong> 60-69 · <strong>C</strong> 50-59 · <strong>D+</strong> 40-49 · <strong>D</strong> 30-39 · <strong>E</strong> 1-29.</p>
+
+      <div class="fi-section-title">Tickers excluidos del scoring</div>
+      <ul class="fi-list">
+        <li><strong>Foreign filers</strong> — empresas que reportan con 20-F en lugar de 10-K (ADRs internacionales). El XBRL no es comparable.</li>
+        <li><strong>Stale</strong> — último filing con más de 12 meses de antigüedad.</li>
+        <li><strong>Sin EPS</strong> — sin datos de EPS disponibles en XBRL.</li>
+      </ul>
+
+      <div class="fi-note"><strong>Composite re-peso:</strong> los tickers excluidos no penalizan al Composite Score. Cuando un ticker no tiene Fund válido, el Composite se calcula re-pesando 50/50 entre ACC y RS.</div>
+    `,
+  },
+};
+
+function _ensureFormulaOverlay() {
+  let ov = document.getElementById('formulaInfoOverlay');
+  if (!ov) {
+    ov = document.createElement('div');
+    ov.id = 'formulaInfoOverlay';
+    ov.addEventListener('click', (e) => {
+      if (e.target === ov) hideFormulaInfo();
+    });
+    document.body.appendChild(ov);
+  }
+  return ov;
+}
+
+function showFormulaInfo(group) {
+  const info = FORMULA_INFO[group];
+  if (!info) return;
+  const ov = _ensureFormulaOverlay();
+  ov.innerHTML = `
+    <div class="fi-panel">
+      <div class="fi-header">
+        <div style="flex:1">
+          <div class="fi-title">${info.title}</div>
+          <div class="fi-subtitle">${info.subtitle}</div>
+        </div>
+        <button class="fi-close-btn" type="button" onclick="hideFormulaInfo()">✕ Cerrar</button>
+      </div>
+      <div class="fi-body">${info.body}</div>
+    </div>
+  `;
+  ov.classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function hideFormulaInfo() {
+  const ov = document.getElementById('formulaInfoOverlay');
+  if (ov) {
+    ov.classList.remove('visible');
+    ov.innerHTML = '';
+  }
+  document.body.style.overflow = '';
+}
+
+// Cerrar con tecla ESC
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    const ov = document.getElementById('formulaInfoOverlay');
+    if (ov && ov.classList.contains('visible')) hideFormulaInfo();
+  }
+});
 </script>
 </body>
 </html>
