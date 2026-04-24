@@ -658,7 +658,7 @@
       <div class="kpi-val col-teal">427</div>
       <div class="kpi-sub" style="color:var(--mist)">Pass all stock-level filters</div>
     </div>
-    <div class="card kpi-neutral-card" title="Spread = % RSI>70 − % RSI<30. Positivo = mercado sesgado overbought. Negativo = sesgado oversold. Color: verde si |spread|≤10 y ninguno supera 15% · ámbar si |spread| entre 10-20 · rojo si |spread|>20 o algún lado supera 25%.">
+    <div class="card kpi-neutral-card" title="Spread = % RSI>70 − % RSI<30. Positivo = mercado sesgado overbought. Negativo = sesgado oversold. Color: verde si |spread|≤8 y ninguno supera 10% · ámbar si |spread| entre 8-15 o algún lado entre 10-20% · rojo si |spread|>15 o algún lado supera 20%. Umbrales calibrados para breadth de RSI en Russell 1000.">
       <div class="card-tag">RSI breadth spread</div>
       <div class="kpi-val kpi-rsi-val col-teal">+7.5</div>
       <div class="kpi-sub kpi-rsi-spread" style="color:var(--mist)">OB 8.5% &nbsp;·&nbsp; OS 1.0%</div>
@@ -2301,7 +2301,9 @@ function initCharts() {
       ...rsiOsData.filter(v => v != null),
       0
     );
-    const yMax = Math.max(30, Math.ceil((maxObs + 5) / 5) * 5);
+    // Min axis of 25% to give visual room above the 20% alert band,
+    // but expands automatically if readings go higher than expected.
+    const yMax = Math.max(25, Math.ceil((maxObs + 3) / 5) * 5);
 
     const lastValueLabelPluginRSI = {
       id: 'lastValueLabelsRSI',
@@ -2338,22 +2340,22 @@ function initCharts() {
         ctx.save();
         ctx.setLineDash([3, 4]);
         ctx.lineWidth = 1;
-        // 15% band (caution)
-        if (15 >= yScale.min && 15 <= yScale.max) {
+        // 10% band (caution) — calibrated for breadth of stocks with RSI>70 / RSI<30
+        if (10 >= yScale.min && 10 <= yScale.max) {
           ctx.strokeStyle = 'rgba(245,158,11,0.35)';
-          const y15 = yScale.getPixelForValue(15);
+          const y10 = yScale.getPixelForValue(10);
           ctx.beginPath();
-          ctx.moveTo(chartArea.left, y15);
-          ctx.lineTo(chartArea.right, y15);
+          ctx.moveTo(chartArea.left, y10);
+          ctx.lineTo(chartArea.right, y10);
           ctx.stroke();
         }
-        // 25% band (alert)
-        if (25 >= yScale.min && 25 <= yScale.max) {
+        // 20% band (alert)
+        if (20 >= yScale.min && 20 <= yScale.max) {
           ctx.strokeStyle = 'rgba(255,77,109,0.35)';
-          const y25 = yScale.getPixelForValue(25);
+          const y20 = yScale.getPixelForValue(20);
           ctx.beginPath();
-          ctx.moveTo(chartArea.left, y25);
-          ctx.lineTo(chartArea.right, y25);
+          ctx.moveTo(chartArea.left, y20);
+          ctx.lineTo(chartArea.right, y20);
           ctx.stroke();
         }
         ctx.restore();
