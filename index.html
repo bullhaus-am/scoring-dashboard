@@ -637,7 +637,7 @@
 
   <!-- KPIs -->
   <div class="sec-head"><span class="sec-label">Market filters</span><div class="sec-line"></div></div>
-  <div class="g4" style="margin-bottom:24px;">
+  <div class="g4" style="margin-bottom:24px;grid-template-columns:repeat(5, minmax(0,1fr));">
     <div class="card kpi-fail-card">
       <div class="card-tag">M1 — Net accumulation 20d</div>
       <div class="kpi-val col-teal">0.24</div>
@@ -658,32 +658,14 @@
       <div class="kpi-val col-teal">427</div>
       <div class="kpi-sub" style="color:var(--mist)">Pass all stock-level filters</div>
     </div>
+    <div class="card kpi-neutral-card" title="% Russell 1000 con RSI(14) > 70 (overbought) / < 30 (oversold). Color: verde ≤15% · ámbar 15-25% · rojo >25% en cualquier lado.">
+      <div class="card-tag">RSI breadth — OB / OS</div>
+      <div class="kpi-val kpi-rsi-val col-teal">8.5% <span style="font-size:14px;color:var(--mist);font-weight:400">/</span> 1.0%</div>
+      <div class="kpi-sub kpi-rsi-spread" style="color:var(--mist)">Spread +7.5</div>
+    </div>
 
   </div>
 
-  <!-- AI COMMENTARY -->
-<div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
-<div class="card ai-commentary-card" style="margin-bottom:20px;">
-  <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>NO-GO bajo quadrant HEALTHY ROTATION: M1 pasa con breadth de acumulación de 0.24, pero M2 falla con ATR ratio de 1.004, señalando volatilidad aún no comprimida. Operativamente, el tape permite rotación selectiva pero no expansión de riesgo agresiva — solo 43.4% del universo es operable y apenas 6.3% muestra compresión ATR, lo que limita setups VCP maduros.</p>
-<p><strong>OBSERVACIONES CLAVE</strong></p>
-<li><strong>Deterioro intradía del breadth</strong>: Avg Net Acc 20d cae de 0.30 a 0.24 y %distribuyendo sube +2.7pp a 28.0%. La rotación está perdiendo energía en el margen, no acelerando — clásico patrón de mercado en transición donde los institucionales reducen exposición bruta sin liquidar.</li>
-<li><strong>Dispersión sectorial 0.535 (ALTA) con 8/11 sectores positivos</strong>: confirma rotación genuina, no rally correlacionado. El dinero rota, no huye, lo que es coherente con el quadrant HEALTHY ROTATION a pesar del NO-GO.</li>
-<li><strong>Energy en capitulación clara</strong>: Net20d -1.35 con 70% distribuyendo y apenas 11% acumulando. Este nivel de unanimidad distributiva es el outlier del tape y sugiere que el complejo energético está bajo presión sistémica, no técnica.</li>
-<li><strong>Semiconductors dominante con 90% de stocks acumulando y Net20d +2.55 sobre 20 nombres</strong>: no es concentración en 2-3 mega-caps, es liderazgo de industria completo. Esta amplitud dentro del grupo es la señal institucional más fuerte del informe.</li>
-<li><strong>45.4% del universo bajo SMA200</strong>: casi la mitad del Russell 1000 sigue en downtrend estructural. El liderazgo es real pero estrecho — no estamos en bull market generalizado sino en rotación hacia ganadores definidos.</li>
-<p><strong>SECTORES E INDUSTRIAS</strong></p>
-<p>Financial Services (+0.53, 46% acc) e Industrials (+0.43, 46% acc) lideran junto con Basic Materials (+0.49) — combinación cíclica clásica de reflación. Technology muestra Net20d apenas +0.10 con 35% distribuyendo, lo que contradice la lectura superficial de "semis lideran": la fortaleza está concentrada en semiconductors (+2.55) mientras el resto del sector se distribuye. Esta bifurcación intra-Tech es la divergencia crítica. Energy (-1.35) y Consumer Defensive (-0.16) son los refugios abandonados — el mercado prefiere ciclo sobre defensa.</p>
-<p><strong>RS MOMENTUM vs ACUMULACIÓN HOY</strong></p>
-<p>Confirmación institucional limpia en el top: grupo A/A+ (RS ayer) entrega Perf +0.65% con Net Acc +12 (18 acc vs 6 dist). Los líderes de momentum están siendo acumulados hoy, no distribuidos — el liderazgo tiene soporte real. En el extremo opuesto, grupos D y E muestran Perf negativa Y Net Acc fuertemente negativo (-18 y -20): sin rebote, sin rotación hacia rezagados, pura distribución continua. No hay bottom-fishing institucional. El mercado está reforzando a sus ganadores, no rotando a los perdedores — esto valida la tesis de liderazgo estrecho pero de alta convicción.</p>
-<p><strong>FUNDAMENTAL vs TÉCNICO</strong></p>
-<p>El top 10 por AccScore es excepcional: <strong>9 de 10 stocks tienen Fund Grade A o A+</strong> con Data Quality High. MRVL (Fund A, 87), WDC (A+, 97), AMD (A+, 97), ECG (A+, 98), DELL (A+, 96) y ADI (A+, 98) son el ejemplo perfecto de convergencia momentum+calidad — candidatos institucionales de primera línea. Sin embargo, la estadística amplia cuenta otra historia: entre los 50 líderes RS-MC A+, la mediana Fund Grade es B, y 15 tienen Fund D/E — un tercio del liderazgo de momentum carece de respaldo fundamental (probable short-covering o rotación cíclica). Inversamente, 11 stocks con Fund A+ tienen RS-MC <50: reserva de early entries si emerge acumulación. La lectura: el top del top es genuino, pero el momentum de segunda línea debe filtrarse agresivamente por fundamentals.</p>
-<p><strong>FOCO OPERATIVO</strong></p>
-<p>1. <strong>Gatillo GO</strong>: ATR ratio mediano <0.95 combinado con Avg Net Acc 20d >0.25 — si ambos cruzan, M2 se activa y el régimen flipea. Monitorear el % ATR comprimido: debe subir de 6.3% hacia >12%.</p>
-<p>2. <strong>Watchlist prioritaria</strong>: MRVL, AMD, ADI, DELL, ECG — RS-MC A+ con Fund A/A+ y DQ High. Esperar pullback a EMA20 con contracción de rango; entrada en ruptura solo si el stock pasa a "Operable".</p>
-<p>3. <strong>Señal de alerta bajista</strong>: si %distribuyendo supera 32% o Energy's contagio se extiende a Materials (Net20d <0), reducir exposición bruta — la rotación saludable se estaría convirtiendo en deterioro generalizado.</p></div>
-</div>
-<!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
   <!-- ROW 1: Breadth + ATR/NetAcc + Perf chart -->
   <div class="sec-head"><span class="sec-label">Market breadth &amp; daily activity</span><div class="sec-line"></div></div>
@@ -752,12 +734,18 @@
       </div>
     </div>
 
-    <!-- CARD 3: Breadth charts (% Above MAs + Daily Perf) -->
+    <!-- CARD 3: Breadth charts (% Above MAs + RSI Breadth + Daily Perf) -->
     <div class="card" style="display:flex;flex-direction:column;">
       <!-- MA breadth history chart -->
       <div style="display:flex;flex-direction:column;flex:1;">
         <div class="card-tag" id="maBreadthChartTitle" style="margin-bottom:8px;">% Above key MAs</div>
         <div style="position:relative;flex:1;min-height:260px;"><canvas id="maBreadthChart"></canvas></div>
+      </div>
+
+      <!-- RSI Breadth history chart -->
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
+        <div class="card-tag" id="rsiBreadthChartTitle" style="margin-bottom:8px;">RSI breadth — overbought / oversold</div>
+        <div style="position:relative;flex:1;min-height:260px;"><canvas id="rsiBreadthChart"></canvas></div>
       </div>
 
       <!-- Daily Performance chart -->
@@ -1019,7 +1007,7 @@ const ALL_STOCKS = [{"rank": 1, "sym": "MRVL", "desc": "Marvell Technology, Inc.
 const TOP_SECTOR = "Communication Services";
 const SECTORS = [{"name": "Communication Services", "n": 41, "score": 27.2, "net20": 0.317, "pct": 34.1, "distPct": 24.4, "pct5": 12.2, "dist5": 9.8, "net5": 0.07, "net50": 0.24, "pct50": 39.0, "dist50": 41.5, "vel5": -0.12, "vel20": 2.32, "rankDelta20": 1}, {"name": "Consumer Cyclical", "n": 129, "score": 26.2, "net20": 0.496, "pct": 41.9, "distPct": 21.7, "pct5": 36.4, "dist5": 15.5, "net5": 0.23, "net50": -0.86, "pct50": 24.8, "dist50": 55.8, "vel5": 0.39, "vel20": 6.48, "rankDelta20": 4}, {"name": "Financial Services", "n": 144, "score": 25.7, "net20": 0.528, "pct": 45.8, "distPct": 18.8, "pct5": 17.4, "dist5": 13.9, "net5": 0.06, "net50": -1.24, "pct50": 20.8, "dist50": 63.2, "vel5": -0.73, "vel20": 6.08, "rankDelta20": 4}, {"name": "Healthcare", "n": 106, "score": 25.2, "net20": 0.217, "pct": 38.7, "distPct": 32.1, "pct5": 18.9, "dist5": 26.4, "net5": -0.08, "net50": -0.77, "pct50": 24.5, "dist50": 54.7, "vel5": -0.47, "vel20": 4.06, "rankDelta20": -1}, {"name": "Industrials", "n": 157, "score": 25.2, "net20": 0.427, "pct": 45.9, "distPct": 28.7, "pct5": 37.6, "dist5": 20.4, "net5": 0.19, "net50": -0.84, "pct50": 24.2, "dist50": 55.4, "vel5": 0.22, "vel20": 5.89, "rankDelta20": 4}, {"name": "Basic Materials", "n": 43, "score": 24.7, "net20": 0.488, "pct": 48.8, "distPct": 20.9, "pct5": 25.6, "dist5": 25.6, "net5": 0.09, "net50": -1.12, "pct50": 20.9, "dist50": 58.1, "vel5": 2.33, "vel20": 5.48, "rankDelta20": 4}, {"name": "Technology", "n": 165, "score": 24.5, "net20": 0.103, "pct": 35.8, "distPct": 35.2, "pct5": 19.4, "dist5": 20.6, "net5": 0.07, "net50": -1.13, "pct50": 24.2, "dist50": 58.2, "vel5": 0.64, "vel20": 3.81, "rankDelta20": -2}, {"name": "Real Estate", "n": 66, "score": 24.3, "net20": 0.182, "pct": 30.3, "distPct": 18.2, "pct5": 7.6, "dist5": 15.2, "net5": -0.09, "net50": -1.33, "pct50": 10.6, "dist50": 68.2, "vel5": 2.42, "vel20": 5.49, "rankDelta20": 3}, {"name": "Utilities", "n": 39, "score": 24.1, "net20": -0.051, "pct": 10.3, "distPct": 12.8, "pct5": 7.7, "dist5": 15.4, "net5": -0.08, "net50": -0.82, "pct50": 7.7, "dist50": 53.8, "vel5": 3.85, "vel20": 4.76, "rankDelta20": -1}, {"name": "Consumer Defensive", "n": 58, "score": 23.4, "net20": -0.155, "pct": 27.6, "distPct": 37.9, "pct5": 15.5, "dist5": 19.0, "net5": -0.02, "net50": -1.4, "pct50": 22.4, "dist50": 60.3, "vel5": 1.12, "vel20": 2.59, "rankDelta20": -6}, {"name": "Energy", "n": 37, "score": 22.3, "net20": -1.351, "pct": 10.8, "distPct": 70.3, "pct5": 10.8, "dist5": 48.6, "net5": -0.38, "net50": 0.27, "pct50": 45.9, "dist50": 45.9, "vel5": 1.22, "vel20": -17.16, "rankDelta20": -10}];
 const INDUSTRIES = [{"name": "Semiconductors", "n": 20, "score": 36.2, "net20": 2.55, "pct": 90.0, "distPct": 0.0, "pct5": 65.0, "dist5": 5.0, "net5": 1.1, "net50": 1.15, "pct50": 50.0, "dist50": 20.0, "vel5": 6.0, "vel20": 18.09, "rankDelta20": 84}, {"name": "Apparel Manufacturing", "n": 5, "score": 36.0, "net20": 2.4, "pct": 100.0, "distPct": 0.0, "pct5": 40.0, "dist5": 0.0, "net5": 0.4, "net50": 1.6, "pct50": 80.0, "dist50": 20.0, "vel5": -3.0, "vel20": 10.0, "rankDelta20": 17}, {"name": "Steel", "n": 4, "score": 35.0, "net20": 2.0, "pct": 75.0, "distPct": 0.0, "pct5": 75.0, "dist5": 0.0, "net5": 1.75, "net50": -2.0, "pct50": 25.0, "dist50": 75.0, "vel5": 10.0, "vel20": 20.0, "rankDelta20": 113}, {"name": "Rental & Leasing Services", "n": 6, "score": 34.2, "net20": 2.167, "pct": 83.3, "distPct": 0.0, "pct5": 66.7, "dist5": 16.7, "net5": 1.17, "net50": -0.17, "pct50": 33.3, "dist50": 66.7, "vel5": 4.17, "vel20": 17.74, "rankDelta20": 98}, {"name": "Computer Hardware", "n": 7, "score": 33.6, "net20": 1.0, "pct": 71.4, "distPct": 14.3, "pct5": 42.9, "dist5": 14.3, "net5": 0.29, "net50": 1.0, "pct50": 57.1, "dist50": 28.6, "vel5": 7.14, "vel20": 6.43, "rankDelta20": 11}, {"name": "Internet Retail", "n": 8, "score": 33.1, "net20": 0.625, "pct": 50.0, "distPct": 0.0, "pct5": 37.5, "dist5": 12.5, "net5": 0.25, "net50": 1.25, "pct50": 50.0, "dist50": 25.0, "vel5": 2.5, "vel20": 6.88, "rankDelta20": 11}, {"name": "Trucking", "n": 5, "score": 32.0, "net20": 1.6, "pct": 100.0, "distPct": 0.0, "pct5": 40.0, "dist5": 0.0, "net5": 0.4, "net50": 0.4, "pct50": 60.0, "dist50": 40.0, "vel5": 0.0, "vel20": 9.0, "rankDelta20": 26}, {"name": "Entertainment", "n": 13, "score": 31.2, "net20": 0.615, "pct": 38.5, "distPct": 7.7, "pct5": 7.7, "dist5": 7.7, "net5": 0.15, "net50": 1.0, "pct50": 53.8, "dist50": 38.5, "vel5": 2.31, "vel20": 5.77, "rankDelta20": 12}, {"name": "Drug Manufacturers - Specialty & Generic", "n": 6, "score": 30.0, "net20": 1.333, "pct": 100.0, "distPct": 0.0, "pct5": 50.0, "dist5": 0.0, "net5": 0.5, "net50": -0.67, "pct50": 33.3, "dist50": 33.3, "vel5": 1.67, "vel20": 12.5, "rankDelta20": 82}, {"name": "Auto & Truck Dealerships", "n": 6, "score": 30.0, "net20": 1.5, "pct": 66.7, "distPct": 0.0, "pct5": 50.0, "dist5": 16.7, "net5": 0.33, "net50": -0.33, "pct50": 33.3, "dist50": 66.7, "vel5": -3.33, "vel20": 8.33, "rankDelta20": 32}];
-const HIST = [{"d": "03-06", "atrRatio": 1.161, "netAcc": -0.44, "pctAcc": 26.1, "pctDist": 47.4, "ema20": 68.1, "sma50": 60.6, "sma200": 47.8, "perf1d": null, "volRatio": 97.0, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-09", "atrRatio": 1.182, "netAcc": -0.57, "pctAcc": 23.3, "pctDist": 50.1, "ema20": 68.9, "sma50": 60.7, "sma200": 47.6, "perf1d": null, "volRatio": 107.4, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-10", "atrRatio": 1.16, "netAcc": -0.6, "pctAcc": 22.9, "pctDist": 49.8, "ema20": 73.8, "sma50": 62.7, "sma200": 49.4, "perf1d": -0.76, "volRatio": 91.8, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-11", "atrRatio": 1.12, "netAcc": -0.65, "pctAcc": 21.3, "pctDist": 50.2, "ema20": 75.2, "sma50": 64.4, "sma200": 51.0, "perf1d": -0.45, "volRatio": 84.1, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-12", "atrRatio": 1.118, "netAcc": -0.75, "pctAcc": 21.9, "pctDist": 53.3, "ema20": 79.7, "sma50": 70.9, "sma200": 54.3, "perf1d": -1.86, "volRatio": 97.8, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-13", "atrRatio": 1.086, "netAcc": -0.6, "pctAcc": 23.4, "pctDist": 49.1, "ema20": 79.8, "sma50": 71.8, "sma200": 55.5, "perf1d": -0.05, "volRatio": 82.3, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-17", "atrRatio": 1.007, "netAcc": -0.54, "pctAcc": 22.0, "pctDist": 48.0, "ema20": 73.5, "sma50": 68.5, "sma200": 53.2, "perf1d": 0.55, "volRatio": 77.2, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-18", "atrRatio": 0.989, "netAcc": -0.66, "pctAcc": 20.5, "pctDist": 50.3, "ema20": 79.6, "sma50": 73.5, "sma200": 55.7, "perf1d": -1.38, "volRatio": 83.9, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-19", "atrRatio": 0.991, "netAcc": -0.67, "pctAcc": 19.8, "pctDist": 50.0, "ema20": 78.9, "sma50": 74.5, "sma200": 56.6, "perf1d": -0.12, "volRatio": 88.3, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-20", "atrRatio": 0.985, "netAcc": -0.99, "pctAcc": 14.8, "pctDist": 60.9, "ema20": 87.6, "sma50": 81.6, "sma200": 59.3, "perf1d": -1.4, "volRatio": 164.8, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-23", "atrRatio": 1.02, "netAcc": -0.84, "pctAcc": 17.5, "pctDist": 58.1, "ema20": 78.4, "sma50": 76.9, "sma200": 56.3, "perf1d": 1.41, "volRatio": 92.6, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-24", "atrRatio": 1.025, "netAcc": -0.88, "pctAcc": 17.3, "pctDist": 59.0, "ema20": 76.4, "sma50": 75.1, "sma200": 55.3, "perf1d": 0.22, "volRatio": 82.8, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-25", "atrRatio": 1.021, "netAcc": -0.85, "pctAcc": 17.7, "pctDist": 59.3, "ema20": 70.0, "sma50": 72.1, "sma200": 55.0, "perf1d": 0.52, "volRatio": 77.1, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-26", "atrRatio": 0.995, "netAcc": -0.93, "pctAcc": 15.1, "pctDist": 60.9, "ema20": 75.4, "sma50": 76.3, "sma200": 56.8, "perf1d": -0.55, "volRatio": 75.0, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-27", "atrRatio": 0.987, "netAcc": -0.92, "pctAcc": 13.1, "pctDist": 60.3, "ema20": 84.0, "sma50": 79.8, "sma200": 60.5, "perf1d": -1.74, "volRatio": 80.2, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-30", "atrRatio": 0.976, "netAcc": -0.95, "pctAcc": 13.1, "pctDist": 60.3, "ema20": 81.4, "sma50": 79.7, "sma200": 60.8, "perf1d": 0.11, "volRatio": 84.2, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-31", "atrRatio": 1.013, "netAcc": -0.74, "pctAcc": 15.9, "pctDist": 56.0, "ema20": 62.2, "sma50": 74.8, "sma200": 56.2, "perf1d": 2.32, "volRatio": 95.3, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "04-01", "atrRatio": 0.99, "netAcc": -0.75, "pctAcc": 14.8, "pctDist": 55.8, "ema20": 56.1, "sma50": 72.8, "sma200": 55.0, "perf1d": 0.41, "volRatio": 83.9, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-02", "atrRatio": 1.013, "netAcc": -0.68, "pctAcc": 15.8, "pctDist": 54.6, "ema20": 51.8, "sma50": 70.2, "sma200": 54.5, "perf1d": 0.35, "volRatio": 72.0, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-06", "atrRatio": 0.961, "netAcc": -0.57, "pctAcc": 17.1, "pctDist": 50.5, "ema20": 48.2, "sma50": 67.5, "sma200": 54.3, "perf1d": 0.4, "volRatio": 61.8, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-07", "atrRatio": 0.938, "netAcc": -0.57, "pctAcc": 16.5, "pctDist": 50.2, "ema20": 50.5, "sma50": 67.6, "sma200": 54.4, "perf1d": -0.19, "volRatio": 72.0, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-08", "atrRatio": 1.029, "netAcc": -0.38, "pctAcc": 20.7, "pctDist": 44.6, "ema20": 25.3, "sma50": 54.9, "sma200": 47.6, "perf1d": 2.41, "volRatio": 95.0, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-09", "atrRatio": 1.028, "netAcc": -0.39, "pctAcc": 21.4, "pctDist": 45.7, "ema20": 30.7, "sma50": 53.7, "sma200": 47.1, "perf1d": 0.27, "volRatio": 77.9, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-10", "atrRatio": 0.992, "netAcc": -0.27, "pctAcc": 24.1, "pctDist": 40.7, "ema20": 37.1, "sma50": 56.0, "sma200": 48.9, "perf1d": -0.72, "volRatio": 70.2, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-13", "atrRatio": 0.993, "netAcc": -0.22, "pctAcc": 25.0, "pctDist": 39.7, "ema20": 28.3, "sma50": 48.9, "sma200": 46.2, "perf1d": 1.19, "volRatio": 77.1, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-14", "atrRatio": 0.967, "netAcc": -0.2, "pctAcc": 25.8, "pctDist": 39.8, "ema20": 28.1, "sma50": 46.1, "sma200": 44.9, "perf1d": 0.32, "volRatio": 77.7, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-15", "atrRatio": 0.957, "netAcc": -0.22, "pctAcc": 26.2, "pctDist": 41.4, "ema20": 30.8, "sma50": 46.1, "sma200": 46.6, "perf1d": -0.04, "volRatio": 78.7, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-16", "atrRatio": 0.945, "netAcc": -0.15, "pctAcc": 27.7, "pctDist": 39.2, "ema20": 28.3, "sma50": 44.5, "sma200": 47.0, "perf1d": 0.24, "volRatio": 80.6, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-17", "atrRatio": 0.984, "netAcc": 0.02, "pctAcc": 32.5, "pctDist": 35.3, "ema20": 20.6, "sma50": 34.0, "sma200": 42.2, "perf1d": 1.73, "volRatio": 97.5, "quadrant": "HEALTHY ROTATION", "m1": "PASS", "m2": "PASS"}, {"d": "04-20", "atrRatio": 0.961, "netAcc": 0.35, "pctAcc": 40.2, "pctDist": 23.4, "ema20": 20.8, "sma50": 33.5, "sma200": 42.0, "perf1d": 0.35, "volRatio": 75.6, "quadrant": "HEALTHY ROTATION", "m1": "PASS", "m2": "PASS"}, {"d": "04-21", "atrRatio": 0.978, "netAcc": 0.3, "pctAcc": 38.5, "pctDist": 24.9, "ema20": 27.9, "sma50": 37.0, "sma200": 44.1, "perf1d": -0.77, "volRatio": 83.6, "quadrant": "HEALTHY ROTATION", "m1": "PASS", "m2": "PASS"}, {"d": "04-22", "atrRatio": 0.972, "netAcc": 0.3, "pctAcc": 39.0, "pctDist": 25.3, "ema20": 32.9, "sma50": 39.0, "sma200": 44.7, "perf1d": -0.21, "volRatio": 81.2, "quadrant": "HEALTHY ROTATION", "m1": "PASS", "m2": "PASS"}, {"d": "04-23", "atrRatio": 1.004, "netAcc": 0.24, "pctAcc": 37.7, "pctDist": 28.0, "ema20": 35.5, "sma50": 41.9, "sma200": 45.4, "perf1d": -0.07, "volRatio": 84.2, "quadrant": "HEALTHY ROTATION", "m1": "PASS", "m2": "FAIL"}];
+const HIST = [{"d": "03-06", "atrRatio": 1.161, "netAcc": -0.44, "pctAcc": 26.1, "pctDist": 47.4, "ema20": 68.1, "sma50": 60.6, "sma200": 47.8, "perf1d": null, "volRatio": 97.0, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-09", "atrRatio": 1.182, "netAcc": -0.57, "pctAcc": 23.3, "pctDist": 50.1, "ema20": 68.9, "sma50": 60.7, "sma200": 47.6, "perf1d": null, "volRatio": 107.4, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-10", "atrRatio": 1.16, "netAcc": -0.6, "pctAcc": 22.9, "pctDist": 49.8, "ema20": 73.8, "sma50": 62.7, "sma200": 49.4, "perf1d": -0.76, "volRatio": 91.8, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-11", "atrRatio": 1.12, "netAcc": -0.65, "pctAcc": 21.3, "pctDist": 50.2, "ema20": 75.2, "sma50": 64.4, "sma200": 51.0, "perf1d": -0.45, "volRatio": 84.1, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-12", "atrRatio": 1.118, "netAcc": -0.75, "pctAcc": 21.9, "pctDist": 53.3, "ema20": 79.7, "sma50": 70.9, "sma200": 54.3, "perf1d": -1.86, "volRatio": 97.8, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "FAIL"}, {"d": "03-13", "atrRatio": 1.086, "netAcc": -0.6, "pctAcc": 23.4, "pctDist": 49.1, "ema20": 79.8, "sma50": 71.8, "sma200": 55.5, "perf1d": -0.05, "volRatio": 82.3, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-17", "atrRatio": 1.007, "netAcc": -0.54, "pctAcc": 22.0, "pctDist": 48.0, "ema20": 73.5, "sma50": 68.5, "sma200": 53.2, "perf1d": 0.55, "volRatio": 77.2, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-18", "atrRatio": 0.989, "netAcc": -0.66, "pctAcc": 20.5, "pctDist": 50.3, "ema20": 79.6, "sma50": 73.5, "sma200": 55.7, "perf1d": -1.38, "volRatio": 83.9, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-19", "atrRatio": 0.991, "netAcc": -0.67, "pctAcc": 19.8, "pctDist": 50.0, "ema20": 78.9, "sma50": 74.5, "sma200": 56.6, "perf1d": -0.12, "volRatio": 88.3, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-20", "atrRatio": 0.985, "netAcc": -0.99, "pctAcc": 14.8, "pctDist": 60.9, "ema20": 87.6, "sma50": 81.6, "sma200": 59.3, "perf1d": -1.4, "volRatio": 164.8, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-23", "atrRatio": 1.02, "netAcc": -0.84, "pctAcc": 17.5, "pctDist": 58.1, "ema20": 78.4, "sma50": 76.9, "sma200": 56.3, "perf1d": 1.41, "volRatio": 92.6, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-24", "atrRatio": 1.025, "netAcc": -0.88, "pctAcc": 17.3, "pctDist": 59.0, "ema20": 76.4, "sma50": 75.1, "sma200": 55.3, "perf1d": 0.22, "volRatio": 82.8, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-25", "atrRatio": 1.021, "netAcc": -0.85, "pctAcc": 17.7, "pctDist": 59.3, "ema20": 70.0, "sma50": 72.1, "sma200": 55.0, "perf1d": 0.52, "volRatio": 77.1, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-26", "atrRatio": 0.995, "netAcc": -0.93, "pctAcc": 15.1, "pctDist": 60.9, "ema20": 75.4, "sma50": 76.3, "sma200": 56.8, "perf1d": -0.55, "volRatio": 75.0, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-27", "atrRatio": 0.987, "netAcc": -0.92, "pctAcc": 13.1, "pctDist": 60.3, "ema20": 84.0, "sma50": 79.8, "sma200": 60.5, "perf1d": -1.74, "volRatio": 80.2, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-30", "atrRatio": 0.976, "netAcc": -0.95, "pctAcc": 13.1, "pctDist": 60.3, "ema20": 81.4, "sma50": 79.7, "sma200": 60.8, "perf1d": 0.11, "volRatio": 84.2, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "03-31", "atrRatio": 1.013, "netAcc": -0.74, "pctAcc": 15.9, "pctDist": 56.0, "ema20": 62.2, "sma50": 74.8, "sma200": 56.2, "perf1d": 2.32, "volRatio": 95.3, "rsiOb": null, "rsiOs": null, "quadrant": "DEFENSIVE ROTATION", "m1": "FAIL", "m2": "PASS"}, {"d": "04-01", "atrRatio": 0.99, "netAcc": -0.75, "pctAcc": 14.8, "pctDist": 55.8, "ema20": 56.1, "sma50": 72.8, "sma200": 55.0, "perf1d": 0.41, "volRatio": 83.9, "rsiOb": null, "rsiOs": null, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-02", "atrRatio": 1.013, "netAcc": -0.68, "pctAcc": 15.8, "pctDist": 54.6, "ema20": 51.8, "sma50": 70.2, "sma200": 54.5, "perf1d": 0.35, "volRatio": 72.0, "rsiOb": null, "rsiOs": null, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-06", "atrRatio": 0.961, "netAcc": -0.57, "pctAcc": 17.1, "pctDist": 50.5, "ema20": 48.2, "sma50": 67.5, "sma200": 54.3, "perf1d": 0.4, "volRatio": 61.8, "rsiOb": null, "rsiOs": null, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-07", "atrRatio": 0.938, "netAcc": -0.57, "pctAcc": 16.5, "pctDist": 50.2, "ema20": 50.5, "sma50": 67.6, "sma200": 54.4, "perf1d": -0.19, "volRatio": 72.0, "rsiOb": null, "rsiOs": null, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-08", "atrRatio": 1.029, "netAcc": -0.38, "pctAcc": 20.7, "pctDist": 44.6, "ema20": 25.3, "sma50": 54.9, "sma200": 47.6, "perf1d": 2.41, "volRatio": 95.0, "rsiOb": null, "rsiOs": null, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-09", "atrRatio": 1.028, "netAcc": -0.39, "pctAcc": 21.4, "pctDist": 45.7, "ema20": 30.7, "sma50": 53.7, "sma200": 47.1, "perf1d": 0.27, "volRatio": 77.9, "rsiOb": null, "rsiOs": null, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-10", "atrRatio": 0.992, "netAcc": -0.27, "pctAcc": 24.1, "pctDist": 40.7, "ema20": 37.1, "sma50": 56.0, "sma200": 48.9, "perf1d": -0.72, "volRatio": 70.2, "rsiOb": null, "rsiOs": null, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-13", "atrRatio": 0.993, "netAcc": -0.22, "pctAcc": 25.0, "pctDist": 39.7, "ema20": 28.3, "sma50": 48.9, "sma200": 46.2, "perf1d": 1.19, "volRatio": 77.1, "rsiOb": null, "rsiOs": null, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-14", "atrRatio": 0.967, "netAcc": -0.2, "pctAcc": 25.8, "pctDist": 39.8, "ema20": 28.1, "sma50": 46.1, "sma200": 44.9, "perf1d": 0.32, "volRatio": 77.7, "rsiOb": null, "rsiOs": null, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-15", "atrRatio": 0.957, "netAcc": -0.22, "pctAcc": 26.2, "pctDist": 41.4, "ema20": 30.8, "sma50": 46.1, "sma200": 46.6, "perf1d": -0.04, "volRatio": 78.7, "rsiOb": null, "rsiOs": null, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-16", "atrRatio": 0.945, "netAcc": -0.15, "pctAcc": 27.7, "pctDist": 39.2, "ema20": 28.3, "sma50": 44.5, "sma200": 47.0, "perf1d": 0.24, "volRatio": 80.6, "rsiOb": null, "rsiOs": null, "quadrant": "SELL OFF", "m1": "FAIL", "m2": "PASS"}, {"d": "04-17", "atrRatio": 0.984, "netAcc": 0.02, "pctAcc": 32.5, "pctDist": 35.3, "ema20": 20.6, "sma50": 34.0, "sma200": 42.2, "perf1d": 1.73, "volRatio": 97.5, "rsiOb": null, "rsiOs": null, "quadrant": "HEALTHY ROTATION", "m1": "PASS", "m2": "PASS"}, {"d": "04-20", "atrRatio": 0.961, "netAcc": 0.35, "pctAcc": 40.2, "pctDist": 23.4, "ema20": 20.8, "sma50": 33.5, "sma200": 42.0, "perf1d": 0.35, "volRatio": 75.6, "rsiOb": null, "rsiOs": null, "quadrant": "HEALTHY ROTATION", "m1": "PASS", "m2": "PASS"}, {"d": "04-21", "atrRatio": 0.978, "netAcc": 0.3, "pctAcc": 38.5, "pctDist": 24.9, "ema20": 27.9, "sma50": 37.0, "sma200": 44.1, "perf1d": -0.77, "volRatio": 83.6, "rsiOb": null, "rsiOs": null, "quadrant": "HEALTHY ROTATION", "m1": "PASS", "m2": "PASS"}, {"d": "04-22", "atrRatio": 0.972, "netAcc": 0.3, "pctAcc": 39.0, "pctDist": 25.3, "ema20": 32.9, "sma50": 39.0, "sma200": 44.7, "perf1d": -0.21, "volRatio": 81.2, "rsiOb": null, "rsiOs": null, "quadrant": "HEALTHY ROTATION", "m1": "PASS", "m2": "PASS"}, {"d": "04-23", "atrRatio": 1.004, "netAcc": 0.24, "pctAcc": 37.7, "pctDist": 28.0, "ema20": 35.5, "sma50": 41.9, "sma200": 45.4, "perf1d": -0.07, "volRatio": 84.2, "rsiOb": 8.5, "rsiOs": 1.0, "quadrant": "HEALTHY ROTATION", "m1": "PASS", "m2": "FAIL"}];
 const ACC_DIST_HIST = [{"date": "2026-04-13", "d": "04-13", "nAcc": 43, "nDist": 16, "nNet": 27, "nTotal": 985}, {"date": "2026-04-14", "d": "04-14", "nAcc": 50, "nDist": 14, "nNet": 36, "nTotal": 985}, {"date": "2026-04-15", "d": "04-15", "nAcc": 40, "nDist": 36, "nNet": 4, "nTotal": 985}, {"date": "2026-04-16", "d": "04-16", "nAcc": 33, "nDist": 28, "nNet": 5, "nTotal": 985}, {"date": "2026-04-17", "d": "04-17", "nAcc": 173, "nDist": 45, "nNet": 128, "nTotal": 985}, {"date": "2026-04-20", "d": "04-20", "nAcc": 26, "nDist": 12, "nNet": 14, "nTotal": 985}, {"date": "2026-04-21", "d": "04-21", "nAcc": 32, "nDist": 68, "nNet": -36, "nTotal": 985}, {"date": "2026-04-22", "d": "04-22", "nAcc": 34, "nDist": 44, "nNet": -10, "nTotal": 985}, {"date": "2026-04-23", "d": "04-23", "nAcc": 47, "nDist": 89, "nNet": -42, "nTotal": 985}];
 const RS_GRADE_PERF = [{"grade": "A/A+", "n": 197, "med_perf": 0.65, "net_acc1d": 12, "sum_acc": 18, "sum_dist": 6}, {"grade": "B", "n": 197, "med_perf": -0.11, "net_acc1d": -10, "sum_acc": 6, "sum_dist": 16}, {"grade": "C", "n": 197, "med_perf": -0.2, "net_acc1d": -6, "sum_acc": 9, "sum_dist": 15}, {"grade": "D", "n": 197, "med_perf": -0.08, "net_acc1d": -18, "sum_acc": 6, "sum_dist": 24}, {"grade": "E", "n": 197, "med_perf": -0.34, "net_acc1d": -20, "sum_acc": 8, "sum_dist": 28}];
 const RS_GRADE_PERF_MULTI = [{"date": "2026-04-23", "label": "T", "rows": [{"grade": "A/A+", "n": 197, "med_perf": 0.65, "net_acc1d": 12, "sum_acc": 18, "sum_dist": 6}, {"grade": "B", "n": 197, "med_perf": -0.11, "net_acc1d": -10, "sum_acc": 6, "sum_dist": 16}, {"grade": "C", "n": 197, "med_perf": -0.2, "net_acc1d": -6, "sum_acc": 9, "sum_dist": 15}, {"grade": "D", "n": 197, "med_perf": -0.08, "net_acc1d": -18, "sum_acc": 6, "sum_dist": 24}, {"grade": "E", "n": 197, "med_perf": -0.34, "net_acc1d": -20, "sum_acc": 8, "sum_dist": 28}]}, {"date": "2026-04-22", "label": "T-1", "rows": [{"grade": "A/A+", "n": 197, "med_perf": 0.11, "net_acc1d": 1, "sum_acc": 10, "sum_dist": 9}, {"grade": "B", "n": 197, "med_perf": -0.2, "net_acc1d": -1, "sum_acc": 5, "sum_dist": 6}, {"grade": "C", "n": 197, "med_perf": -0.33, "net_acc1d": -2, "sum_acc": 7, "sum_dist": 9}, {"grade": "D", "n": 197, "med_perf": -0.27, "net_acc1d": -5, "sum_acc": 4, "sum_dist": 9}, {"grade": "E", "n": 197, "med_perf": -0.44, "net_acc1d": -3, "sum_acc": 8, "sum_dist": 11}]}, {"date": "2026-04-21", "label": "T-2", "rows": [{"grade": "A/A+", "n": 197, "med_perf": -0.02, "net_acc1d": -1, "sum_acc": 11, "sum_dist": 12}, {"grade": "B", "n": 197, "med_perf": -0.76, "net_acc1d": -5, "sum_acc": 3, "sum_dist": 8}, {"grade": "C", "n": 197, "med_perf": -1.01, "net_acc1d": 1, "sum_acc": 11, "sum_dist": 10}, {"grade": "D", "n": 197, "med_perf": -0.88, "net_acc1d": -10, "sum_acc": 4, "sum_dist": 14}, {"grade": "E", "n": 197, "med_perf": -1, "net_acc1d": -21, "sum_acc": 3, "sum_dist": 24}]}, {"date": "2026-04-20", "label": "T-3", "rows": [{"grade": "A/A+", "n": 197, "med_perf": 0.77, "net_acc1d": 8, "sum_acc": 8, "sum_dist": 0}, {"grade": "B", "n": 197, "med_perf": 0.12, "net_acc1d": 1, "sum_acc": 3, "sum_dist": 2}, {"grade": "C", "n": 197, "med_perf": 0.07, "net_acc1d": 0, "sum_acc": 3, "sum_dist": 3}, {"grade": "D", "n": 197, "med_perf": 0.32, "net_acc1d": 4, "sum_acc": 6, "sum_dist": 2}, {"grade": "E", "n": 197, "med_perf": 0.35, "net_acc1d": 1, "sum_acc": 6, "sum_dist": 5}]}, {"date": "2026-04-17", "label": "T-4", "rows": [{"grade": "A/A+", "n": 197, "med_perf": 1.65, "net_acc1d": 4, "sum_acc": 31, "sum_dist": 27}, {"grade": "B", "n": 197, "med_perf": 1.66, "net_acc1d": 28, "sum_acc": 35, "sum_dist": 7}, {"grade": "C", "n": 197, "med_perf": 1.32, "net_acc1d": 24, "sum_acc": 27, "sum_dist": 3}, {"grade": "D", "n": 197, "med_perf": 1.99, "net_acc1d": 28, "sum_acc": 34, "sum_dist": 6}, {"grade": "E", "n": 197, "med_perf": 1.88, "net_acc1d": 44, "sum_acc": 46, "sum_dist": 2}]}, {"date": null, "label": "TOTAL", "rows": [{"grade": "A/A+", "n": 197, "med_perf": 3.19, "net_acc1d": 24, "sum_acc": 78, "sum_dist": 54}, {"grade": "B", "n": 197, "med_perf": 0.7, "net_acc1d": 13, "sum_acc": 52, "sum_dist": 39}, {"grade": "C", "n": 197, "med_perf": -0.16, "net_acc1d": 17, "sum_acc": 57, "sum_dist": 40}, {"grade": "D", "n": 197, "med_perf": 1.06, "net_acc1d": -1, "sum_acc": 54, "sum_dist": 55}, {"grade": "E", "n": 197, "med_perf": 0.43, "net_acc1d": 1, "sum_acc": 71, "sum_dist": 70}], "is_total": true}];
@@ -2286,6 +2274,162 @@ function initCharts() {
             ticks: {
               color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 },
               stepSize: 25,
+              callback: v => v + '%'
+            }
+          }
+        }
+      }
+    });
+  }
+
+  // ── RSI Breadth History (% RSI>70 overbought / % RSI<30 oversold) ──────────
+  // Dos líneas con puntos: rojo salmón (OB) + verde teal (OS). Escala 0-40%.
+  // Bandas horizontales punteadas en 15% (caution) y 25% (alert) como referencia.
+  // Reutiliza lastValueLabelPlugin inline (scope local) para etiquetar el último
+  // valor de cada serie al lado del punto final.
+  const rsiBreadthEl = document.getElementById('rsiBreadthChart');
+  if (rsiBreadthEl) {
+    const titleElR = document.getElementById('rsiBreadthChartTitle');
+    if (titleElR) titleElR.textContent = `RSI breadth — OB / OS · ${HIST.length} sessions`;
+
+    const rsiObData = HIST.map(h => h.rsiOb != null ? +(h.rsiOb).toFixed(1) : null);
+    const rsiOsData = HIST.map(h => h.rsiOs != null ? +(h.rsiOs).toFixed(1) : null);
+
+    // Max dinámico: al menos 30%, pero subimos si hay lecturas extremas.
+    const maxObs = Math.max(
+      ...rsiObData.filter(v => v != null),
+      ...rsiOsData.filter(v => v != null),
+      0
+    );
+    const yMax = Math.max(30, Math.ceil((maxObs + 5) / 5) * 5);
+
+    const lastValueLabelPluginRSI = {
+      id: 'lastValueLabelsRSI',
+      afterDatasetsDraw: (chart) => {
+        const { ctx } = chart;
+        ctx.save();
+        ctx.font = "600 11px 'IBM Plex Mono', monospace";
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        chart.data.datasets.forEach((ds, dsIdx) => {
+          const meta = chart.getDatasetMeta(dsIdx);
+          if (!meta || !meta.data || meta.data.length === 0) return;
+          let lastIdx = ds.data.length - 1;
+          while (lastIdx >= 0 && ds.data[lastIdx] == null) lastIdx--;
+          if (lastIdx < 0) return;
+          const pt = meta.data[lastIdx];
+          if (!pt) return;
+          const value = ds.data[lastIdx];
+          const text = value.toFixed(1) + '%';
+          ctx.fillStyle = ds.borderColor;
+          ctx.fillText(text, pt.x + 8, pt.y);
+        });
+        ctx.restore();
+      }
+    };
+
+    // Plugin para bandas horizontales de referencia en 15% y 25%.
+    const thresholdBandsPlugin = {
+      id: 'thresholdBands',
+      beforeDatasetsDraw: (chart) => {
+        const { ctx, chartArea, scales } = chart;
+        if (!chartArea || !scales.y) return;
+        const yScale = scales.y;
+        ctx.save();
+        ctx.setLineDash([3, 4]);
+        ctx.lineWidth = 1;
+        // 15% band (caution)
+        if (15 >= yScale.min && 15 <= yScale.max) {
+          ctx.strokeStyle = 'rgba(245,158,11,0.35)';
+          const y15 = yScale.getPixelForValue(15);
+          ctx.beginPath();
+          ctx.moveTo(chartArea.left, y15);
+          ctx.lineTo(chartArea.right, y15);
+          ctx.stroke();
+        }
+        // 25% band (alert)
+        if (25 >= yScale.min && 25 <= yScale.max) {
+          ctx.strokeStyle = 'rgba(255,77,109,0.35)';
+          const y25 = yScale.getPixelForValue(25);
+          ctx.beginPath();
+          ctx.moveTo(chartArea.left, y25);
+          ctx.lineTo(chartArea.right, y25);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+    };
+
+    new Chart(rsiBreadthEl, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: '% RSI > 70 (OB)',
+            data: rsiObData,
+            borderColor: '#ff4d6d',
+            backgroundColor: 'rgba(255,77,109,0.05)',
+            borderWidth: 1.5,
+            pointRadius: 2.2,
+            pointBackgroundColor: '#ff4d6d',
+            pointBorderColor: '#ff4d6d',
+            fill: false,
+            tension: 0.3,
+          },
+          {
+            label: '% RSI < 30 (OS)',
+            data: rsiOsData,
+            borderColor: '#00e5cc',
+            backgroundColor: 'rgba(0,229,204,0.05)',
+            borderWidth: 1.5,
+            pointRadius: 2.2,
+            pointBackgroundColor: '#00e5cc',
+            pointBorderColor: '#00e5cc',
+            fill: false,
+            tension: 0.3,
+          }
+        ]
+      },
+      plugins: [lastValueLabelPluginRSI, thresholdBandsPlugin],
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        layout: { padding: { right: 52 } },
+        plugins: {
+          legend: {
+            display: true, position: 'top', align: 'end',
+            labels: {
+              color: '#8899aa',
+              font: { family: "'IBM Plex Sans',sans-serif", size: 9 },
+              boxWidth: 10, boxHeight: 10, padding: 8,
+              usePointStyle: true, pointStyle: 'line',
+            }
+          },
+          tooltip: {
+            mode: 'index', intersect: false,
+            backgroundColor: '#111827', borderColor: '#1e2d45', borderWidth: 1,
+            titleColor: '#e8f0fe', bodyColor: '#8899aa', padding: 10,
+            callbacks: {
+              label: (ctx) => {
+                const v = ctx.parsed.y;
+                if (v == null) return `${ctx.dataset.label}: —`;
+                return `${ctx.dataset.label}: ${v.toFixed(1)}%`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: grid, display: false },
+            ticks: { color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 }
+          },
+          y: {
+            min: 0, max: yMax,
+            grid: { color: grid },
+            ticks: {
+              color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 },
+              stepSize: 5,
               callback: v => v + '%'
             }
           }
