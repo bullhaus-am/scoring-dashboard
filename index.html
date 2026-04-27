@@ -666,29 +666,6 @@
 
   </div>
 
-  <!-- AI COMMENTARY -->
-<div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
-<div class="card ai-commentary-card" style="margin-bottom:20px;">
-  <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>Mercado en GO con quadrant HEALTHY ROTATION: M1 mejora a 0.26 y ATR mediano 0.984 confirma volatilidad normalizada. Dispersión sectorial alta (0.552) con 8 de 11 sectores positivos en Net20d valida rotación constructiva, no rally indiscriminado. Operativamente: el régimen permite agregar exposición selectiva, pero la divergencia entre Net20d (mejorando) y % bajo EMA20 (deteriorando +4.2pp a 39.7%) advierte que la sesión de hoy fue de pullback intradía dentro de tendencia mayor intacta.</p>
-<p><strong>OBSERVACIONES CLAVE</strong></p>
-<li><strong>Avg Net Acc 20d sube a 0.26 (+0.02) con %dist cayendo a 27.2%</strong>: la huella institucional de fondo sigue mejorando aunque el tape diario fue débil (perf medianas negativas en todos los grades RS). Acumulación silenciosa bajo precio plano.</li>
-<li><strong>% bajo EMA20 salta +4.2pp a 39.7% en una sola sesión</strong>: ruptura de corto plazo en casi la mitad del universo. Pullback técnico sincronizado, no liquidación — el % bajo SMA200 (46.9%) apenas se movió.</li>
-<li><strong>Energy colapsa a Net20d -1.38 con 68% distribuyendo</strong>: liquidación institucional severa y aislada. Es el outlier que infla la dispersión sectorial; sin él, el mercado luce más uniforme.</li>
-<li><strong>Semiconductors con 100% de stocks acumulando y Net20d +3.00</strong>: lectura extrema y rara. No es rotación — es concentración institucional agresiva en una industria. Liderazgo claro y verificable.</li>
-<li><strong>Solo 5.8% del universo con ATR comprimido (<0.80)</strong>: muy pocos setups VCP maduros. El mercado está en fase de tendencia, no de base — favorece continuación sobre breakouts frescos.</li>
-<p><strong>SECTORES E INDUSTRIAS</strong></p>
-<p>Basic Materials (+0.60, %Acc 56%) e Industrials (+0.47, %Acc 48%) son el liderazgo cíclico real, acompañados por Financial Services (+0.48) y Consumer Cyclical (+0.48): rotación pro-ciclo clásica. Technology aparece más modesto en headline (+0.23) pero esconde el dato verdaderamente extremo: Semiconductors con Net20d +3.00 y 100% acumulación — el motor está concentrado en chips, no en software ni en megacaps generalistas. En el lado negativo, Energy (-1.38) y Consumer Defensive (-0.19) confirman risk-on: el dinero sale de defensivos y commodities energéticas hacia ciclo industrial y semis.</p>
-<p><strong>RS MOMENTUM vs ACUMULACIÓN HOY</strong></p>
-<p>Confirmación institucional clara en el liderazgo: RS Grade A/A+ (N=197) con Perf -0.20% pero Net Acc 1d <strong>+9</strong> (14 acc vs 5 dist) — pullback con acumulación, exactamente la firma de entrada institucional. En contraste, los grados B/D/E muestran Net Acc negativo con perf también negativa: distribución continua en rezagados. El grupo C neutral. Los top stocks (MRVL, AMD, WDC, DELL — todos RS-MC 98-99 A+) refuerzan: el liderazgo de momentum está siendo defendido en la baja, no abandonado. Es la lectura más constructiva posible bajo un día rojo.</p>
-<p><strong>FUNDAMENTAL vs TÉCNICO</strong></p>
-<p>Convergencia excepcional en el top 10: <strong>los 10 líderes técnicos tienen Fund Grade A o A+</strong>, mediana A. AMD, WDC, DELL, ECG todos A+ fundamental con RS-MC 97-99 — esto es liderazgo de altísima calidad, no rally especulativo. MRVL (AccScore 70, Fund A) y AMD (Fund A+) son los nombres donde momentum y fundamentals convergen con máxima fuerza. Sin embargo, el dato global matiza: entre los 50 RS-MC A+ del universo, la mediana Fund Grade es solo <strong>B</strong>, y 17 son D/E — hay una capa secundaria de momentum sin sustento fundamental que conviene evitar. Por el lado opuesto, 10 nombres Fund A+ con RS-MC <50 son watchlist de early entries si emerge acumulación. La calidad está concentrada en el top — fuera del podio, el liderazgo se diluye.</p>
-<p><strong>FOCO OPERATIVO</strong></p>
-<p>1. <strong>Confirmación de pullback constructivo</strong>: si mañana % bajo EMA20 retrocede bajo 37% Y Net Acc 1d en grupo RS A/A+ se mantiene positivo, agregar en líderes semis con Fund Grade A/A+ (MRVL, AMD, WDC operables cuando lo permitan).</p>
-<p>2. <strong>Evitar trampa de momentum sin fundamentals</strong>: filtrar cualquier candidato RS-MC ≥90 que tenga Fund Grade ≤C — son los 17 nombres del bucket de divergencia.</p>
-<p>3. <strong>Watchlist Energy</strong>: si %dist baja de 68% a <50% en 3 sesiones, evaluar capitulación terminal; mientras tanto, evitar largos en el sector aunque aparezcan rebotes técnicos.</p></div>
-</div>
-<!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
   <!-- ROW 1: Breadth + ATR/NetAcc + Perf chart -->
   <div class="sec-head"><span class="sec-label">Market breadth &amp; daily activity</span><div class="sec-line"></div></div>
@@ -747,13 +724,24 @@
       </div>
     </div>
 
-    <!-- CARD 2: ATR + Net Acc -->
+    <!-- CARD 2: ATR + Acc/Dist Breadth + Net Acc -->
     <div class="card" style="display:flex;flex-direction:column;">
-      <div class="card-tag">ATR ratio trend</div>
-      <div style="position:relative;flex:1;min-height:180px;margin-bottom:14px;"><canvas id="atrChart"></canvas></div>
-      <div style="padding-top:12px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
+      <!-- ATR Ratio Trend -->
+      <div style="display:flex;flex-direction:column;flex:1;">
+        <div class="card-tag" style="margin-bottom:8px;">ATR ratio trend</div>
+        <div style="position:relative;flex:1;min-height:180px;"><canvas id="atrChart"></canvas></div>
+      </div>
+
+      <!-- Acc / Dist Breadth (NUEVO) -->
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
+        <div class="card-tag" id="accBreadthChartTitle" style="margin-bottom:8px;">Acc / Dist breadth — 20d</div>
+        <div style="position:relative;flex:1;min-height:180px;"><canvas id="accBreadthChart"></canvas></div>
+      </div>
+
+      <!-- Net Accumulation 20d Trend -->
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
         <div class="card-tag" style="margin-bottom:8px;">Net accumulation 20d trend</div>
-        <div style="position:relative;flex:1;min-height:160px;"><canvas id="accChart"></canvas></div>
+        <div style="position:relative;flex:1;min-height:180px;"><canvas id="accChart"></canvas></div>
       </div>
     </div>
 
@@ -2269,6 +2257,127 @@ function initCharts() {
       y:{...base.scales.y, ticks:{...base.scales.y.ticks, callback:v=>v.toFixed(1)}}
     }}
   });
+
+  // ── Acc/Dist Breadth (% acumulando / neutro / distribuyendo) ───────────────
+  // Stacked area chart: tres capas que suman 100% en cada día.
+  //   - Acc verde (abajo): % stocks con Net Acc/Dist 20d > 0
+  //   - Neutro gris (medio): % stocks con Net = 0 exacto (ni acc ni dist)
+  //   - Dist rojo (arriba): % stocks con Net Acc/Dist 20d < 0
+  // El neutro se calcula en frontend: 100 - pctAcc - pctDist (cubre tanto
+  // tickers en cero exacto como NaN/datos faltantes).
+  // Lectura: mucho gris = mercado indeciso, mucho verde = rally amplio,
+  // mucho rojo = liquidación amplia.
+  const accBreadthEl = document.getElementById('accBreadthChart');
+  if (accBreadthEl) {
+    const titleElAcc = document.getElementById('accBreadthChartTitle');
+    if (titleElAcc) titleElAcc.textContent = `Acc / Dist breadth 20d — ${HIST.length} sessions`;
+
+    const accData     = HIST.map(h => h.pctAcc  != null ? +(h.pctAcc).toFixed(1)  : null);
+    const distData    = HIST.map(h => h.pctDist != null ? +(h.pctDist).toFixed(1) : null);
+    const neutralData = HIST.map(h => {
+      if (h.pctAcc == null || h.pctDist == null) return null;
+      return +Math.max(0, 100 - h.pctAcc - h.pctDist).toFixed(1);
+    });
+
+    const accBreadthChartInstance = new Chart(accBreadthEl, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {
+            label: '% Accumulating',
+            data: accData,
+            borderColor: 'rgba(0,229,204,0.9)',
+            backgroundColor: 'rgba(0,229,204,0.55)',
+            borderWidth: 1,
+            pointRadius: 0,
+            pointHoverRadius: 3,
+            fill: 'origin',
+            tension: 0.25,
+            stack: 'breadth',
+            order: 3,
+          },
+          {
+            label: '% Neutral',
+            data: neutralData,
+            borderColor: 'rgba(140,150,170,0.5)',
+            backgroundColor: 'rgba(110,120,140,0.40)',
+            borderWidth: 1,
+            pointRadius: 0,
+            pointHoverRadius: 3,
+            fill: '-1',
+            tension: 0.25,
+            stack: 'breadth',
+            order: 2,
+          },
+          {
+            label: '% Distributing',
+            data: distData,
+            borderColor: 'rgba(255,77,109,0.9)',
+            backgroundColor: 'rgba(255,77,109,0.55)',
+            borderWidth: 1,
+            pointRadius: 0,
+            pointHoverRadius: 3,
+            fill: '-1',
+            tension: 0.25,
+            stack: 'breadth',
+            order: 1,
+          }
+        ]
+      },
+      plugins: [crosshairPlugin],
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        onHover: makeSyncedOnHover(() => accBreadthChartInstance),
+        plugins: {
+          legend: {
+            display: true, position: 'top', align: 'end',
+            labels: {
+              color: '#8899aa',
+              font: { family: "'IBM Plex Sans',sans-serif", size: 9 },
+              boxWidth: 10, boxHeight: 10, padding: 8,
+              usePointStyle: true, pointStyle: 'rect',
+            }
+          },
+          tooltip: {
+            mode: 'index', intersect: false,
+            backgroundColor: '#111827', borderColor: '#1e2d45', borderWidth: 1,
+            titleColor: '#e8f0fe', bodyColor: '#8899aa', padding: 10,
+            callbacks: {
+              label: (ctx) => {
+                const v = ctx.parsed.y;
+                if (v == null) return `${ctx.dataset.label}: —`;
+                return `${ctx.dataset.label}: ${v.toFixed(1)}%`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: grid, display: false },
+            stacked: true,
+            ticks: { color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 }
+          },
+          y: {
+            min: 0, max: 100,
+            stacked: true,
+            grid: {
+              color: ctx => ctx.tick.value === 50 ? 'rgba(255,255,255,0.15)' : grid,
+              lineWidth: ctx => ctx.tick.value === 50 ? 1.2 : 1,
+            },
+            ticks: {
+              color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 },
+              stepSize: 25,
+              callback: v => v + '%'
+            }
+          }
+        }
+      }
+    });
+    syncedCharts.push(accBreadthChartInstance);
+    accBreadthEl.addEventListener('mouseleave', clearSyncedHover);
+  }
 
   // ── MA Breadth History (% above EMA20 / SMA50 / SMA200) ────────────────────
   // 3 líneas con puntos: verde teal (EMA20), amber (SMA50), azul (SMA200).
