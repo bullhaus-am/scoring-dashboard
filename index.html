@@ -2165,6 +2165,12 @@ function initCharts() {
 
   const base = {
     responsive:true, maintainAspectRatio:false,
+    interaction:{mode:'index', intersect:false},
+    // Right padding shared across all synced charts so their plotting areas
+    // line up — required for the synced crosshair line to appear at the same
+    // visual X position across charts that have last-value labels (which need
+    // padding) and charts that don't.
+    layout:{padding:{right:52}},
     plugins:{ legend:{display:false}, tooltip:{mode:'index',intersect:false,
       backgroundColor:'#111827', borderColor:'#1e2d45', borderWidth:1,
       titleColor:'#e8f0fe', bodyColor:'#8899aa', padding:10 }},
