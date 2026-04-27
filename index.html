@@ -2230,14 +2230,18 @@ function initCharts() {
     perfChartEl.addEventListener('mouseleave', clearSyncedHover);
   })();
 
-  new Chart(document.getElementById('atrChart'),{
+  const atrChartEl = document.getElementById('atrChart');
+  const atrChartInstance = new Chart(atrChartEl,{
     type:'line',
     data:{labels, datasets:[{
       data:HIST.map(h=>h.atrRatio),
       borderColor:'#00e5cc', backgroundColor:'rgba(0,229,204,0.05)',
       borderWidth:1.5, pointRadius:2.5, pointBackgroundColor:'#00e5cc', fill:true, tension:0.3
     }]},
-    options:{...base, scales:{...base.scales,
+    plugins:[crosshairPlugin],
+    options:{...base,
+      onHover: makeSyncedOnHover(() => atrChartInstance),
+      scales:{...base.scales,
       y:{...base.scales.y, min:0.75, max:1.20,
         ticks:{...base.scales.y.ticks, callback:v=>v.toFixed(2)},
         grid:{...base.scales.y.grid,
@@ -2245,18 +2249,26 @@ function initCharts() {
       }
     }}
   });
+  syncedCharts.push(atrChartInstance);
+  atrChartEl.addEventListener('mouseleave', clearSyncedHover);
 
-  new Chart(document.getElementById('accChart'),{
+  const accChartEl = document.getElementById('accChart');
+  const accChartInstance = new Chart(accChartEl,{
     type:'bar',
     data:{labels, datasets:[{
       data:HIST.map(h=>h.netAcc),
       backgroundColor:HIST.map(h=>h.netAcc>=0?'rgba(0,229,204,0.7)':'rgba(255,77,109,0.65)'),
       borderRadius:2
     }]},
-    options:{...base, scales:{...base.scales,
+    plugins:[crosshairPlugin],
+    options:{...base,
+      onHover: makeSyncedOnHover(() => accChartInstance),
+      scales:{...base.scales,
       y:{...base.scales.y, ticks:{...base.scales.y.ticks, callback:v=>v.toFixed(1)}}
     }}
   });
+  syncedCharts.push(accChartInstance);
+  accChartEl.addEventListener('mouseleave', clearSyncedHover);
 
   // ── Acc/Dist Breadth (% acumulando vs distribuyendo, 20d) ──────────────────
   // Dos líneas independientes con puntos:
