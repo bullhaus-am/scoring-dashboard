@@ -2258,26 +2258,48 @@ function initCharts() {
     }}
   });
 
-  // ── Acc/Dist Breadth (% acumulando / neutro / distribuyendo) ───────────────
-  // Stacked area chart: tres capas que suman 100% en cada día.
-  //   - Acc verde (abajo): % stocks con Net Acc/Dist 20d > 0
-  //   - Neutro gris (medio): % stocks con Net = 0 exacto (ni acc ni dist)
-  //   - Dist rojo (arriba): % stocks con Net Acc/Dist 20d < 0
-  // El neutro se calcula en frontend: 100 - pctAcc - pctDist (cubre tanto
-  // tickers en cero exacto como NaN/datos faltantes).
-  // Lectura: mucho gris = mercado indeciso, mucho verde = rally amplio,
-  // mucho rojo = liquidación amplia.
+  // ── Acc/Dist Breadth (% acumulando vs distribuyendo, 20d) ──────────────────
+  // Dos líneas independientes con puntos:
+  //   - Verde teal (% Accumulating): % stocks con Net Acc/Dist 20d > 0
+  //   - Rojo salmón (% Distributing): % stocks con Net Acc/Dist 20d < 0
+  // Línea horizontal de referencia en 50%. La distancia entre las líneas
+  // representa la "polarización" del mercado; el gap entre la suma y 100%
+  // refleja stocks neutros (Net = 0 o sin data).
+  // Lectura: cuando ambas convergen → mercado mayoritariamente neutro.
+  // Cuando divergen → polarización clara (rally amplio o liquidación amplia).
   const accBreadthEl = document.getElementById('accBreadthChart');
   if (accBreadthEl) {
     const titleElAcc = document.getElementById('accBreadthChartTitle');
     if (titleElAcc) titleElAcc.textContent = `Acc / Dist breadth 20d — ${HIST.length} sessions`;
 
-    const accData     = HIST.map(h => h.pctAcc  != null ? +(h.pctAcc).toFixed(1)  : null);
-    const distData    = HIST.map(h => h.pctDist != null ? +(h.pctDist).toFixed(1) : null);
-    const neutralData = HIST.map(h => {
-      if (h.pctAcc == null || h.pctDist == null) return null;
-      return +Math.max(0, 100 - h.pctAcc - h.pctDist).toFixed(1);
-    });
+    const accData  = HIST.map(h => h.pctAcc  != null ? +(h.pctAcc).toFixed(1)  : null);
+    const distData = HIST.map(h => h.pctDist != null ? +(h.pctDist).toFixed(1) : null);
+
+    // Plugin inline: dibuja el último valor de cada serie al lado del punto final.
+    const lastValueLabelPluginAcc = {
+      id: 'lastValueLabelsAcc',
+      afterDatasetsDraw: (chart) => {
+        const { ctx } = chart;
+        ctx.save();
+        ctx.font = "600 11px 'IBM Plex Mono', monospace";
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        chart.data.datasets.forEach((ds, dsIdx) => {
+          const meta = chart.getDatasetMeta(dsIdx);
+          if (!meta || !meta.data || meta.data.length === 0) return;
+          let lastIdx = ds.data.length - 1;
+          while (lastIdx >= 0 && ds.data[lastIdx] == null) lastIdx--;
+          if (lastIdx < 0) return;
+          const pt = meta.data[lastIdx];
+          if (!pt) return;
+          const value = ds.data[lastIdx];
+          const text = value.toFixed(1) + '%';
+          ctx.fillStyle = ds.borderColor;
+          ctx.fillText(text, pt.x + 8, pt.y);
+        });
+        ctx.restore();
+      }
+    };
 
     const accBreadthChartInstance = new Chart(accBreadthEl, {
       type: 'line',
@@ -2287,49 +2309,36 @@ function initCharts() {
           {
             label: '% Accumulating',
             data: accData,
-            borderColor: 'rgba(0,229,204,0.9)',
-            backgroundColor: 'rgba(0,229,204,0.55)',
-            borderWidth: 1,
-            pointRadius: 0,
-            pointHoverRadius: 3,
-            fill: 'origin',
-            tension: 0.25,
-            stack: 'breadth',
-            order: 3,
-          },
-          {
-            label: '% Neutral',
-            data: neutralData,
-            borderColor: 'rgba(140,150,170,0.5)',
-            backgroundColor: 'rgba(110,120,140,0.40)',
-            borderWidth: 1,
-            pointRadius: 0,
-            pointHoverRadius: 3,
-            fill: '-1',
-            tension: 0.25,
-            stack: 'breadth',
-            order: 2,
+            borderColor: '#00e5cc',
+            backgroundColor: 'rgba(0,229,204,0.05)',
+            borderWidth: 1.5,
+            pointRadius: 2.2,
+            pointBackgroundColor: '#00e5cc',
+            pointBorderColor: '#00e5cc',
+            fill: false,
+            tension: 0.3,
           },
           {
             label: '% Distributing',
             data: distData,
-            borderColor: 'rgba(255,77,109,0.9)',
-            backgroundColor: 'rgba(255,77,109,0.55)',
-            borderWidth: 1,
-            pointRadius: 0,
-            pointHoverRadius: 3,
-            fill: '-1',
-            tension: 0.25,
-            stack: 'breadth',
-            order: 1,
+            borderColor: '#ff4d6d',
+            backgroundColor: 'rgba(255,77,109,0.05)',
+            borderWidth: 1.5,
+            pointRadius: 2.2,
+            pointBackgroundColor: '#ff4d6d',
+            pointBorderColor: '#ff4d6d',
+            fill: false,
+            tension: 0.3,
           }
         ]
       },
-      plugins: [crosshairPlugin],
+      plugins: [lastValueLabelPluginAcc, crosshairPlugin],
       options: {
         responsive: true, maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         onHover: makeSyncedOnHover(() => accBreadthChartInstance),
+        // Padding derecho para que las etiquetas de último valor no se corten
+        layout: { padding: { right: 52 } },
         plugins: {
           legend: {
             display: true, position: 'top', align: 'end',
@@ -2337,7 +2346,7 @@ function initCharts() {
               color: '#8899aa',
               font: { family: "'IBM Plex Sans',sans-serif", size: 9 },
               boxWidth: 10, boxHeight: 10, padding: 8,
-              usePointStyle: true, pointStyle: 'rect',
+              usePointStyle: true, pointStyle: 'line',
             }
           },
           tooltip: {
@@ -2356,12 +2365,10 @@ function initCharts() {
         scales: {
           x: {
             grid: { color: grid, display: false },
-            stacked: true,
             ticks: { color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 }
           },
           y: {
             min: 0, max: 100,
-            stacked: true,
             grid: {
               color: ctx => ctx.tick.value === 50 ? 'rgba(255,255,255,0.15)' : grid,
               lineWidth: ctx => ctx.tick.value === 50 ? 1.2 : 1,
