@@ -2089,21 +2089,17 @@ function initCharts() {
     id: 'syncedCrosshair',
     afterDraw: (chart) => {
       if (syncedHoverIdx == null) return;
+      const xScale = chart.scales.x;
+      if (!xScale) return;
+      // Use scale.getPixelForValue: this correctly respects each chart type's
+      // tick offset behavior (bar charts reserve half-bar margin at each
+      // edge via offset:true, line charts don't). Now that all charts share
+      // the same plotting area width (via afterFit on Y axes), the X positions
+      // for the same idx are visually aligned across line and bar charts.
+      const x = xScale.getPixelForValue(syncedHoverIdx);
+      if (x == null || isNaN(x)) return;
       const { ctx, chartArea } = chart;
       if (!chartArea) return;
-      // Compute X manually from the chartArea proportionally. This bypasses
-      // the difference between bar chart's getPixelForValue (which returns
-      // the center of the bar, offset by half a bar-width) and line chart's
-      // (which returns the tick center). With this approach, idx N maps to
-      // the same proportional X across line and bar charts, regardless of
-      // Chart.js internal offsetting.
-      const N = chart.data.labels.length;
-      if (N <= 1) return;
-      const x = chartArea.left + (chartArea.right - chartArea.left) * (syncedHoverIdx / (N - 1));
-      // DEBUG: identifica cada chart y su posición de crosshair
-      if (chart.canvas && chart.canvas.id) {
-        console.log(`[crosshair] chart=${chart.canvas.id}  idx=${syncedHoverIdx}  x=${x.toFixed(1)}  area=[${chartArea.left.toFixed(1)}-${chartArea.right.toFixed(1)}]  width=${(chartArea.right-chartArea.left).toFixed(1)}`);
-      }
       ctx.save();
       ctx.setLineDash([4, 4]);
       ctx.lineWidth = 1;
@@ -2184,7 +2180,13 @@ function initCharts() {
       backgroundColor:'#111827', borderColor:'#1e2d45', borderWidth:1,
       titleColor:'#e8f0fe', bodyColor:'#8899aa', padding:10 }},
     scales:{
-      x:{grid:{color:grid}, ticks:{color:tick, font:{family:"'IBM Plex Mono',monospace",size:9}, maxRotation:45}},
+      // offset:true on the X axis makes line charts respect the same half-tick
+      // padding that bar charts use by default. This visually aligns line
+      // points and bar centers at the same X for the same idx, which is
+      // critical for the synced crosshair line to look correct across both
+      // chart types.
+      x:{grid:{color:grid}, offset:true,
+         ticks:{color:tick, font:{family:"'IBM Plex Mono',monospace",size:9}, maxRotation:45}},
       // Force a fixed Y-axis width across ALL synced charts so the plotting
       // area starts at the same X regardless of label content (e.g. "100%"
       // is wider than "25%", and "1.20" is wider than "0.0"). Without this,
@@ -2406,6 +2408,7 @@ function initCharts() {
         scales: {
           x: {
             grid: { color: grid, display: false },
+            offset: true,
             ticks: { color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 }
           },
           y: {
@@ -2546,6 +2549,7 @@ function initCharts() {
         scales: {
           x: {
             grid: { color: grid, display: false },
+            offset: true,
             ticks: { color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 }
           },
           y: {
@@ -2711,6 +2715,7 @@ function initCharts() {
         scales: {
           x: {
             grid: { color: grid, display: false },
+            offset: true,
             ticks: { color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 }
           },
           y: {
@@ -2821,6 +2826,7 @@ function initCharts() {
         scales: {
           x: {
             grid: { color: grid, display: false },
+            offset: true,
             ticks: { color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 10 }
           },
           y: {
