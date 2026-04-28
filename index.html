@@ -2089,10 +2089,14 @@ function initCharts() {
     id: 'syncedCrosshair',
     afterDraw: (chart) => {
       if (syncedHoverIdx == null) return;
-      const meta = chart.getDatasetMeta(0);
-      if (!meta || !meta.data || syncedHoverIdx >= meta.data.length) return;
-      const pt = meta.data[syncedHoverIdx];
-      if (!pt) return;
+      const xScale = chart.scales.x;
+      if (!xScale) return;
+      // Use scale.getPixelForValue (NOT meta.data[idx].x) to get a position
+      // that's consistent across line and bar charts. Bar charts with
+      // categoryPercentage/barPercentage shift the meta point off-tick,
+      // which would desync the visual crosshair vs other chart types.
+      const x = xScale.getPixelForValue(syncedHoverIdx);
+      if (x == null || isNaN(x)) return;
       const { ctx, chartArea } = chart;
       if (!chartArea) return;
       ctx.save();
@@ -2100,8 +2104,8 @@ function initCharts() {
       ctx.lineWidth = 1;
       ctx.strokeStyle = 'rgba(200, 210, 225, 0.35)';
       ctx.beginPath();
-      ctx.moveTo(pt.x, chartArea.top);
-      ctx.lineTo(pt.x, chartArea.bottom);
+      ctx.moveTo(x, chartArea.top);
+      ctx.lineTo(x, chartArea.bottom);
       ctx.stroke();
       ctx.restore();
     }
