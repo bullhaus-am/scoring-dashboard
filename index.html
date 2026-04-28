@@ -2089,12 +2089,17 @@ function initCharts() {
     id: 'syncedCrosshair',
     afterDraw: (chart) => {
       if (syncedHoverIdx == null) return;
-      const xScale = chart.scales.x;
-      if (!xScale) return;
-      const x = xScale.getPixelForValue(syncedHoverIdx);
-      if (x == null || isNaN(x)) return;
       const { ctx, chartArea } = chart;
       if (!chartArea) return;
+      // Compute X manually from the chartArea proportionally. This bypasses
+      // the difference between bar chart's getPixelForValue (which returns
+      // the center of the bar, offset by half a bar-width) and line chart's
+      // (which returns the tick center). With this approach, idx N maps to
+      // the same proportional X across line and bar charts, regardless of
+      // Chart.js internal offsetting.
+      const N = chart.data.labels.length;
+      if (N <= 1) return;
+      const x = chartArea.left + (chartArea.right - chartArea.left) * (syncedHoverIdx / (N - 1));
       // DEBUG: identifica cada chart y su posición de crosshair
       if (chart.canvas && chart.canvas.id) {
         console.log(`[crosshair] chart=${chart.canvas.id}  idx=${syncedHoverIdx}  x=${x.toFixed(1)}  area=[${chartArea.left.toFixed(1)}-${chartArea.right.toFixed(1)}]  width=${(chartArea.right-chartArea.left).toFixed(1)}`);
@@ -2180,7 +2185,14 @@ function initCharts() {
       titleColor:'#e8f0fe', bodyColor:'#8899aa', padding:10 }},
     scales:{
       x:{grid:{color:grid}, ticks:{color:tick, font:{family:"'IBM Plex Mono',monospace",size:9}, maxRotation:45}},
-      y:{grid:{color:grid}, ticks:{color:tick, font:{family:"'IBM Plex Mono',monospace",size:9}}}
+      // Force a fixed Y-axis width across ALL synced charts so the plotting
+      // area starts at the same X regardless of label content (e.g. "100%"
+      // is wider than "25%", and "1.20" is wider than "0.0"). Without this,
+      // each chart gets a different left padding and the synced crosshair
+      // visually drifts between charts even when on the same data index.
+      y:{grid:{color:grid},
+         ticks:{color:tick, font:{family:"'IBM Plex Mono',monospace",size:9}},
+         afterFit: (axis) => { axis.width = 42; }}
     }
   };
 
@@ -2223,17 +2235,24 @@ function initCharts() {
          borderWidth:1.5, pointRadius:2, fill:false, tension:0.35, yAxisID:'y2'}
       ]},
       plugins:[crosshairPlugin],
+      // perfChart has a y2 axis on the right side that consumes space the
+      // other charts don't have. Net effect: the y2 axis (forced to width=10)
+      // + remaining padding (right=42) sums to 52 — same as the other charts'
+      // pure padding=52. That keeps the plotting area's right edge aligned.
       options:{...base, maintainAspectRatio:false,
+        layout:{padding:{right:42}},
         onHover: makeSyncedOnHover(() => perfChartInstance),
         scales:{
         x:base.scales.x,
+        // Y axis (left): no title — that would widen plotting area inconsistently
         y:{...base.scales.y,
            min: yMin, max: yMax,
-           title:{display:true,text:'Perf%',color:tick,font:{size:9}}},
+           afterFit: (axis) => { axis.width = 42; }},
+        // Y2 (right): minimal width; tick labels render inside the padding
         y2:{position:'right', grid:{drawOnChartArea:false},
             min: y2Min, max: y2Max,
             ticks:{color:tick,font:{size:9},callback:v=>Math.round(v)+'%'},
-            title:{display:true,text:'Vol ratio',color:tick,font:{size:9}}}
+            afterFit: (axis) => { axis.width = 10; }}
       }}
     });
     syncedCharts.push(perfChartInstance);
@@ -2399,7 +2418,8 @@ function initCharts() {
               color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 },
               stepSize: 25,
               callback: v => v + '%'
-            }
+            },
+            afterFit: (axis) => { axis.width = 42; }
           }
         }
       }
@@ -2538,7 +2558,8 @@ function initCharts() {
               color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 },
               stepSize: 25,
               callback: v => v + '%'
-            }
+            },
+            afterFit: (axis) => { axis.width = 42; }
           }
         }
       }
@@ -2699,7 +2720,8 @@ function initCharts() {
               color: tick, font: { family: "'IBM Plex Mono',monospace", size: 8 },
               stepSize: 5,
               callback: v => v + '%'
-            }
+            },
+            afterFit: (axis) => { axis.width = 42; }
           }
         }
       }
