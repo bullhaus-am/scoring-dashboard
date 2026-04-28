@@ -2091,14 +2091,14 @@ function initCharts() {
       if (syncedHoverIdx == null) return;
       const xScale = chart.scales.x;
       if (!xScale) return;
-      // Use scale.getPixelForValue (NOT meta.data[idx].x) to get a position
-      // that's consistent across line and bar charts. Bar charts with
-      // categoryPercentage/barPercentage shift the meta point off-tick,
-      // which would desync the visual crosshair vs other chart types.
       const x = xScale.getPixelForValue(syncedHoverIdx);
       if (x == null || isNaN(x)) return;
       const { ctx, chartArea } = chart;
       if (!chartArea) return;
+      // DEBUG: identifica cada chart y su posición de crosshair
+      if (chart.canvas && chart.canvas.id) {
+        console.log(`[crosshair] chart=${chart.canvas.id}  idx=${syncedHoverIdx}  x=${x.toFixed(1)}  area=[${chartArea.left.toFixed(1)}-${chartArea.right.toFixed(1)}]  width=${(chartArea.right-chartArea.left).toFixed(1)}`);
+      }
       ctx.save();
       ctx.setLineDash([4, 4]);
       ctx.lineWidth = 1;
