@@ -187,43 +187,50 @@
   /* Stock table */
   .tbl-card { background: var(--bg2); border: 1px solid var(--rule); border-radius: var(--r); padding: 18px 8px; margin-bottom: 0; }
   .tbl-top  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
-  .tbl-wrap { overflow-x: auto; width: 100%; }
+  /* No overflow on tbl-wrap: an overflow-x:auto here creates a scrolling
+   * context that breaks position:sticky vertical (header sticky-top would
+   * reference tbl-wrap which has no vertical scroll). With overflow:visible,
+   * sticky-top references the page viewport (✓ headers stick) and sticky-left
+   * also references viewport (✓ columns stick during horizontal page scroll). */
+  .tbl-wrap { width: 100%; }
   .stbl { width: 100%; min-width: 2440px; border-collapse: collapse; font-size: 11px; table-layout: fixed; }
 
   /* ── Sticky headers + sticky-left columns ─────────────────────────────────
    * Two-row header sticks below the topbar (which is sticky at top:0, h=72px).
-   * First 4 columns (Fav, Rank, Δ Rank, Ticker) stick to the left of tbl-wrap
-   * during horizontal scroll. Z-index ladder:
+   * First 4 columns (Fav, Rank, Δ Rank, Ticker) stick to the left of viewport
+   * during horizontal page scroll. Z-index ladder:
    *   - topbar: 100 (declared elsewhere)
    *   - sticky header rows: 50 (vertical scroll only)
    *   - sticky-left body cells: 10 (horizontal scroll only)
    *   - sticky-left header cells (intersection): 60 (above both)
-   * Variables --row1-h / --row2-h control the vertical offsets of header rows.
+   * Background var(--bg2) matches the .tbl-card parent so the cells visually
+   * blend with the rest of the table (rather than var(--bg) which is darker
+   * and looks like a separate dark band).
    */
   .stbl { --row1-h: 30px; --row2-h: 32px; --topbar-h: 72px; }
   .stbl thead tr.thead-groups th {
     position: sticky;
     top: var(--topbar-h);
     z-index: 50;
-    background: var(--bg);
+    background: var(--bg2);
   }
   .stbl thead tr:not(.thead-groups) th {
     position: sticky;
     top: calc(var(--topbar-h) + var(--row1-h));
     z-index: 50;
-    background: var(--bg);
+    background: var(--bg2);
   }
   /* Sticky-left columns. Offsets calculated from colgroup widths:
    * fav=14, rank=36, deltaRank=52, ticker=48 → cumulative 0, 14, 50, 102.
    * Last sticky column (ticker) gets a subtle right shadow to mark the
    * boundary when the rest of the table scrolls under it. */
-  .stbl .scol-1 { position: sticky; left: 0;     z-index: 10; background: var(--bg); }
-  .stbl .scol-2 { position: sticky; left: 14px;  z-index: 10; background: var(--bg); }
-  .stbl .scol-3 { position: sticky; left: 50px;  z-index: 10; background: var(--bg); }
-  .stbl .scol-4 { position: sticky; left: 102px; z-index: 10; background: var(--bg);
+  .stbl .scol-1 { position: sticky; left: 0;     z-index: 10; background: var(--bg2); }
+  .stbl .scol-2 { position: sticky; left: 14px;  z-index: 10; background: var(--bg2); }
+  .stbl .scol-3 { position: sticky; left: 50px;  z-index: 10; background: var(--bg2); }
+  .stbl .scol-4 { position: sticky; left: 102px; z-index: 10; background: var(--bg2);
                   box-shadow: 4px 0 8px -2px rgba(0,0,0,0.5); }
   /* Hover state should also apply to sticky cells, so override the row-hover
-   * background here as well (otherwise sticky cells stay var(--bg) on hover). */
+   * background here as well (otherwise sticky cells stay var(--bg2) on hover). */
   .stbl tr:hover .scol-1,
   .stbl tr:hover .scol-2,
   .stbl tr:hover .scol-3,
@@ -234,7 +241,7 @@
   .stbl thead .scol-1,
   .stbl thead .scol-2,
   .stbl thead .scol-3,
-  .stbl thead .scol-4 { z-index: 60; background: var(--bg); }
+  .stbl thead .scol-4 { z-index: 60; background: var(--bg2); }
   .stbl th {
     font-size: 9px; font-weight: 600; color: var(--mist);
     letter-spacing: 2px; text-transform: uppercase;
