@@ -2262,31 +2262,40 @@ function initCharts() {
   };
 
   // Broadcaster: called by each chart's onHover. Updates the global index
-  // and triggers a redraw on the OTHER charts (not the source, which is
-  // already redrawing itself via its native hover handler).
+  // Broadcaster: called by each chart's onHover. Updates the global index
+  // and forces the OTHER charts (not the source, which Chart.js already
+  // updates natively) to show their tooltip at the same idx.
+  //
+  // Implementation notes:
+  //   1. We always include ALL datasets in activeEls without filtering by
+  //      whether the data point at idx is truthy. Chart.js itself handles
+  //      null values and renders "—" via tooltip callbacks. Filtering caused
+  //      tooltips to disappear on charts with sparse data (e.g. RSI Breadth
+  //      pre 23/3 has null values).
+  //   2. We pass {x:0, y:0} to tooltip.setActiveElements. With the topLeft
+  //      positioner, Chart.js ignores these coords and uses chartArea.left/top
+  //      anyway. We don't reach into meta.data[idx].x because that fails on
+  //      null bar chart elements.
+  //   3. We use chart.update('none') instead of chart.draw() so layout state
+  //      is fully recomputed (including tooltip caret/position). 'none' skips
+  //      the animation, so it's fast.
   function broadcastHover(sourceChart, idx) {
     if (idx === syncedHoverIdx) return;
     syncedHoverIdx = idx;
     syncedCharts.forEach(ch => {
       if (ch === sourceChart || !ch) return;
-      // Force tooltip to show at the synced index (simulating hover)
-      if (idx != null) {
-        const meta = ch.getDatasetMeta(0);
-        if (meta && meta.data && idx < meta.data.length && meta.data[idx]) {
-          const activeEls = ch.data.datasets
-            .map((_, dsIdx) => ({ datasetIndex: dsIdx, index: idx }))
-            .filter(e => {
-              const m = ch.getDatasetMeta(e.datasetIndex);
-              return m && m.data && m.data[e.index];
-            });
-          ch.setActiveElements(activeEls);
-          ch.tooltip.setActiveElements(activeEls, { x: meta.data[idx].x, y: meta.data[idx].y });
-        }
+      if (idx != null && idx >= 0 && idx < ch.data.labels.length) {
+        const activeEls = ch.data.datasets.map((_, dsIdx) => ({
+          datasetIndex: dsIdx,
+          index: idx
+        }));
+        ch.setActiveElements(activeEls);
+        ch.tooltip.setActiveElements(activeEls, { x: 0, y: 0 });
       } else {
         ch.setActiveElements([]);
         ch.tooltip.setActiveElements([], { x: 0, y: 0 });
       }
-      ch.draw();
+      ch.update('none');
     });
   }
 
@@ -2298,7 +2307,7 @@ function initCharts() {
       if (!ch) return;
       ch.setActiveElements([]);
       ch.tooltip.setActiveElements([], { x: 0, y: 0 });
-      ch.draw();
+      ch.update('none');
     });
   }
 
