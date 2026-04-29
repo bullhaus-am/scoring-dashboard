@@ -189,6 +189,52 @@
   .tbl-top  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
   .tbl-wrap { overflow-x: auto; width: 100%; }
   .stbl { width: 100%; min-width: 2440px; border-collapse: collapse; font-size: 11px; table-layout: fixed; }
+
+  /* ── Sticky headers + sticky-left columns ─────────────────────────────────
+   * Two-row header sticks below the topbar (which is sticky at top:0, h=72px).
+   * First 4 columns (Fav, Rank, Δ Rank, Ticker) stick to the left of tbl-wrap
+   * during horizontal scroll. Z-index ladder:
+   *   - topbar: 100 (declared elsewhere)
+   *   - sticky header rows: 50 (vertical scroll only)
+   *   - sticky-left body cells: 10 (horizontal scroll only)
+   *   - sticky-left header cells (intersection): 60 (above both)
+   * Variables --row1-h / --row2-h control the vertical offsets of header rows.
+   */
+  .stbl { --row1-h: 30px; --row2-h: 32px; --topbar-h: 72px; }
+  .stbl thead tr.thead-groups th {
+    position: sticky;
+    top: var(--topbar-h);
+    z-index: 50;
+    background: var(--bg);
+  }
+  .stbl thead tr:not(.thead-groups) th {
+    position: sticky;
+    top: calc(var(--topbar-h) + var(--row1-h));
+    z-index: 50;
+    background: var(--bg);
+  }
+  /* Sticky-left columns. Offsets calculated from colgroup widths:
+   * fav=14, rank=36, deltaRank=52, ticker=48 → cumulative 0, 14, 50, 102.
+   * Last sticky column (ticker) gets a subtle right shadow to mark the
+   * boundary when the rest of the table scrolls under it. */
+  .stbl .scol-1 { position: sticky; left: 0;     z-index: 10; background: var(--bg); }
+  .stbl .scol-2 { position: sticky; left: 14px;  z-index: 10; background: var(--bg); }
+  .stbl .scol-3 { position: sticky; left: 50px;  z-index: 10; background: var(--bg); }
+  .stbl .scol-4 { position: sticky; left: 102px; z-index: 10; background: var(--bg);
+                  box-shadow: 4px 0 8px -2px rgba(0,0,0,0.5); }
+  /* Hover state should also apply to sticky cells, so override the row-hover
+   * background here as well (otherwise sticky cells stay var(--bg) on hover). */
+  .stbl tr:hover .scol-1,
+  .stbl tr:hover .scol-2,
+  .stbl tr:hover .scol-3,
+  .stbl tr:hover .scol-4 { background: var(--bg3); }
+  /* Header cells that are ALSO sticky-left (the column header row + the group
+   * row above the first 4 columns) need a higher z-index to stay above body
+   * sticky-left cells when both vertical and horizontal scroll happen. */
+  .stbl thead .scol-1,
+  .stbl thead .scol-2,
+  .stbl thead .scol-3,
+  .stbl thead .scol-4 { z-index: 60; background: var(--bg); }
   .stbl th {
     font-size: 9px; font-weight: 600; color: var(--mist);
     letter-spacing: 2px; text-transform: uppercase;
@@ -944,10 +990,10 @@
             <th colspan="1"  class="thg thg-op">&nbsp;</th>
           </tr>
           <tr>
-            <th class="fav-th" title="Watchlist"></th>
-            <th class="lft sortable" onclick="sortBy('rank')" data-col="rank">Rank</th>
-            <th class="sortable" onclick="sortBy('deltaRank')" data-col="deltaRank" id="deltaRankHeader" style="text-align:center" title="Cambio de posición en el Composite Ranking vs hace ~20 sesiones">Δ Rank</th>
-            <th class="lft sortable" onclick="sortBy('sym')" data-col="sym">Ticker</th>
+            <th class="fav-th scol-1" title="Watchlist"></th>
+            <th class="lft sortable scol-2" onclick="sortBy('rank')" data-col="rank">Rank</th>
+            <th class="sortable scol-3" onclick="sortBy('deltaRank')" data-col="deltaRank" id="deltaRankHeader" style="text-align:center" title="Cambio de posición en el Composite Ranking vs hace ~20 sesiones">Δ Rank</th>
+            <th class="lft sortable scol-4" onclick="sortBy('sym')" data-col="sym">Ticker</th>
             <th class="lft sortable" onclick="sortBy('desc')" data-col="desc">Empresa</th>
             <th class="lft sortable" onclick="sortBy('sector')" data-col="sector">Sector</th>
             <th class="lft sortable" onclick="sortBy('industry')" data-col="industry">Industry</th>
@@ -1544,14 +1590,14 @@ function toggleWatchlist() {
 // Positivo (subió) → verde con ↑, negativo (bajó) → rojo con ↓, null (nuevo) → N/A gris.
 function deltaRankCell(d) {
   if (d == null) {
-    return '<td style="text-align:center;color:#4a5568;font-size:10px" title="Sin ranking previo (ticker nuevo o sin histórico)">N/A</td>';
+    return '<td class="scol-3" style="text-align:center;color:#4a5568;font-size:10px" title="Sin ranking previo (ticker nuevo o sin histórico)">N/A</td>';
   }
   if (d === 0) {
-    return '<td style="text-align:center;color:#8899aa">0</td>';
+    return '<td class="scol-3" style="text-align:center;color:#8899aa">0</td>';
   }
   const color = d > 0 ? '#00e5cc' : '#ff4d6d';
   const arrow = d > 0 ? '↑' : '↓';
-  return `<td style="text-align:center;color:${color};font-weight:600">${d > 0 ? '+' : ''}${d} ${arrow}</td>`;
+  return `<td class="scol-3" style="text-align:center;color:${color};font-weight:600">${d > 0 ? '+' : ''}${d} ${arrow}</td>`;
 }
 
 function buildRow(s) {
@@ -1561,10 +1607,10 @@ function buildRow(s) {
   const fw = v => v !== 0 ? '700' : '400';
   const sign = v => v > 0 ? '+' : '';
   return `<tr>
-      <td><button class="fav-star active" onclick="toggleFav('${s.sym}',this)" title="Quitar de watchlist">★</button></td>
-      <td style="color:#4a5568">${s.rank}</td>
+      <td class="scol-1"><button class="fav-star active" onclick="toggleFav('${s.sym}',this)" title="Quitar de watchlist">★</button></td>
+      <td class="scol-2" style="color:#4a5568">${s.rank}</td>
       ${deltaRankCell(s.deltaRank)}
-      <td class="lft"><span class="sym tv-copy" onclick="copyTicker(this,'${s.sym}')" title="Copiar al clipboard">${s.sym}</span></td>
+      <td class="lft scol-4"><span class="sym tv-copy" onclick="copyTicker(this,'${s.sym}')" title="Copiar al clipboard">${s.sym}</span></td>
       <td class="lft"><span class="co-name" title="${s.desc}">${s.desc}</span></td>
       <td class="lft"><span class="sector-tag" title="${s.sector}">${s.sector}</span></td>
       <td class="lft"><span class="industry-tag" title="${s.industry}">${s.industry}</span></td>
@@ -2014,10 +2060,10 @@ function renderStocks() {
     const ar = s.atrRatio < 1.0 ? 'col-teal' : (s.atrRatio > 1.3 ? 'col-red' : '');
     const sc = scoreColor(s.score);
     return `<tr>
-      <td><button class="fav-star ${isFav(s.sym)?'active':''}" onclick="toggleFav('${s.sym}',this)" title="Agregar a watchlist">★</button></td>
-      <td style="color:#4a5568">${s.rank}</td>
+      <td class="scol-1"><button class="fav-star ${isFav(s.sym)?'active':''}" onclick="toggleFav('${s.sym}',this)" title="Agregar a watchlist">★</button></td>
+      <td class="scol-2" style="color:#4a5568">${s.rank}</td>
       ${deltaRankCell(s.deltaRank)}
-      <td class="lft"><span class="sym tv-copy" onclick="copyTicker(this,'${s.sym}')" title="Copiar al clipboard">${s.sym}</span></td>
+      <td class="lft scol-4"><span class="sym tv-copy" onclick="copyTicker(this,'${s.sym}')" title="Copiar al clipboard">${s.sym}</span></td>
       <td class="lft"><span class="co-name" title="${s.desc}">${s.desc}</span></td>
       <td class="lft"><span class="sector-tag" title="${s.sector}">${s.sector}</span></td>
       <td class="lft"><span class="industry-tag" title="${s.industry}">${s.industry}</span></td>
