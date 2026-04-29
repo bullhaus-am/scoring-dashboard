@@ -2169,21 +2169,63 @@ function initCharts() {
   const tick = '#4a5568';
   const labels = HIST.map(h => h.d);
 
-  // ── Custom tooltip positioner: fixed top-left of chartArea ────────────────
-  // Chart.js's default positioner ('nearest') puts the tooltip near the
-  // hovered point — which means it moves around the chart as the cursor
-  // moves and can get clipped at edges or overlap data lines. With this
-  // custom positioner registered as 'topLeft', tooltips always render at a
-  // small offset from the chart's top-left corner, regardless of cursor
-  // position. Combined with the synced crosshair (which fires tooltips on
-  // all 6 charts at the same idx via tooltip.setActiveElements), this gives
-  // a predictable layout: hover any chart → 6 tooltips appear in identical
-  // positions across all 6 cards.
-  if (typeof Chart !== 'undefined' && Chart.Tooltip && !Chart.Tooltip.positioners.topLeft) {
-    Chart.Tooltip.positioners.topLeft = function(elements, eventPosition) {
-      const chartArea = this.chart.chartArea;
+  // ── Custom tooltip positioner: above the hovered data point ───────────────
+  // Chart.js's default 'nearest' positioner moves around the chart and can
+  // get clipped at edges or overlap data lines. Our 'nearTop' positioner
+  // pins the tooltip to the X of the synced index (so it follows the
+  // crosshair horizontally) and to a Y just above the topmost active point.
+  // If that would clip past the top edge, we flip it below the bottommost
+  // active point instead — same logic browsers use for native tooltips.
+  if (typeof Chart !== 'undefined' && Chart.Tooltip && !Chart.Tooltip.positioners.nearTop) {
+    Chart.Tooltip.positioners.nearTop = function(elements, eventPosition) {
+      const chart = this.chart;
+      const chartArea = chart.chartArea;
       if (!chartArea) return false;
-      return { x: chartArea.left + 8, y: chartArea.top + 8 };
+
+      // X: snap to the synced idx position (works for both line and bar charts
+      // because we registered offset:true on x axes). Falls back to the event
+      // X if no synced idx — preserves a sensible default.
+      let x;
+      if (typeof syncedHoverIdx === 'number' && syncedHoverIdx >= 0 && chart.scales.x) {
+        x = chart.scales.x.getPixelForValue(syncedHoverIdx);
+      } else if (eventPosition) {
+        x = eventPosition.x;
+      } else {
+        x = chartArea.left + (chartArea.right - chartArea.left) / 2;
+      }
+      // Clamp X within chartArea so tooltip doesn't get clipped horizontally.
+      // Chart.js will apply caretX offset internally.
+      x = Math.max(chartArea.left + 4, Math.min(chartArea.right - 4, x));
+
+      // Y: find the topmost (smallest y) and bottommost (largest y) active
+      // element to decide whether to place tooltip above or below.
+      let topY = Infinity, botY = -Infinity;
+      (elements || []).forEach(el => {
+        if (el && typeof el.element?.y === 'number') {
+          topY = Math.min(topY, el.element.y);
+          botY = Math.max(botY, el.element.y);
+        }
+      });
+      // If no element data (e.g. all null), center on chartArea vertically.
+      if (!isFinite(topY)) topY = (chartArea.top + chartArea.bottom) / 2;
+      if (!isFinite(botY)) botY = topY;
+
+      // Tooltip estimated height (will be refined by Chart.js after render).
+      const tooltipHalfHeight = 30;
+      const offset = 14;
+
+      // Try above the topmost point. If it would overflow chartArea.top,
+      // place below the bottommost point instead.
+      let y = topY - offset - tooltipHalfHeight;
+      if (y < chartArea.top + 4) {
+        y = botY + offset + tooltipHalfHeight;
+        // If even that overflows (very tall tooltip), clamp.
+        if (y > chartArea.bottom - 4) {
+          y = chartArea.top + tooltipHalfHeight + 4;
+        }
+      }
+
+      return { x, y };
     };
   }
 
@@ -2272,7 +2314,7 @@ function initCharts() {
   //      null values and renders "—" via tooltip callbacks. Filtering caused
   //      tooltips to disappear on charts with sparse data (e.g. RSI Breadth
   //      pre 23/3 has null values).
-  //   2. We pass {x:0, y:0} to tooltip.setActiveElements. With the topLeft
+  //   2. We pass {x:0, y:0} to tooltip.setActiveElements. With the nearTop
   //      positioner, Chart.js ignores these coords and uses chartArea.left/top
   //      anyway. We don't reach into meta.data[idx].x because that fails on
   //      null bar chart elements.
@@ -2334,7 +2376,7 @@ function initCharts() {
     // visual X position across charts that have last-value labels (which need
     // padding) and charts that don't.
     layout:{padding:{right:52}},
-    plugins:{ legend:{display:false}, tooltip:{mode:'index',intersect:false, position:'topLeft',
+    plugins:{ legend:{display:false}, tooltip:{mode:'index',intersect:false, position:'nearTop',
       backgroundColor:'#111827', borderColor:'#1e2d45', borderWidth:1,
       titleColor:'#e8f0fe', bodyColor:'#8899aa', padding:10 }},
     scales:{
@@ -2549,7 +2591,7 @@ function initCharts() {
             }
           },
           tooltip: {
-            mode: 'index', intersect: false, position: 'topLeft',
+            mode: 'index', intersect: false, position: 'nearTop',
             backgroundColor: '#111827', borderColor: '#1e2d45', borderWidth: 1,
             titleColor: '#e8f0fe', bodyColor: '#8899aa', padding: 10,
             callbacks: {
@@ -2675,7 +2717,7 @@ function initCharts() {
             }
           },
           tooltip: {
-            mode: 'index', intersect: false, position: 'topLeft',
+            mode: 'index', intersect: false, position: 'nearTop',
             backgroundColor: '#111827', borderColor: '#1e2d45', borderWidth: 1,
             titleColor: '#e8f0fe', bodyColor: '#8899aa', padding: 10,
             callbacks: {
@@ -2822,7 +2864,7 @@ function initCharts() {
             }
           },
           tooltip: {
-            mode: 'index', intersect: false, position: 'topLeft',
+            mode: 'index', intersect: false, position: 'nearTop',
             backgroundColor: '#111827', borderColor: '#1e2d45', borderWidth: 1,
             titleColor: '#e8f0fe', bodyColor: '#8899aa', padding: 10,
             callbacks: {
