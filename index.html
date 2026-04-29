@@ -2169,6 +2169,24 @@ function initCharts() {
   const tick = '#4a5568';
   const labels = HIST.map(h => h.d);
 
+  // ── Custom tooltip positioner: fixed top-left of chartArea ────────────────
+  // Chart.js's default positioner ('nearest') puts the tooltip near the
+  // hovered point — which means it moves around the chart as the cursor
+  // moves and can get clipped at edges or overlap data lines. With this
+  // custom positioner registered as 'topLeft', tooltips always render at a
+  // small offset from the chart's top-left corner, regardless of cursor
+  // position. Combined with the synced crosshair (which fires tooltips on
+  // all 6 charts at the same idx via tooltip.setActiveElements), this gives
+  // a predictable layout: hover any chart → 6 tooltips appear in identical
+  // positions across all 6 cards.
+  if (typeof Chart !== 'undefined' && Chart.Tooltip && !Chart.Tooltip.positioners.topLeft) {
+    Chart.Tooltip.positioners.topLeft = function(elements, eventPosition) {
+      const chartArea = this.chart.chartArea;
+      if (!chartArea) return false;
+      return { x: chartArea.left + 8, y: chartArea.top + 8 };
+    };
+  }
+
   // ── Last-day snapshot helper ──────────────────────────────────────────────
   // Populates the .chart-snap element next to each chart's title with the
   // last day's values, color-coded per series. Replaces the in-chart
@@ -2307,7 +2325,7 @@ function initCharts() {
     // visual X position across charts that have last-value labels (which need
     // padding) and charts that don't.
     layout:{padding:{right:52}},
-    plugins:{ legend:{display:false}, tooltip:{mode:'index',intersect:false,
+    plugins:{ legend:{display:false}, tooltip:{mode:'index',intersect:false, position:'topLeft',
       backgroundColor:'#111827', borderColor:'#1e2d45', borderWidth:1,
       titleColor:'#e8f0fe', bodyColor:'#8899aa', padding:10 }},
     scales:{
@@ -2522,7 +2540,7 @@ function initCharts() {
             }
           },
           tooltip: {
-            mode: 'index', intersect: false,
+            mode: 'index', intersect: false, position: 'topLeft',
             backgroundColor: '#111827', borderColor: '#1e2d45', borderWidth: 1,
             titleColor: '#e8f0fe', bodyColor: '#8899aa', padding: 10,
             callbacks: {
@@ -2648,7 +2666,7 @@ function initCharts() {
             }
           },
           tooltip: {
-            mode: 'index', intersect: false,
+            mode: 'index', intersect: false, position: 'topLeft',
             backgroundColor: '#111827', borderColor: '#1e2d45', borderWidth: 1,
             titleColor: '#e8f0fe', bodyColor: '#8899aa', padding: 10,
             callbacks: {
@@ -2795,7 +2813,7 @@ function initCharts() {
             }
           },
           tooltip: {
-            mode: 'index', intersect: false,
+            mode: 'index', intersect: false, position: 'topLeft',
             backgroundColor: '#111827', borderColor: '#1e2d45', borderWidth: 1,
             titleColor: '#e8f0fe', bodyColor: '#8899aa', padding: 10,
             callbacks: {
