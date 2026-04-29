@@ -453,7 +453,36 @@
   .fticker:focus, .fselect:focus { outline: none; border-color: var(--teal); color: var(--white); }
   .fbtn.active { background: var(--teal2); border-color: var(--teal); color: var(--teal); }
 
-  /* ── Stock table: better header ──────────────────────────────── */
+  /* ── Chart card header with last-day snapshot ─────────────────────────────
+   * The card-tag (title) sits left, snapshot (date + per-series values) sits
+   * right. Used in the 6 breadth/perf charts. The snapshot is populated by
+   * JS at render time using the same colors as each series in the chart.
+   */
+  .chart-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .chart-card-header .card-tag { margin-bottom: 0; }
+  .chart-snap {
+    display: flex; gap: 12px; align-items: baseline;
+    font-family: var(--font-mono); font-size: 10px;
+    color: var(--mist);
+  }
+  .chart-snap-date {
+    color: var(--mist); font-size: 9px; letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .chart-snap-item { display: inline-flex; align-items: baseline; gap: 5px; }
+  .chart-snap-item .snap-dot {
+    width: 7px; height: 7px; border-radius: 50%; display: inline-block;
+    align-self: center;
+  }
+  .chart-snap-item .snap-val { font-weight: 600; }
+  .chart-snap-item .snap-label { color: var(--mist); font-size: 9px; }
   .stbl thead tr { border-bottom: 1px solid var(--rule2); }
   .thead-groups th { padding: 7px 8px 6px; font-size: 9px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; text-align: center; white-space: nowrap; }
   .thg-id   { color: #8899aa; }
@@ -781,19 +810,28 @@
     <div class="card" style="display:flex;flex-direction:column;">
       <!-- ATR Ratio Trend -->
       <div style="display:flex;flex-direction:column;flex:1;">
-        <div class="card-tag" style="margin-bottom:8px;">ATR ratio trend</div>
+        <div class="chart-card-header">
+          <div class="card-tag" id="atrChartTitle">ATR ratio trend</div>
+          <div class="chart-snap" id="atrChartSnap"></div>
+        </div>
         <div style="position:relative;flex:1;min-height:180px;"><canvas id="atrChart"></canvas></div>
       </div>
 
-      <!-- Acc / Dist Breadth (NUEVO) -->
+      <!-- Acc / Dist Breadth -->
       <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
-        <div class="card-tag" id="accBreadthChartTitle" style="margin-bottom:8px;">Acc / Dist breadth — 20d</div>
+        <div class="chart-card-header">
+          <div class="card-tag" id="accBreadthChartTitle">Acc / Dist breadth — 20d</div>
+          <div class="chart-snap" id="accBreadthChartSnap"></div>
+        </div>
         <div style="position:relative;flex:1;min-height:180px;"><canvas id="accBreadthChart"></canvas></div>
       </div>
 
       <!-- Net Accumulation 20d Trend -->
       <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
-        <div class="card-tag" style="margin-bottom:8px;">Net accumulation 20d trend</div>
+        <div class="chart-card-header">
+          <div class="card-tag" id="accChartTitle">Net accumulation 20d trend</div>
+          <div class="chart-snap" id="accChartSnap"></div>
+        </div>
         <div style="position:relative;flex:1;min-height:180px;"><canvas id="accChart"></canvas></div>
       </div>
     </div>
@@ -802,19 +840,28 @@
     <div class="card" style="display:flex;flex-direction:column;">
       <!-- MA breadth history chart -->
       <div style="display:flex;flex-direction:column;flex:1;">
-        <div class="card-tag" id="maBreadthChartTitle" style="margin-bottom:8px;">% Above key MAs</div>
+        <div class="chart-card-header">
+          <div class="card-tag" id="maBreadthChartTitle">% Above key MAs</div>
+          <div class="chart-snap" id="maBreadthChartSnap"></div>
+        </div>
         <div style="position:relative;flex:1;min-height:260px;"><canvas id="maBreadthChart"></canvas></div>
       </div>
 
       <!-- RSI Breadth history chart -->
       <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
-        <div class="card-tag" id="rsiBreadthChartTitle" style="margin-bottom:8px;">RSI breadth — overbought / oversold</div>
+        <div class="chart-card-header">
+          <div class="card-tag" id="rsiBreadthChartTitle">RSI breadth — overbought / oversold</div>
+          <div class="chart-snap" id="rsiBreadthChartSnap"></div>
+        </div>
         <div style="position:relative;flex:1;min-height:260px;"><canvas id="rsiBreadthChart"></canvas></div>
       </div>
 
       <!-- Daily Performance chart -->
       <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--rule);display:flex;flex-direction:column;flex:1;">
-        <div class="card-tag" id="perfChartTitle" style="margin-bottom:8px;">Daily performance &amp; volume ratio</div>
+        <div class="chart-card-header">
+          <div class="card-tag" id="perfChartTitle">Daily performance &amp; volume ratio</div>
+          <div class="chart-snap" id="perfChartSnap"></div>
+        </div>
         <div style="position:relative;flex:1;min-height:260px;"><canvas id="perfChart"></canvas></div>
       </div>
     </div>
@@ -2122,6 +2169,37 @@ function initCharts() {
   const tick = '#4a5568';
   const labels = HIST.map(h => h.d);
 
+  // ── Last-day snapshot helper ──────────────────────────────────────────────
+  // Populates the .chart-snap element next to each chart's title with the
+  // last day's values, color-coded per series. Replaces the in-chart
+  // last-value labels which overlapped when series converged (e.g. % Above MAs
+  // when EMA20/SMA50/SMA200 all hover around 55%).
+  // Args: snapId  — DOM id of the target .chart-snap element
+  //       date    — date string from HIST (last entry)
+  //       items   — array of {color, label, value, suffix?}
+  function renderSnapshot(snapId, date, items) {
+    const el = document.getElementById(snapId);
+    if (!el) return;
+    const dateHtml = `<span class="chart-snap-date">${date}</span>`;
+    const itemsHtml = items.map(it => {
+      const v = it.value == null ? '—' : (
+        typeof it.value === 'number'
+          ? it.value.toFixed(it.decimals != null ? it.decimals : 1) + (it.suffix || '')
+          : it.value
+      );
+      return `<span class="chart-snap-item">
+        <span class="snap-dot" style="background:${it.color}"></span>
+        <span class="snap-val" style="color:${it.color}">${v}</span>
+        <span class="snap-label">${it.label}</span>
+      </span>`;
+    }).join('');
+    el.innerHTML = dateHtml + itemsHtml;
+  }
+
+  // Last entry from HIST (drives all the snapshots)
+  const lastH = HIST.length > 0 ? HIST[HIST.length - 1] : null;
+  const lastD = lastH ? lastH.d : '';
+
   // ── Synchronized crosshair across breadth charts ──────────────────────────
   // Three charts in the "Market breadth & daily activity" row are indexed
   // on the same label array (HIST dates). When hovering over any one, we
@@ -2312,6 +2390,13 @@ function initCharts() {
     });
     syncedCharts.push(perfChartInstance);
     perfChartEl.addEventListener('mouseleave', clearSyncedHover);
+    if (lastH) {
+      const perfColor = (lastH.perf1d != null && lastH.perf1d >= 0) ? '#00e5cc' : '#ff4d6d';
+      renderSnapshot('perfChartSnap', lastD, [
+        { color: perfColor,           label: 'Perf 1D',    value: lastH.perf1d,   suffix: '%', decimals: 2 },
+        { color: 'rgba(245,158,11,0.9)', label: 'Vol ratio', value: lastH.volRatio, suffix: '%', decimals: 1 }
+      ]);
+    }
   })();
 
   const atrChartEl = document.getElementById('atrChart');
@@ -2335,6 +2420,9 @@ function initCharts() {
   });
   syncedCharts.push(atrChartInstance);
   atrChartEl.addEventListener('mouseleave', clearSyncedHover);
+  if (lastH) renderSnapshot('atrChartSnap', lastD, [
+    { color: '#00e5cc', label: 'ATR ratio', value: lastH.atrRatio, decimals: 3 }
+  ]);
 
   const accChartEl = document.getElementById('accChart');
   const accChartInstance = new Chart(accChartEl,{
@@ -2353,6 +2441,12 @@ function initCharts() {
   });
   syncedCharts.push(accChartInstance);
   accChartEl.addEventListener('mouseleave', clearSyncedHover);
+  if (lastH) {
+    const netAccColor = lastH.netAcc >= 0 ? '#00e5cc' : '#ff4d6d';
+    renderSnapshot('accChartSnap', lastD, [
+      { color: netAccColor, label: 'Net Acc 20d', value: lastH.netAcc, decimals: 2 }
+    ]);
+  }
 
   // ── Acc/Dist Breadth (% acumulando vs distribuyendo, 20d) ──────────────────
   // Dos líneas independientes con puntos:
@@ -2371,31 +2465,13 @@ function initCharts() {
     const accData  = HIST.map(h => h.pctAcc  != null ? +(h.pctAcc).toFixed(1)  : null);
     const distData = HIST.map(h => h.pctDist != null ? +(h.pctDist).toFixed(1) : null);
 
-    // Plugin inline: dibuja el último valor de cada serie al lado del punto final.
-    const lastValueLabelPluginAcc = {
-      id: 'lastValueLabelsAcc',
-      afterDatasetsDraw: (chart) => {
-        const { ctx } = chart;
-        ctx.save();
-        ctx.font = "600 11px 'IBM Plex Mono', monospace";
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        chart.data.datasets.forEach((ds, dsIdx) => {
-          const meta = chart.getDatasetMeta(dsIdx);
-          if (!meta || !meta.data || meta.data.length === 0) return;
-          let lastIdx = ds.data.length - 1;
-          while (lastIdx >= 0 && ds.data[lastIdx] == null) lastIdx--;
-          if (lastIdx < 0) return;
-          const pt = meta.data[lastIdx];
-          if (!pt) return;
-          const value = ds.data[lastIdx];
-          const text = value.toFixed(1) + '%';
-          ctx.fillStyle = ds.borderColor;
-          ctx.fillText(text, pt.x + 8, pt.y);
-        });
-        ctx.restore();
-      }
-    };
+    // Last-day snapshot: replaces in-chart labels (which overlapped when
+    // both series converged near 50%). Right padding kept at 52 to preserve
+    // alignment with synced crosshair across all charts.
+    if (lastH) renderSnapshot('accBreadthChartSnap', lastD, [
+      { color: '#00e5cc', label: 'Acc', value: lastH.pctAcc, suffix: '%' },
+      { color: '#ff4d6d', label: 'Dist', value: lastH.pctDist, suffix: '%' }
+    ]);
 
     const accBreadthChartInstance = new Chart(accBreadthEl, {
       type: 'line',
@@ -2428,7 +2504,7 @@ function initCharts() {
           }
         ]
       },
-      plugins: [lastValueLabelPluginAcc, crosshairPlugin],
+      plugins: [crosshairPlugin],
       options: {
         responsive: true, maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
@@ -2498,33 +2574,18 @@ function initCharts() {
     const sma50Above  = HIST.map(h => h.sma50  != null ? +(100 - h.sma50).toFixed(1)  : null);
     const sma200Above = HIST.map(h => h.sma200 != null ? +(100 - h.sma200).toFixed(1) : null);
 
-    // Plugin inline: dibuja el último valor de cada serie al lado del punto final.
-    // Usa texto monoespaciado con el color de cada línea.
-    const lastValueLabelPlugin = {
-      id: 'lastValueLabels',
-      afterDatasetsDraw: (chart) => {
-        const { ctx } = chart;
-        ctx.save();
-        ctx.font = "600 11px 'IBM Plex Mono', monospace";
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        chart.data.datasets.forEach((ds, dsIdx) => {
-          const meta = chart.getDatasetMeta(dsIdx);
-          if (!meta || !meta.data || meta.data.length === 0) return;
-          // Último punto no-null
-          let lastIdx = ds.data.length - 1;
-          while (lastIdx >= 0 && ds.data[lastIdx] == null) lastIdx--;
-          if (lastIdx < 0) return;
-          const pt = meta.data[lastIdx];
-          if (!pt) return;
-          const value = ds.data[lastIdx];
-          const text = value.toFixed(1) + '%';
-          ctx.fillStyle = ds.borderColor;
-          ctx.fillText(text, pt.x + 8, pt.y);
-        });
-        ctx.restore();
-      }
-    };
+    // Last-day snapshot: replaces the in-chart end-of-line labels which
+    // overlapped when the three MA breadth series converged near 50-60%.
+    if (lastH) {
+      const ema20Last  = lastH.ema20  != null ? +(100 - lastH.ema20).toFixed(1)  : null;
+      const sma50Last  = lastH.sma50  != null ? +(100 - lastH.sma50).toFixed(1)  : null;
+      const sma200Last = lastH.sma200 != null ? +(100 - lastH.sma200).toFixed(1) : null;
+      renderSnapshot('maBreadthChartSnap', lastD, [
+        { color: '#00e5cc', label: 'EMA20',  value: ema20Last,  suffix: '%' },
+        { color: '#f59e0b', label: 'SMA50',  value: sma50Last,  suffix: '%' },
+        { color: '#3b82f6', label: 'SMA200', value: sma200Last, suffix: '%' }
+      ]);
+    }
 
     const maBreadthChartInstance = new Chart(maBreadthEl, {
       type: 'line',
@@ -2569,7 +2630,7 @@ function initCharts() {
           }
         ]
       },
-      plugins: [lastValueLabelPlugin, crosshairPlugin],
+      plugins: [crosshairPlugin],
       options: {
         responsive: true, maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
@@ -2648,30 +2709,11 @@ function initCharts() {
     // but expands automatically if readings go higher than expected.
     const yMax = Math.max(25, Math.ceil((maxObs + 3) / 5) * 5);
 
-    const lastValueLabelPluginRSI = {
-      id: 'lastValueLabelsRSI',
-      afterDatasetsDraw: (chart) => {
-        const { ctx } = chart;
-        ctx.save();
-        ctx.font = "600 11px 'IBM Plex Mono', monospace";
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        chart.data.datasets.forEach((ds, dsIdx) => {
-          const meta = chart.getDatasetMeta(dsIdx);
-          if (!meta || !meta.data || meta.data.length === 0) return;
-          let lastIdx = ds.data.length - 1;
-          while (lastIdx >= 0 && ds.data[lastIdx] == null) lastIdx--;
-          if (lastIdx < 0) return;
-          const pt = meta.data[lastIdx];
-          if (!pt) return;
-          const value = ds.data[lastIdx];
-          const text = value.toFixed(1) + '%';
-          ctx.fillStyle = ds.borderColor;
-          ctx.fillText(text, pt.x + 8, pt.y);
-        });
-        ctx.restore();
-      }
-    };
+    // Last-day snapshot
+    if (lastH) renderSnapshot('rsiBreadthChartSnap', lastD, [
+      { color: '#ff4d6d', label: 'OB',  value: lastH.rsiOb, suffix: '%' },
+      { color: '#00e5cc', label: 'OS',  value: lastH.rsiOs, suffix: '%' }
+    ]);
 
     // Plugin para bandas horizontales de referencia en 15% y 25%.
     const thresholdBandsPlugin = {
@@ -2736,7 +2778,7 @@ function initCharts() {
           }
         ]
       },
-      plugins: [lastValueLabelPluginRSI, thresholdBandsPlugin, crosshairPlugin],
+      plugins: [thresholdBandsPlugin, crosshairPlugin],
       options: {
         responsive: true, maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
