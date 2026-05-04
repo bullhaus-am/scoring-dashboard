@@ -1912,10 +1912,10 @@ function showEstDetail(ticker) {
     const bar = _bar(label, v, cap);
     if (low == null && high == null) return bar;
     const fmt = x => `${x >= 0 ? '+' : ''}${x.toFixed(1)}%`;
-    const rangeStr = (low != null && high != null) ? `${fmt(low)} – ${fmt(high)}`
+    const rangeStr = (low != null && high != null) ? `low ${fmt(low)} &nbsp;·&nbsp; high ${fmt(high)}`
                    : low  != null ? `low ${fmt(low)}`
                    : `high ${fmt(high)}`;
-    const range = `<div style="font-size:9px;color:#4a5568;padding:0 6px 5px 140px;margin-top:-5px;letter-spacing:0.4px">Range: ${rangeStr}</div>`;
+    const range = `<div style="font-size:9px;color:#4a5568;padding:0 6px 5px 140px;margin-top:-5px;letter-spacing:0.4px">${rangeStr}</div>`;
     return bar + range;
   }
 
