@@ -497,20 +497,36 @@
     border-left: 1px solid rgba(255,255,255,0.12) !important;
   }
   /* Estimates detail popup */
-  .est-detail-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:center; justify-content:center; }
+  .est-detail-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.72); z-index:1000; align-items:center; justify-content:center; }
   .est-detail-overlay.active { display:flex; }
-  .est-detail-panel { background:#1a2035; border:1px solid rgba(255,255,255,0.12); border-radius:10px; width:420px; max-width:95vw; box-shadow:0 20px 60px rgba(0,0,0,0.6); }
-  .est-detail-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px 12px; border-bottom:1px solid rgba(255,255,255,0.1); }
-  .est-detail-title { font-size:13px; font-weight:700; color:#34d399; letter-spacing:.05em; }
+  .est-detail-panel { background:#141c2e; border:1px solid rgba(255,255,255,0.1); border-radius:12px; width:480px; max-width:96vw; box-shadow:0 24px 64px rgba(0,0,0,0.7); overflow:hidden; }
+  .est-detail-header { display:flex; align-items:center; justify-content:space-between; padding:14px 20px 12px; background:rgba(52,211,153,0.06); border-bottom:1px solid rgba(52,211,153,0.15); }
+  .est-detail-title { font-size:11px; font-weight:700; color:#34d399; letter-spacing:.1em; text-transform:uppercase; }
   .est-detail-close { background:none; border:none; color:#8899aa; font-size:18px; cursor:pointer; padding:0 4px; line-height:1; }
   .est-detail-close:hover { color:#fff; }
-  .est-detail-body { padding:20px 24px 24px; }
-  .est-detail-ticker { font-size:15px; font-weight:700; color:#fff; margin-bottom:4px; }
-  .est-detail-grade-row { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
-  .est-kv-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px 20px; }
-  .est-kv { display:flex; flex-direction:column; gap:2px; }
-  .est-kv-label { font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:#8899aa; font-family:var(--font-sans); }
-  .est-kv-value { font-size:13px; font-weight:700; font-family:'IBM Plex Mono',monospace; }
+  .est-detail-body { padding:18px 22px 22px; }
+  /* ticker + rating row */
+  .est-hero { display:flex; align-items:center; gap:12px; margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,0.07); }
+  .est-hero-ticker { font-size:22px; font-weight:800; color:#fff; font-family:'IBM Plex Mono',monospace; }
+  .est-hero-pctil { font-size:26px; font-weight:800; font-family:'IBM Plex Mono',monospace; }
+  .est-hero-analysts { font-size:10px; color:#8899aa; margin-left:auto; text-align:right; line-height:1.4; }
+  .est-hero-analysts strong { color:#fff; font-size:13px; display:block; }
+  /* sections */
+  .est-section { margin-bottom:14px; }
+  .est-section:last-child { margin-bottom:0; }
+  .est-section-title { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#8899aa; font-family:var(--font-sans); margin-bottom:8px; padding-left:2px; }
+  .est-section-title span { display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:6px; vertical-align:middle; }
+  /* metric rows */
+  .est-metric { display:flex; align-items:center; gap:10px; padding:5px 0; }
+  .est-metric-label { font-size:10px; color:#8899aa; font-family:var(--font-sans); width:130px; flex-shrink:0; }
+  .est-metric-bar-track { flex:1; height:5px; background:rgba(255,255,255,0.07); border-radius:3px; overflow:hidden; }
+  .est-metric-bar-fill { height:100%; border-radius:3px; transition:width .3s; }
+  .est-metric-value { font-size:11px; font-weight:700; font-family:'IBM Plex Mono',monospace; width:70px; text-align:right; flex-shrink:0; }
+  /* quarter dots */
+  .est-dots { display:flex; gap:5px; flex:1; align-items:center; }
+  .est-dot { width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+  .est-dot-hit  { background:#00e5cc; box-shadow:0 0 5px rgba(0,229,204,0.5); }
+  .est-dot-miss { background:rgba(255,255,255,0.1); }
   .stbl th { padding-bottom: 10px; }
 
   /* ── Quadrant in KPI card: fix alignment ────────────────────── */
@@ -1857,26 +1873,49 @@ function showEstDetail(ticker) {
   const s = ALL_STOCKS.find(x => x.sym === ticker);
   if (!s) return;
 
-  const pctil = s.estPctil;
-  const grade = s.estGrade || '—';
+  const pctil      = s.estPctil;
+  const grade      = s.estGrade || '—';
   const pctilColor = estPctilColor(pctil);
   const gradeClass = estGradeClass(grade);
 
-  function _fmtPct(v, dec=1) {
-    if (v == null) return '<span style="color:#4a5568">—</span>';
-    const color = v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
+  // Bar row: label | track+fill | value
+  function _bar(label, v, capPos, capNeg) {
+    capNeg = capNeg ?? capPos;
+    if (v == null) {
+      return `<div class="est-metric">
+        <span class="est-metric-label">${label}</span>
+        <div class="est-metric-bar-track"><div class="est-metric-bar-fill" style="width:0%"></div></div>
+        <span class="est-metric-value" style="color:#4a5568">—</span>
+      </div>`;
+    }
+    const color  = v >= capPos * 0.5 ? '#00e5cc' : v >= capPos * 0.15 ? '#f59e0b' : v < 0 ? '#ff4d6d' : '#8899aa';
+    const cap    = v >= 0 ? capPos : capNeg;
+    const pct    = Math.min(Math.abs(v) / cap * 100, 100).toFixed(1);
     const sign   = v > 0 ? '+' : '';
-    return `<span style="color:${color}">${sign}${v.toFixed(dec)}%</span>`;
+    return `<div class="est-metric">
+      <span class="est-metric-label">${label}</span>
+      <div class="est-metric-bar-track"><div class="est-metric-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+      <span class="est-metric-value" style="color:${color}">${sign}${v.toFixed(1)}%</span>
+    </div>`;
   }
-  function _fmtN(v) {
-    if (v == null) return '<span style="color:#4a5568">—</span>';
-    const color = v >= 10 ? '#00e5cc' : v >= 3 ? '#f59e0b' : '#ff4d6d';
-    return `<span style="color:${color}">${v}</span>`;
-  }
-  function _fmtQ(v) {
-    if (v == null) return '<span style="color:#4a5568">—</span>';
+
+  // Quarter dots row
+  function _dots(v) {
+    if (v == null) return `<div class="est-metric">
+      <span class="est-metric-label">Beat rate</span>
+      <div class="est-dots">${[0,0,0,0].map(() => `<span class="est-dot est-dot-miss"></span>`).join('')}</div>
+      <span class="est-metric-value" style="color:#4a5568">—</span>
+    </div>`;
+    const total = 4;
+    const dots  = Array.from({length: total}, (_, i) =>
+      `<span class="est-dot ${i < v ? 'est-dot-hit' : 'est-dot-miss'}"></span>`
+    ).join('');
     const color = v === 4 ? '#00e5cc' : v >= 2 ? '#f59e0b' : '#ff4d6d';
-    return `<span style="color:${color}">${v}/4</span>`;
+    return `<div class="est-metric">
+      <span class="est-metric-label">Beat rate</span>
+      <div class="est-dots">${dots}</div>
+      <span class="est-metric-value" style="color:${color}">${v}/${total} qtrs</span>
+    </div>`;
   }
 
   let ov = document.getElementById('estDetailOverlay');
@@ -1889,49 +1928,48 @@ function showEstDetail(ticker) {
     document.addEventListener('keydown', e => { if (e.key === 'Escape') closeEstDetail(); });
   }
 
+  const naColor = s.estNAnalysts == null ? '#4a5568' : s.estNAnalysts >= 10 ? '#00e5cc' : s.estNAnalysts >= 3 ? '#f59e0b' : '#ff4d6d';
+
   ov.innerHTML = `
     <div class="est-detail-panel">
       <div class="est-detail-header">
-        <span class="est-detail-title">📈 ANALYST ESTIMATES DETAIL</span>
+        <span class="est-detail-title">📈 Analyst Estimates Detail</span>
         <button class="est-detail-close" onclick="closeEstDetail()">✕</button>
       </div>
       <div class="est-detail-body">
-        <div class="est-detail-ticker">${ticker}</div>
-        <div class="est-detail-grade-row">
-          <span style="color:#8899aa;font-size:11px">Est Rating</span>
-          <span class="rsmc-num" style="color:${pctilColor};font-size:16px;font-weight:700">${pctil??'—'}</span>
-          <span class="grade-badge ${gradeClass}" style="font-size:12px;padding:2px 10px">${grade!=='-'?grade:'—'}</span>
+
+        <!-- Hero: ticker + rating + analysts -->
+        <div class="est-hero">
+          <span class="est-hero-ticker">${ticker}</span>
+          <span class="est-hero-pctil" style="color:${pctilColor}">${pctil ?? '—'}</span>
+          <span class="grade-badge ${gradeClass}" style="font-size:13px;padding:3px 11px">${grade !== '-' ? grade : '—'}</span>
+          <span class="est-hero-analysts">
+            <strong style="color:${naColor}">${s.estNAnalysts ?? '—'}</strong>
+            analysts covering
+          </span>
         </div>
-        <div class="est-kv-grid">
-          <div class="est-kv">
-            <span class="est-kv-label">Surpr Avg%</span>
-            <span class="est-kv-value">${_fmtPct(s.estSurpAvg)}</span>
-          </div>
-          <div class="est-kv">
-            <span class="est-kv-label">Surp +Q/4</span>
-            <span class="est-kv-value">${_fmtQ(s.estSurpQ)}</span>
-          </div>
-          <div class="est-kv">
-            <span class="est-kv-label">N Analyst</span>
-            <span class="est-kv-value">${_fmtN(s.estNAnalysts)}</span>
-          </div>
-          <div class="est-kv">
-            <span class="est-kv-label">Rev Ratio 0q%</span>
-            <span class="est-kv-value">${_fmtPct(s.estRevRatio0q)}</span>
-          </div>
-          <div class="est-kv">
-            <span class="est-kv-label">Rev Ratio 1y%</span>
-            <span class="est-kv-value">${_fmtPct(s.estRevRatio1y)}</span>
-          </div>
-          <div class="est-kv">
-            <span class="est-kv-label">EPS Fwd%</span>
-            <span class="est-kv-value">${_fmtPct(s.estEpsFwd)}</span>
-          </div>
-          <div class="est-kv">
-            <span class="est-kv-label">Rev Fwd%</span>
-            <span class="est-kv-value">${_fmtPct(s.estRevFwd)}</span>
-          </div>
+
+        <!-- Block 1: Surprise Track Record -->
+        <div class="est-section">
+          <div class="est-section-title"><span style="background:#a78bfa"></span>Surprise Track Record</div>
+          ${_bar('Avg EPS surprise', s.estSurpAvg, 20)}
+          ${_dots(s.estSurpQ)}
         </div>
+
+        <!-- Block 2: Estimate Revisions -->
+        <div class="est-section">
+          <div class="est-section-title"><span style="background:#60a5fa"></span>Estimate Revisions</div>
+          ${_bar('Current quarter', s.estRevRatio0q, 100)}
+          ${_bar('Next year', s.estRevRatio1y, 100)}
+        </div>
+
+        <!-- Block 3: Forward Growth -->
+        <div class="est-section">
+          <div class="est-section-title"><span style="background:#34d399"></span>Forward Growth (consensus)</div>
+          ${_bar('EPS growth fwd', s.estEpsFwd, 50)}
+          ${_bar('Revenue growth fwd', s.estRevFwd, 30)}
+        </div>
+
       </div>
     </div>`;
 
