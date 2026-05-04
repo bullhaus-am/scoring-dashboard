@@ -242,9 +242,9 @@
     font-size: 9px; font-weight: 600; color: var(--mist);
     letter-spacing: 2px; text-transform: uppercase;
     padding: 5px 6px; border-bottom: 1px solid var(--rule2);
-    text-align: center; white-space: nowrap; user-select: none;
+    text-align: center; white-space: normal; user-select: none;
     font-family: var(--font-sans);
-    vertical-align: bottom;
+    vertical-align: bottom; line-height: 1.3;
   }
   .stbl th.lft { text-align: left; }
   .stbl th.sortable { cursor: pointer; }
@@ -1088,11 +1088,11 @@
             <th class="lft sortable" onclick="sortBy('desc')" data-col="desc">Empresa</th>
             <th class="lft sortable" onclick="sortBy('sector')" data-col="sector">Sector</th>
             <th class="lft sortable" onclick="sortBy('industry')" data-col="industry">Industry</th>
-            <th class="sortable" onclick="sortBy('compScore')" data-col="compScore" style="white-space:nowrap;text-align:center" title="Composite Score: 40% ACC + 30% RS + 30% Fund (50/50 ACC/RS si Fund missing)">Comp Score</th>
+            <th class="sortable" onclick="sortBy('compScore')" data-col="compScore" style="text-align:center" title="Composite Score: 40% ACC + 30% RS + 30% Fund (50/50 ACC/RS si Fund missing)">Comp Score</th>
             <th class="sortable" onclick="sortBy('compGrade')" data-col="compGrade">Comp Grade</th>
-            <th class="sortable grp-sep-rs" onclick="sortBy('rsmc')" data-col="rsmc" style="white-space:nowrap;text-align:center">RS Rating</th>
+            <th class="sortable grp-sep-rs" onclick="sortBy('rsmc')" data-col="rsmc" style="text-align:center">RS Rating</th>
             <th class="sortable" onclick="sortBy('rsGrade')" data-col="rsGrade">RS Grade</th>
-            <th onclick="sortBy('blueDot')" data-col="blueDot" style="white-space:nowrap;cursor:pointer" title="RS Line within 5% of 52w high">Blue Dot</th>
+            <th onclick="sortBy('blueDot')" data-col="blueDot" style="cursor:pointer" title="RS Line within 5% of 52w high">Blue Dot</th>
             <th class="sortable grp-sep-acc" onclick="sortBy('score')" data-col="score">ACC Score</th>
             <th class="sortable" onclick="sortBy('accGrade')" data-col="accGrade">ACC Grade</th>
             <th class="sortable" onclick="sortBy('net50')" data-col="net50">Net 50d</th>
