@@ -2052,14 +2052,14 @@ function showEstDetail(ticker) {
 
         <!-- Block 1: Surprise Track Record -->
         <div class="est-section">
-          <div class="est-section-title"><span style="background:#a78bfa"></span>Surprise Track Record<span style="display:block;font-weight:400;opacity:0.5;font-size:8.5px;text-transform:none;letter-spacing:0;margin-top:1px;margin-left:14px">last 4 quarters</span></div>
+          <div class="est-section-title"><span style="background:#a78bfa"></span>Surprise Track Record <em style="font-style:normal;font-weight:400;opacity:0.5;font-size:8.5px;text-transform:none;letter-spacing:0">(last 4 quarters)</em></div>
           ${_bar('Avg EPS surprise', s.estSurpAvg, 20)}
           ${_dots(s.estSurpQ)}
         </div>
 
         <!-- Block 2: Estimate Revisions -->
         <div class="est-section">
-          <div class="est-section-title"><span style="background:#60a5fa"></span>Estimate Revisions<span style="display:block;font-weight:400;opacity:0.5;font-size:8.5px;text-transform:none;letter-spacing:0;margin-top:1px;margin-left:14px">last 30 days</span></div>
+          <div class="est-section-title"><span style="background:#60a5fa"></span>Estimate Revisions <em style="font-style:normal;font-weight:400;opacity:0.5;font-size:8.5px;text-transform:none;letter-spacing:0">(last 30 days)</em></div>
           ${_revBar('Current quarter', s.estRevRatio0q, s.estRevUp0q, s.estRevDown0q)}
           ${_revBar('Next year', s.estRevRatio1y, s.estRevUp1y, s.estRevDown1y)}
         </div>
