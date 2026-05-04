@@ -1068,11 +1068,11 @@
           <col style="width:58px">   <!-- Fund Rating -->
           <col style="width:46px">   <!-- Fund Grade -->
           <col style="width:52px">   <!-- Sales & EPS -->
+          <col style="width:48px">   <!-- Growth Accel -->
           <col style="width:58px">   <!-- Data Quality -->
           <col style="width:58px">   <!-- Est Rating -->
           <col style="width:46px">   <!-- Est Grade -->
           <col style="width:56px">   <!-- Analyst Estimates -->
-          <col style="width:48px">   <!-- Growth Accel -->
           <col style="width:44px">   <!-- ATR 5% -->
           <col style="width:50px">   <!-- ATR ratio -->
           <col style="width:50px">   <!-- EMA20% -->
@@ -1088,8 +1088,8 @@
             <th colspan="2"  class="thg thg-comp">Composite<span class="thg-info" onclick="showFormulaInfo('comp')" title="Cómo se calcula">i</span></th>
             <th colspan="3"  class="thg thg-rs">Relative Strength Momentum<span class="thg-info" onclick="showFormulaInfo('rs')" title="Cómo se calcula">i</span></th>
             <th colspan="7"  class="thg thg-acc">Accumulation / Distribution<span class="thg-info" onclick="showFormulaInfo('acc')" title="Cómo se calcula">i</span></th>
-            <th colspan="4"  class="thg thg-fund" id="fundGroupHeader">Fundamental Rating<span class="thg-info" onclick="showFormulaInfo('fund')" title="Cómo se calcula">i</span></th>
-            <th colspan="4"  class="thg thg-est" id="estGroupHeader">Estimates Rating<span class="thg-info" onclick="showFormulaInfo('est')" title="Cómo se calcula">i</span></th>
+            <th colspan="5"  class="thg thg-fund" id="fundGroupHeader">Fundamental Rating<span class="thg-info" onclick="showFormulaInfo('fund')" title="Cómo se calcula">i</span></th>
+            <th colspan="3"  class="thg thg-est" id="estGroupHeader">Estimates Rating<span class="thg-info" onclick="showFormulaInfo('est')" title="Cómo se calcula">i</span></th>
             <th colspan="4"  class="thg thg-vol">Volatility &amp; Moving Averages</th>
             <th colspan="3"  class="thg thg-perf">Volume &amp; Performance</th>
             <th colspan="1"  class="thg thg-op">&nbsp;</th>
@@ -1117,11 +1117,11 @@
             <th class="sortable grp-sep-fund" onclick="sortBy('fundPctil')" data-col="fundPctil">Fund Rating</th>
             <th class="sortable" onclick="sortBy('fundGrade')" data-col="fundGrade">Fund Grade</th>
             <th data-col="fundDetail" title="Detalle trimestral y anual" style="cursor:default">Sales &amp; EPS</th>
+            <th data-col="growthAccel" style="cursor:default" title="Growth Acceleration: EPS (top) and Revenue (bottom) YoY% trend over last 3 quarters + Q0 estimate. Teal = accelerating · Red = decelerating">Growth Accel</th>
             <th class="sortable" onclick="sortBy('fundDq')" data-col="fundDq">Data Quality</th>
             <th class="sortable grp-sep-est" onclick="sortBy('estPctil')" data-col="estPctil">Est Rating</th>
             <th class="sortable" onclick="sortBy('estGrade')" data-col="estGrade">Est Grade</th>
             <th data-col="estDetail" style="cursor:default">Analyst Estimates</th>
-            <th data-col="growthAccel" style="cursor:default" title="Growth Acceleration: EPS (top) and Revenue (bottom) YoY% trend over last 3 quarters + Q0 estimate. Teal = accelerating · Red = decelerating">Growth Accel</th>
             <th class="sortable grp-sep-vol" onclick="sortBy('atr5')" data-col="atr5">ATR 5%</th>
             <th class="sortable" onclick="sortBy('atrRatio')" data-col="atrRatio">ATR ratio</th>
             <th class="sortable" onclick="sortBy('ema20')" data-col="ema20">EMA20%</th>
@@ -1720,38 +1720,23 @@ function _accelColor(curr, prev) {
 // Full popup section: labeled cells with values for EPS & Rev acceleration
 function _accelSectionHtml(epsArr, revArr) {
   if (!epsArr && !revArr) return '';
-  const labels = ['Q-2', 'Q-1', 'Q0', 'Est'];
-  const fmt = v => v != null ? `${v >= 0 ? '+' : ''}${v.toFixed(1)}%` : '—';
-  const valColor = v => v == null ? '#8899aa' : v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
+  const fmtV = v => v != null ? `${v >= 0 ? '+' : ''}${v.toFixed(1)}%` : '—';
+  const vc   = v => v == null ? '#8899aa' : v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
 
-  function _cells(arr, label) {
-    if (!arr) return '';
-    const prevArr = [null, arr[0], arr[1], arr[2]];
-    const cells = arr.map((v, i) => {
-      const bg = i === 0 ? '#1e293b' : _accelColor(v, prevArr[i]);
-      const isEst = i === 3;
-      return `<div class="fd-accel-cell">
-        <div class="fd-accel-seg" style="background:${bg}${isEst?';border:1px solid rgba(255,255,255,0.15)':''}"></div>
-        <div class="fd-accel-val" style="color:${valColor(v)}">${fmt(v)}</div>
-        ${isEst ? '<div class="fd-accel-est">est</div>' : ''}
-      </div>`;
+  function _strip(arr) {
+    if (!arr) return '<span style="color:#4a5568;font-size:10px">—</span>';
+    return arr.map((v, i) => {
+      const bg  = i === 0 ? '#1e293b' : _accelColor(v, arr[i - 1]);
+      const sep = i > 0 ? `<span style="color:#374151;margin:0 3px;font-size:9px">→</span>` : '';
+      const est = i === 3 ? `<span style="color:#4a5568;font-size:8.5px;font-style:italic;margin-left:1px">e</span>` : '';
+      return `${sep}<span style="display:inline-flex;align-items:center;gap:3px"><span style="display:inline-block;width:7px;height:7px;border-radius:2px;background:${bg};flex-shrink:0"></span><span style="color:${vc(v)};font-size:10px;font-family:'IBM Plex Mono',monospace">${fmtV(v)}${est}</span></span>`;
     }).join('');
-    return `<div class="fd-accel-row">
-      <div class="fd-accel-label">${label}</div>
-      <div style="display:flex;gap:8px">${cells}</div>
-    </div>`;
   }
 
-  const periodRow = `<div class="fd-accel-row">
-    <div class="fd-accel-label"></div>
-    <div style="display:flex;gap:8px">${labels.map(l => `<div class="fd-accel-cell"><div style="color:#8899aa;font-size:9.5px;text-align:center;width:36px">${l}</div></div>`).join('')}</div>
-  </div>`;
-
-  return `<div class="fd-accel-wrap">
-    <div class="fd-accel-title">Growth Acceleration — EPS &amp; Revenue YoY%</div>
-    ${periodRow}
-    ${_cells(epsArr, 'EPS YoY')}
-    ${_cells(revArr, 'Rev YoY')}
+  return `<div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.07)">
+    <div style="font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#4a5568;margin-bottom:1px">Growth Acceleration</div>
+    <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:#6b7280;width:26px;flex-shrink:0">EPS</span><span>${_strip(epsArr)}</span></div>
+    <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:#6b7280;width:26px;flex-shrink:0">Rev</span><span>${_strip(revArr)}</span></div>
   </div>`;
 }
 
@@ -1808,11 +1793,11 @@ function buildRow(s) {
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.fundPctil||0)*0.5}px;background:${fundPctilColor(s.fundPctil)}"></div></div><span class="rsmc-num" style="color:${fundPctilColor(s.fundPctil)}">${s.fundPctil??'—'}</span></div></td>
       <td><span class="grade-badge ${fundGradeClass(s.fundGrade,s.fundStatus)}" title="${fundGradeTooltip(s.fundStatus)}">${fundGradeDisplay(s.fundGrade,s.fundStatus)}</span></td>
       <td style="text-align:center">${(s.fundQ&&s.fundQ.length)||(s.fundA&&s.fundA.length)?`<span class="detail-icon" onclick="showFundDetail('${s.sym}')" title="Ver detalle trimestral y anual">📊</span>`:`<span class="detail-icon-disabled" title="Sin detalle disponible">📊</span>`}</td>
+      ${_accelCellHtml(s.epsAccel, s.revAccel)}
       <td style="text-align:center"><span class="dq-badge ${dqBadgeClass(s.fundDq)}" title="${(s.fundDqDetail||'').replace(/"/g,'&quot;')}">${dqBadgeText(s.fundDq)}</span></td>
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.estPctil||0)*0.5}px;background:${estPctilColor(s.estPctil)}"></div></div><span class="rsmc-num" style="color:${estPctilColor(s.estPctil)}">${s.estPctil??'—'}</span></div></td>
       <td><span class="grade-badge ${estGradeClass(s.estGrade)}">${s.estGrade&&s.estGrade!=='-'?s.estGrade:'—'}</span></td>
       <td style="text-align:center">${s.estPctil!=null?`<span class="detail-icon" onclick="showEstDetail('${s.sym}')" title="Ver detalle Analyst Estimates">📈</span>`:`<span class="detail-icon-disabled" title="Sin datos de estimates">📈</span>`}</td>
-      ${_accelCellHtml(s.epsAccel, s.revAccel)}
       <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5)}%</td>
       <td class="${ar}">${fmt(s.atrRatio,3)}</td>
       <td style="color:${nc(s.ema20)};font-weight:${fw(s.ema20)}">${sign(s.ema20)}${fmt(s.ema20)}%</td>
@@ -2249,10 +2234,10 @@ function showFundDetail(ticker) {
         </div>
       </div>
       ${dqBannerHtml}
-      ${_accelSectionHtml(s.epsAccel, s.revAccel)}
       <div class="fund-detail-body">
         <div>
           <div class="fd-section-title">Detalle Trimestral — últimos ${s.fundQ ? s.fundQ.length : 0} trimestres</div>
+          ${_accelSectionHtml(s.epsAccel, s.revAccel)}
           ${qHtml}
         </div>
         <div>
@@ -2441,11 +2426,11 @@ function renderStocks() {
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.fundPctil||0)*0.5}px;background:${fundPctilColor(s.fundPctil)}"></div></div><span class="rsmc-num" style="color:${fundPctilColor(s.fundPctil)}">${s.fundPctil??'—'}</span></div></td>
       <td><span class="grade-badge ${fundGradeClass(s.fundGrade,s.fundStatus)}" title="${fundGradeTooltip(s.fundStatus)}">${fundGradeDisplay(s.fundGrade,s.fundStatus)}</span></td>
       <td style="text-align:center">${(s.fundQ&&s.fundQ.length)||(s.fundA&&s.fundA.length)?`<span class="detail-icon" onclick="showFundDetail('${s.sym}')" title="Ver detalle trimestral y anual">📊</span>`:`<span class="detail-icon-disabled" title="Sin detalle disponible">📊</span>`}</td>
+      ${_accelCellHtml(s.epsAccel, s.revAccel)}
       <td style="text-align:center"><span class="dq-badge ${dqBadgeClass(s.fundDq)}" title="${(s.fundDqDetail||'').replace(/"/g,'&quot;')}">${dqBadgeText(s.fundDq)}</span></td>
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.estPctil||0)*0.5}px;background:${estPctilColor(s.estPctil)}"></div></div><span class="rsmc-num" style="color:${estPctilColor(s.estPctil)}">${s.estPctil??'—'}</span></div></td>
       <td><span class="grade-badge ${estGradeClass(s.estGrade)}">${s.estGrade&&s.estGrade!=='-'?s.estGrade:'—'}</span></td>
       <td style="text-align:center">${s.estPctil!=null?`<span class="detail-icon" onclick="showEstDetail('${s.sym}')" title="Ver detalle Analyst Estimates">📈</span>`:`<span class="detail-icon-disabled" title="Sin datos de estimates">📈</span>`}</td>
-      ${_accelCellHtml(s.epsAccel, s.revAccel)}
       <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5)}%</td>
       <td class="${ar}">${fmt(s.atrRatio,3)}</td>
       <td style="color:${nc(s.ema20)};font-weight:${fw(s.ema20)}">${sign(s.ema20)}${fmt(s.ema20)}%</td>
