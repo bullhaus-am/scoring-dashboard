@@ -1001,6 +1001,13 @@
             </button>
             <div class="fmulti-panel" id="fmulti-panel-fund"></div>
           </div>
+          <div class="fmulti" id="fmulti-est" data-filter="est">
+            <button class="fmulti-btn" type="button" onclick="gmsToggle('est')">
+              <span class="fmulti-label">Est Grade</span>
+              <span class="fmulti-caret">▾</span>
+            </button>
+            <div class="fmulti-panel" id="fmulti-panel-est"></div>
+          </div>
         </div>
 
         <span class="fbar-sep"></span>
@@ -1479,6 +1486,7 @@ const GMS = {
   rs:   { set: new Set(), label: 'RS Grade',   filterKey: 'rsGrade' },
   acc:  { set: new Set(), label: 'ACC Grade',  filterKey: 'accGrade' },
   fund: { set: new Set(), label: 'Fund Grade', filterKey: 'fundGrade' },
+  est:  { set: new Set(), label: 'Est Grade',  filterKey: 'estGrade' },
 };
 const GMS_GRADES = ['A+', 'A', 'B', 'C', 'D', 'E'];
 
@@ -1545,7 +1553,7 @@ function gmsUpdateButton(key) {
 }
 
 function gmsInit() {
-  ['comp', 'rs', 'acc', 'fund'].forEach(k => { gmsBuildPanel(k); gmsUpdateButton(k); });
+  ['comp', 'rs', 'acc', 'fund', 'est'].forEach(k => { gmsBuildPanel(k); gmsUpdateButton(k); });
   // Cerrar paneles al clickear afuera
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.fmulti')) {
@@ -2219,7 +2227,8 @@ function renderStocks() {
     gmsMatches('comp', s.compGrade) &&
     gmsMatches('rs',   s.rsGrade) &&
     gmsMatches('acc',  s.accGrade) &&
-    gmsMatches('fund', s.fundGrade)
+    gmsMatches('fund', s.fundGrade) &&
+    gmsMatches('est',  s.estGrade)
   );
 
   // 3) Scope filter (dropdowns / ticker) - combines with type and grade
@@ -2241,10 +2250,11 @@ function renderStocks() {
       'rsGrade':   'rsmc',
       'accGrade':  'score',
       'fundGrade': 'fundPctil',
+      'estGrade':  'estPctil',
       'compGrade': 'compScore',
     };
     const _cmpField = (a, b, col, dir) => {
-      if (col === 'rsGrade' || col === 'accGrade' || col === 'fundGrade' || col === 'compGrade') {
+      if (col === 'rsGrade' || col === 'accGrade' || col === 'fundGrade' || col === 'estGrade' || col === 'compGrade') {
         const [ea, ra] = gradeRank(a[col]);
         const [eb, rb] = gradeRank(b[col]);
         if (ea !== eb) return (ea - eb) * dir;  // excluidos siempre al final
@@ -2341,8 +2351,9 @@ function renderStocks() {
   const gradeLabel    = gmsLabel('rs');
   const accGradeLabel = gmsLabel('acc');
   const fundGradeLabel= gmsLabel('fund');
+  const estGradeLabel = gmsLabel('est');
   const scopeLabel = filterTicker ? `TICKER: ${filterTicker}` : filterIndustry ? `INDUSTRY: ${filterIndustry}` : filterSector ? `SECTOR: ${filterSector}` : '';
-  const parts = [typeLabel, compGradeLabel, gradeLabel, accGradeLabel, fundGradeLabel, scopeLabel].filter(Boolean);
+  const parts = [typeLabel, compGradeLabel, gradeLabel, accGradeLabel, fundGradeLabel, estGradeLabel, scopeLabel].filter(Boolean);
   const filterDesc = parts.join(' · ');
   document.getElementById('tblFooter').textContent =
     `SHOWING ${Math.min(50, total)} OF ${total} STOCKS  ·  ${filterDesc}  ·  SORTED BY ${sortCol.toUpperCase()} ${sortDir===-1?'↓':'↑'}`;
