@@ -1452,7 +1452,7 @@ function clearAllFilters() {
   if (allBtn) allBtn.classList.add('active');
 
   // 3. Grade multi-selects (RS / ACC / Fund) — vaciar Sets y desmarcar checks
-  ['comp', 'rs', 'acc', 'fund'].forEach(k => {
+  ['comp', 'rs', 'acc', 'fund', 'est'].forEach(k => {
     GMS[k].set.clear();
     const panel = document.getElementById(`fmulti-panel-${k}`);
     if (panel) panel.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
@@ -1722,21 +1722,60 @@ function _accelSectionHtml(epsArr, revArr) {
   if (!epsArr && !revArr) return '';
   const fmtV = v => v != null ? `${v >= 0 ? '+' : ''}${v.toFixed(1)}%` : '—';
   const vc   = v => v == null ? '#8899aa' : v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
+  const bgc  = (v, prev) => {
+    if (v == null) return 'rgba(255,255,255,0.02)';
+    const c = _accelColor(v, prev);
+    if (c === '#00e5cc')  return 'rgba(0,229,204,0.10)';
+    if (c === '#2dd4bf')  return 'rgba(45,212,191,0.07)';
+    if (c === '#f59e0b')  return 'rgba(245,158,11,0.09)';
+    if (c === '#ff4d6d')  return 'rgba(255,77,109,0.09)';
+    return 'rgba(255,255,255,0.02)';
+  };
 
-  function _strip(arr) {
-    if (!arr) return '<span style="color:#4a5568;font-size:10px">—</span>';
-    return arr.map((v, i) => {
-      const bg  = i === 0 ? '#1e293b' : _accelColor(v, arr[i - 1]);
-      const sep = i > 0 ? `<span style="color:#374151;margin:0 3px;font-size:9px">→</span>` : '';
-      const est = i === 3 ? `<span style="color:#4a5568;font-size:8.5px;font-style:italic;margin-left:1px">e</span>` : '';
-      return `${sep}<span style="display:inline-flex;align-items:center;gap:3px"><span style="display:inline-block;width:7px;height:7px;border-radius:2px;background:${bg};flex-shrink:0"></span><span style="color:${vc(v)};font-size:10px;font-family:'IBM Plex Mono',monospace">${fmtV(v)}${est}</span></span>`;
-    }).join('');
+  const COL_W = '90px';
+  const thStyle = `font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#4a5568;text-align:center;padding:0 10px 6px;font-family:var(--font-sans)`;
+  const tdBase  = `font-size:11.5px;text-align:center;padding:7px 10px;border-radius:4px;font-family:'IBM Plex Mono',monospace`;
+
+  function _td(v, prev, isEst) {
+    const bg  = isEst ? (v != null ? bgc(v, prev) : 'rgba(255,255,255,0.02)') : (prev != null ? bgc(v, prev) : 'rgba(255,255,255,0.02)');
+    const border = isEst ? ';outline:1px dashed rgba(255,255,255,0.10);outline-offset:-1px' : '';
+    const est = isEst ? `<span style="font-size:8px;font-style:italic;color:#4a5568;margin-left:2px">e</span>` : '';
+    return `<td style="${tdBase};background:${bg}${border}"><span style="color:${vc(v)};font-weight:700">${fmtV(v)}</span>${est}</td>`;
   }
 
-  return `<div style="display:flex;flex-direction:column;gap:5px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,0.07)">
-    <div style="font-size:8.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#4a5568;margin-bottom:1px">Growth Acceleration</div>
-    <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:#6b7280;width:26px;flex-shrink:0">EPS</span><span>${_strip(epsArr)}</span></div>
-    <div style="display:flex;align-items:center;gap:6px"><span style="font-size:9px;color:#6b7280;width:26px;flex-shrink:0">Rev</span><span>${_strip(revArr)}</span></div>
+  const labelTd = `font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6b7280;padding:7px 10px 7px 0;font-family:var(--font-sans);white-space:nowrap`;
+
+  return `<div style="margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.07)">
+    <div style="font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#4a5568;margin-bottom:8px">Growth Acceleration</div>
+    <table style="border-collapse:separate;border-spacing:4px 0;width:auto">
+      <thead><tr>
+        <th style="width:36px"></th>
+        <th style="${thStyle};width:${COL_W}">Q-2</th>
+        <th style="${thStyle};width:${COL_W}">Q-1</th>
+        <th style="${thStyle};width:${COL_W}">Q0</th>
+        <th style="${thStyle};width:${COL_W}">Est</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td style="${labelTd}">EPS</td>
+          ${epsArr ? [
+            _td(epsArr[0], null,       false),
+            _td(epsArr[1], epsArr[0],  false),
+            _td(epsArr[2], epsArr[1],  false),
+            _td(epsArr[3], epsArr[2],  true),
+          ].join('') : `<td colspan="4" style="color:#4a5568;font-size:11px;text-align:center">—</td>`}
+        </tr>
+        <tr>
+          <td style="${labelTd}">Rev</td>
+          ${revArr ? [
+            _td(revArr[0], null,       false),
+            _td(revArr[1], revArr[0],  false),
+            _td(revArr[2], revArr[1],  false),
+            _td(revArr[3], revArr[2],  true),
+          ].join('') : `<td colspan="4" style="color:#4a5568;font-size:11px;text-align:center">—</td>`}
+        </tr>
+      </tbody>
+    </table>
   </div>`;
 }
 
