@@ -1922,6 +1922,7 @@ function renderWatchlist() {
       return (a[col]??-999)-(b[col]??-999);
     };
     const favStocks = wl.map(sym => ALL_STOCKS.find(s => s.sym === sym)).filter(Boolean);
+    favStocks.sort((a, b) => (a.rank ?? 999999) - (b.rank ?? 999999));
     const _activeSorts2 = sortKeys.length ? sortKeys : [{col:'rank', dir:1}];
     favStocks.sort((a, b) => {
       for (const k of _activeSorts2) {
