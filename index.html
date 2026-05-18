@@ -1609,7 +1609,7 @@ function sortBy(col, forceDir) {
   } else if (sortKeys.length < 2) {
     // Slot available — add as next sort
     // Text/grade cols default ascending; numeric cols default descending
-    const ASC_FIRST = new Set(['sym','desc','sector','industry','rsGrade','accGrade','fundGrade','estGrade','compGrade','fundDq','operable']);
+    const ASC_FIRST = new Set(['sym','desc','sector','industry','rsGrade','accGrade','fundGrade','estGrade','compGrade','fundDq']);
     sortKeys.push({col, dir: ASC_FIRST.has(col) ? 1 : -1});
   }
   // If already have 2 sorts and clicking a new column — ignore (must reset first)
@@ -1810,6 +1810,15 @@ function statusBadge(s) {
   return `<span class="op-no">NO</span>`;
 }
 
+function statusRank(s) {
+  const v = s.volOk === 'YES';
+  const e = s.extOk === 'YES';
+  if (v && e) return 3;
+  if (v)      return 2;
+  if (e)      return 1;
+  return 0;
+}
+
 function buildRow(s) {
   const ar = s.atrRatio < 1.0 ? 'col-teal' : (s.atrRatio > 1.3 ? 'col-red' : '');
   const sc = scoreColor(s.score);
@@ -1905,7 +1914,10 @@ function renderWatchlist() {
         if (ea !== eb) return (ea - eb) * dir;
         return (a[col] ?? 0) - (b[col] ?? 0);
       }
-      const TEXT_COLS2 = new Set(['sector','industry','sym','desc','operable']);
+      if (col==='operable') {
+        return statusRank(a) - statusRank(b);
+      }
+      const TEXT_COLS2 = new Set(['sector','industry','sym','desc']);
       if (TEXT_COLS2.has(col)) { const av=(a[col]||'').toLowerCase(),bv=(b[col]||'').toLowerCase(); return av<bv?-1:av>bv?1:0; }
       return (a[col]??-999)-(b[col]??-999);
     };
@@ -2423,8 +2435,11 @@ function renderStocks() {
         if (ea !== eb) return (ea - eb) * dir;  // neutraliza dir externo
         return (a[col] ?? 0) - (b[col] ?? 0);
       }
+      if (col === 'operable') {
+        return statusRank(a) - statusRank(b);
+      }
       // Text columns — A-Z sort
-      const TEXT_COLS = new Set(['sector','industry','sym','desc','operable']);
+      const TEXT_COLS = new Set(['sector','industry','sym','desc']);
       if (TEXT_COLS.has(col)) {
         const av = (a[col]||'').toLowerCase();
         const bv = (b[col]||'').toLowerCase();
