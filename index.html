@@ -789,10 +789,12 @@
   body.density-14 .thead-groups th { padding: 5px 6px 4px; font-size: 8px; letter-spacing: .05em; }
   body.density-14 .sym { font-size: 10px; }
   /* Name max-widths match column widths minus cell padding (4+4=8px) so the
-   * ellipsis kicks in BEFORE the text spills into the next column. */
+   * ellipsis kicks in BEFORE the text spills into the next column.
+   * display:inline-block is required for max-width + ellipsis to actually
+   * clip — by default these spans are inline and ignore max-width. */
   body.density-14 .co-name { font-size: 9px; max-width: 82px; }
-  body.density-14 .sector-tag { font-size: 8.5px; max-width: 56px; }
-  body.density-14 .industry-tag { font-size: 8.5px; max-width: 80px; }
+  body.density-14 .sector-tag { font-size: 8.5px; max-width: 56px; display: inline-block; vertical-align: middle; }
+  body.density-14 .industry-tag { font-size: 8.5px; max-width: 80px; display: inline-block; vertical-align: middle; }
   body.density-14 .s-bar { width: 22px; }
   body.density-14 .s-bar-wrap { gap: 3px; }
 
