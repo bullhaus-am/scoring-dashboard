@@ -285,9 +285,15 @@
   .sym { font-weight: 700; color: var(--white); font-size: 11px; }
   .tv-copy { cursor: pointer; transition: color 0.15s ease; }
   .tv-copy:hover { color: var(--teal); }
-  .co-name { font-size: 9.5px; color: var(--mist); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
-  .sector-tag { font-size: 9px; color: var(--smoke); max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .industry-tag { font-size: 9px; color: var(--mist); max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* max-width values match the column widths from colgroup minus cell padding
+   * (12px total for 27" mode). display:inline-block is REQUIRED for max-width
+   * + ellipsis to actually clip — by default <span> is inline and ignores
+   * max-width, which let long industry/sector names bleed into adjacent
+   * columns. 14" mode overrides these with tighter values to match its
+   * narrower columns. */
+  .co-name { font-size: 9.5px; color: var(--mist); max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block; }
+  .sector-tag { font-size: 9px; color: var(--smoke); max-width: 68px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: middle; }
+  .industry-tag { font-size: 9px; color: var(--mist); max-width: 96px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: middle; }
 
   .fbar { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
   .fbar-lbl { font-size: 9px; color: var(--mist); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-right: 4px; font-family: var(--font-sans); }
@@ -2016,13 +2022,13 @@ function buildRow(s) {
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.estPctil||0)*0.5}px;background:${estPctilColor(s.estPctil)}"></div></div><span class="rsmc-num" style="color:${estPctilColor(s.estPctil)}">${s.estPctil??'—'}</span></div></td>
       <td><span class="grade-badge ${estGradeClass(s.estGrade)}">${s.estGrade&&s.estGrade!=='-'?s.estGrade:'—'}</span></td>
       <td style="text-align:center">${s.estPctil!=null?`<span class="detail-icon" onclick="showEstDetail('${s.sym}')" title="Ver detalle Analyst Estimates">📈</span>`:`<span class="detail-icon-disabled" title="Sin datos de estimates">📈</span>`}</td>
-      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5)}%</td>
-      <td class="${ar}">${fmt(s.atrRatio,3)}</td>
-      <td style="color:${nc(s.ema20)};font-weight:${fw(s.ema20)}">${sign(s.ema20)}${fmt(s.ema20)}%</td>
-      <td style="color:${nc(s.sma50)};font-weight:${fw(s.sma50)}">${sign(s.sma50)}${fmt(s.sma50)}%</td>
+      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5, 1)}%</td>
+      <td class="${ar}">${fmt(s.atrRatio, 2)}</td>
+      <td style="color:${nc(s.ema20)};font-weight:${fw(s.ema20)}">${sign(s.ema20)}${fmt(s.ema20, 1)}%</td>
+      <td style="color:${nc(s.sma50)};font-weight:${fw(s.sma50)}">${sign(s.sma50)}${fmt(s.sma50, 1)}%</td>
       <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.volRatio,1)}%</td>
-      <td style="color:${nc(s.perf1d)};font-weight:${fw(s.perf1d)}">${sign(s.perf1d)}${fmt(s.perf1d)}%</td>
-      <td style="color:${nc(s.perf6m)};font-weight:${fw(s.perf6m)}">${sign(s.perf6m)}${fmt(s.perf6m)}%</td>
+      <td style="color:${nc(s.perf1d)};font-weight:${fw(s.perf1d)}">${sign(s.perf1d)}${fmt(s.perf1d, 1)}%</td>
+      <td style="color:${nc(s.perf6m)};font-weight:${fw(s.perf6m)}">${sign(s.perf6m)}${fmt(s.perf6m, 1)}%</td>
       <td style="border-left:1px solid rgba(255,255,255,0.08)">${statusBadge(s)}</td>
     </tr>`;
 }
@@ -2656,13 +2662,13 @@ function renderStocks() {
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="rsmc-bar-wrap"><div class="rsmc-bar"><div class="rsmc-fill" style="width:${(s.estPctil||0)*0.5}px;background:${estPctilColor(s.estPctil)}"></div></div><span class="rsmc-num" style="color:${estPctilColor(s.estPctil)}">${s.estPctil??'—'}</span></div></td>
       <td><span class="grade-badge ${estGradeClass(s.estGrade)}">${s.estGrade&&s.estGrade!=='-'?s.estGrade:'—'}</span></td>
       <td style="text-align:center">${s.estPctil!=null?`<span class="detail-icon" onclick="showEstDetail('${s.sym}')" title="Ver detalle Analyst Estimates">📈</span>`:`<span class="detail-icon-disabled" title="Sin datos de estimates">📈</span>`}</td>
-      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5)}%</td>
-      <td class="${ar}">${fmt(s.atrRatio,3)}</td>
-      <td style="color:${nc(s.ema20)};font-weight:${fw(s.ema20)}">${sign(s.ema20)}${fmt(s.ema20)}%</td>
-      <td style="color:${nc(s.sma50)};font-weight:${fw(s.sma50)}">${sign(s.sma50)}${fmt(s.sma50)}%</td>
+      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5, 1)}%</td>
+      <td class="${ar}">${fmt(s.atrRatio, 2)}</td>
+      <td style="color:${nc(s.ema20)};font-weight:${fw(s.ema20)}">${sign(s.ema20)}${fmt(s.ema20, 1)}%</td>
+      <td style="color:${nc(s.sma50)};font-weight:${fw(s.sma50)}">${sign(s.sma50)}${fmt(s.sma50, 1)}%</td>
       <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.volRatio,1)}%</td>
-      <td style="color:${nc(s.perf1d)};font-weight:${fw(s.perf1d)}">${sign(s.perf1d)}${fmt(s.perf1d)}%</td>
-      <td style="color:${nc(s.perf6m)};font-weight:${fw(s.perf6m)}">${sign(s.perf6m)}${fmt(s.perf6m)}%</td>
+      <td style="color:${nc(s.perf1d)};font-weight:${fw(s.perf1d)}">${sign(s.perf1d)}${fmt(s.perf1d, 1)}%</td>
+      <td style="color:${nc(s.perf6m)};font-weight:${fw(s.perf6m)}">${sign(s.perf6m)}${fmt(s.perf6m, 1)}%</td>
       <td style="border-left:1px solid rgba(255,255,255,0.12)">${statusBadge(s)}</td>
     </tr>`;
   }).join('');
