@@ -788,9 +788,11 @@
   body.density-14 .stbl td { padding: 3px 4px; }
   body.density-14 .thead-groups th { padding: 5px 6px 4px; font-size: 8px; letter-spacing: .05em; }
   body.density-14 .sym { font-size: 10px; }
-  body.density-14 .co-name { font-size: 9px; max-width: 130px; }
-  body.density-14 .sector-tag { font-size: 8.5px; max-width: 90px; }
-  body.density-14 .industry-tag { font-size: 8.5px; max-width: 110px; }
+  /* Name max-widths match column widths minus cell padding (4+4=8px) so the
+   * ellipsis kicks in BEFORE the text spills into the next column. */
+  body.density-14 .co-name { font-size: 9px; max-width: 82px; }
+  body.density-14 .sector-tag { font-size: 8.5px; max-width: 56px; }
+  body.density-14 .industry-tag { font-size: 8.5px; max-width: 80px; }
   body.density-14 .s-bar { width: 22px; }
   body.density-14 .s-bar-wrap { gap: 3px; }
 
@@ -811,8 +813,13 @@
    * which looks like the header is transparent). Force a fixed row1 height
    * so --row1-h matches exactly and no gap appears between the two sticky
    * header rows during vertical scroll. */
-  body.density-14 .stbl { --topbar-h: 56px; --row1-h: 22px; }
-  body.density-14 .thead-groups th { height: 22px; padding: 3px 6px; }
+  body.density-14 .stbl { --topbar-h: 56px; --row1-h: 20px; }
+  /* Row1 is 22px tall but --row1-h is 20 → column header row sticks 2px
+   * above where the group row ends, creating an invisible 2px overlap
+   * (same bg2 background) that masks any micro-gap from border rendering.
+   * vertical-align: middle keeps the group header text centered so the
+   * overlap doesn't clip any text. */
+  body.density-14 .thead-groups th { height: 22px; padding: 3px 6px; vertical-align: middle; }
 
   /* Shrink colgroup column widths via CSS overrides
    * Original colgroup widths (px): 14,36,52,48,110,78,106,64,46,64,42,40,52,42,42,42,38,36,54,58,46,52,48,58,58,46,56,44,50,50,50,50,46,50,90
