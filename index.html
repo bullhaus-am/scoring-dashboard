@@ -875,6 +875,14 @@
   body.density-14 .sec-hdr-row, body.density-14 .sec-row,
   body.density-14 .ind-hdr-row, body.density-14 .ind-row { padding: 3px 0; }
 
+  /* RS Grade Perf & Acc/Dist table — tighter to keep columns from overflowing
+   * in 14" mode. Cells use inline styles so we need !important to override. */
+  body.density-14 #rsGradePerfTable td { padding: 4px 3px 4px 5px !important; }
+  body.density-14 #rsGradePerfTable th { padding: 0 3px 5px 5px !important; }
+  body.density-14 #rsGradePerfTable td span[style*="font-size:11px"] { font-size: 10px !important; }
+  body.density-14 #rsGradePerfTable td span[style*="font-size:8px"] { font-size: 7.5px !important; }
+  body.density-14 #rsGradePerfTable td span[style*="font-size:7.5px"] { width: 28px !important; }
+
 </style>
 </head>
 <body>
@@ -3553,7 +3561,7 @@ function renderRsGradePerf() {
   const gradeColors = { 'A/A+': '#f59e0b', 'B': '#00e5cc', 'C': '#8899aa', 'D': '#ff4d6d', 'E': '#ff4d6d' };
   const grades      = ['A/A+', 'B', 'C', 'D', 'E'];
   const nc          = v => (v === null || v === undefined) ? '#8899aa' : v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
-  const fmtP        = v => (v === null || v === undefined) ? '<span style="color:var(--mist)">—</span>' : `<span style="color:${nc(v)}">${v >= 0 ? '+' : ''}${v.toFixed(2)}%</span>`;
+  const fmtP        = v => (v === null || v === undefined) ? '<span style="color:var(--mist)">—</span>' : `<span style="color:${nc(v)}">${v >= 0 ? '+' : ''}${v.toFixed(1)}%</span>`;
   const fmtN        = (v, acc, dist) => {
     if (v === null || v === undefined) return '<span style="color:var(--mist)">—</span>';
     const adStr = (acc !== null && acc !== undefined && dist !== null && dist !== undefined)
@@ -3674,7 +3682,7 @@ function renderRsGradePerf() {
       if (medPerf !== null) {
         html += `<div style="display:flex;align-items:baseline;gap:4px;">
           <span style="font-size:7.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--mist);width:36px;flex-shrink:0;">Perf ${isTotal ? '5D' : '1D'}</span>
-          <span style="font-size:11px;font-weight:700;color:${ncLocal(medPerf)};">${medPerf >= 0 ? '+' : ''}${medPerf.toFixed(2)}%</span>
+          <span style="font-size:11px;font-weight:700;color:${ncLocal(medPerf)};">${medPerf >= 0 ? '+' : ''}${medPerf.toFixed(1)}%</span>
         </div>`;
       }
       html += `<div style="display:flex;align-items:baseline;gap:4px;">
