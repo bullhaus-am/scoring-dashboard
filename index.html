@@ -1108,8 +1108,8 @@
         <div class="fgroup">
           <button class="fbtn active" onclick="setFilter('all',this)">All</button>
           <button class="fbtn" onclick="setFilter('operable',this)">Operable</button>
-          <button class="fbtn" onclick="setFilter('volOk',this)">Volat OK</button>
-          <button class="fbtn" onclick="setFilter('extOk',this)">Not Extended</button>
+          <button class="fbtn" onclick="setFilter('volOk',this)">ATR OK</button>
+          <button class="fbtn" onclick="setFilter('extOk',this)">Near MA</button>
         </div>
 
         <span class="fbar-sep"></span>
@@ -1524,7 +1524,7 @@ function initDropdowns() {
   industries.forEach(i => { const o = document.createElement('option'); o.value = i; o.textContent = i; id.appendChild(o); });
 }
 
-// ── Type filter buttons (All / Operable / Volat OK / Not Extended) ──────────
+// ── Type filter buttons (All / Operable / ATR OK / Near MA) ─────────────────
 function setFilter(f, btn) {
   filterMode = f;
   filterTicker = '';
@@ -1956,8 +1956,8 @@ function statusBadge(s) {
   const v = s.volOk === 'YES';
   const e = s.extOk === 'YES';
   if (v && e) return `<span class="op-yes">YES</span>`;
-  if (v)      return `<span class="op-partial">VOLAT OK</span>`;
-  if (e)      return `<span class="op-partial">NOT EXTENDED</span>`;
+  if (v)      return `<span class="op-partial">ATR OK</span>`;
+  if (e)      return `<span class="op-partial">NEAR MA</span>`;
   return `<span class="op-no">NO</span>`;
 }
 
@@ -2657,7 +2657,7 @@ function renderStocks() {
       <td style="border-left:1px solid rgba(255,255,255,0.12)">${statusBadge(s)}</td>
     </tr>`;
   }).join('');
-  const typeLabel = {all:'ALL', operable:'OPERABLE', volOk:'VOLAT OK', extOk:'NOT EXTENDED'}[filterMode] || 'ALL';
+  const typeLabel = {all:'ALL', operable:'OPERABLE', volOk:'ATR OK', extOk:'NEAR MA'}[filterMode] || 'ALL';
   const compGradeLabel= gmsLabel('comp');
   const gradeLabel    = gmsLabel('rs');
   const accGradeLabel = gmsLabel('acc');
