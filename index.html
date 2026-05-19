@@ -875,13 +875,14 @@
   body.density-14 .sec-hdr-row, body.density-14 .sec-row,
   body.density-14 .ind-hdr-row, body.density-14 .ind-row { padding: 3px 0; }
 
-  /* RS Grade Perf & Acc/Dist table — tighter to keep columns from overflowing
-   * in 14" mode. Cells use inline styles so we need !important to override. */
-  body.density-14 #rsGradePerfTable td { padding: 4px 3px 4px 5px !important; }
-  body.density-14 #rsGradePerfTable th { padding: 0 3px 5px 5px !important; }
-  body.density-14 #rsGradePerfTable td span[style*="font-size:11px"] { font-size: 10px !important; }
+  /* RS Grade Perf & Acc/Dist table — light density adjustments for 14" mode.
+   * The table was redesigned to 2 sub-rows per grade (Perf + Net Acc), with
+   * metric labels in a dedicated left column instead of repeated in every
+   * cell, so it fits comfortably in both densities. These rules just shrink
+   * the values a touch in 14" mode. */
+  body.density-14 #rsGradePerfTable td { padding-top: 4px !important; padding-bottom: 4px !important; }
+  body.density-14 #rsGradePerfTable td span[style*="font-size:11.5px"] { font-size: 10.5px !important; }
   body.density-14 #rsGradePerfTable td span[style*="font-size:8px"] { font-size: 7.5px !important; }
-  body.density-14 #rsGradePerfTable td span[style*="font-size:7.5px"] { width: 28px !important; }
 
 </style>
 </head>
@@ -3579,9 +3580,11 @@ function renderRsGradePerf() {
     return scale[i] !== undefined ? scale[i] : 0.55;
   }
 
-  // Header row
+  // Header row — grade column (~36px) + metric label column (~50px) + 6 data columns
   let html = `<table style="width:100%;border-collapse:separate;border-spacing:0;font-family:var(--font);table-layout:fixed;">`;
-  html += `<thead><tr><th style="width:44px;border-right:1px solid rgba(255,255,255,0.06);"></th>`;
+  html += `<thead><tr>`;
+  html += `<th style="width:36px;border-right:1px solid rgba(255,255,255,0.06);"></th>`;
+  html += `<th style="width:50px;border-right:1px solid rgba(255,255,255,0.06);"></th>`;
   data.forEach((day, i) => {
     const isToday  = day.label === 'T';
     const isTotal  = !!day.is_total;
@@ -3601,14 +3604,28 @@ function renderRsGradePerf() {
   });
   html += `</tr></thead><tbody>`;
 
-  grades.forEach((grade, gi) => {
-    const gc  = gradeColors[grade] || '#8899aa';
-    const bg  = gi % 2 === 1 ? 'background:rgba(255,255,255,0.018);' : '';
-    const bdr = gi < grades.length - 1 ? 'border-bottom:1px solid var(--rule);' : '';
-    html += `<tr style="${bg}${bdr}">`;
-    html += `<td style="padding:7px 8px;vertical-align:middle;border-right:1px solid rgba(255,255,255,0.06);">
-      <span style="font-size:12px;font-weight:700;color:${gc};">${grade}</span></td>`;
+  // Cell helpers — paddings asymmetric so Perf row sits just above its NetAcc
+  // row visually (3px bottom on perf, 3px top on netacc) instead of evenly
+  // spaced like an ordinary table.
+  const perfPad   = 'padding:6px 6px 3px 8px;';
+  const netPad    = 'padding:3px 6px 6px 8px;';
+  const ncLocal   = v => v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
+  const metricLbl = 'font-size:8.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--mist);';
 
+  // ── Body: each grade renders as 2 sub-rows (Perf + Net Acc).
+  //    Grade label cell uses rowspan=2 so it visually spans both sub-rows.
+  grades.forEach((grade, gi) => {
+    const gc          = gradeColors[grade] || '#8899aa';
+    const bg          = gi % 2 === 1 ? 'background:rgba(255,255,255,0.018);' : '';
+    const isLastGrade = gi === grades.length - 1;
+    const groupBdr    = !isLastGrade ? 'border-bottom:1px solid var(--rule);' : '';
+
+    // -- Sub-row 1: Perf
+    html += `<tr style="${bg}">`;
+    html += `<td rowspan="2" style="padding:0 6px;vertical-align:middle;text-align:center;border-right:1px solid rgba(255,255,255,0.06);${groupBdr}">
+      <span style="font-size:13px;font-weight:700;color:${gc};">${grade}</span></td>`;
+    html += `<td style="${perfPad}vertical-align:middle;border-right:1px solid rgba(255,255,255,0.04);">
+      <span style="${metricLbl}">Perf</span></td>`;
     data.forEach((day, di) => {
       const row     = (day.rows || []).find(r => r.grade === grade);
       const op      = _opacityFor(di, day);
@@ -3616,81 +3633,107 @@ function renderRsGradePerf() {
       const sep     = (di < data.length - 1 && !isTotal) ? 'border-right:1px solid rgba(255,255,255,0.04);' : '';
       const leftBdr = isTotal ? 'border-left:2px solid rgba(245,158,11,0.4);' : '';
       const bgCol   = isTotal ? 'background:rgba(245,158,11,0.04);' : '';
-      html += `<td style="padding:6px 6px 6px 8px;vertical-align:middle;opacity:${op};${sep}${leftBdr}${bgCol}">`;
+      html += `<td style="${perfPad}vertical-align:middle;opacity:${op};${sep}${leftBdr}${bgCol}">`;
       if (!row || row.n === 0) {
         html += `<span style="color:var(--mist);font-size:9px;">—</span>`;
       } else {
-        html += `<div style="display:flex;flex-direction:column;gap:2px;">
-          <div style="display:flex;align-items:baseline;gap:4px;">
-            <span style="font-size:7.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--mist);width:36px;flex-shrink:0;">Perf ${isTotal ? '5D' : '1D'}</span>
-            <span style="font-size:11px;font-weight:700;">${fmtP(row.med_perf)}</span>
-          </div>
-          <div style="display:flex;align-items:baseline;gap:4px;">
-            <span style="font-size:7.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--mist);width:36px;flex-shrink:0;">Net Acc</span>
-            <span style="font-size:11px;font-weight:700;">${fmtN(row.net_acc1d, row.sum_acc, row.sum_dist)}</span>
-          </div>
-        </div>`;
+        html += `<span style="font-size:11.5px;font-weight:700;">${fmtP(row.med_perf)}</span>`;
+      }
+      html += `</td>`;
+    });
+    html += `</tr>`;
+
+    // -- Sub-row 2: Net Acc (no rowspan'd grade cell — covered by row above)
+    html += `<tr style="${bg}">`;
+    html += `<td style="${netPad}vertical-align:middle;border-right:1px solid rgba(255,255,255,0.04);${groupBdr}">
+      <span style="${metricLbl}">Net Acc</span></td>`;
+    data.forEach((day, di) => {
+      const row     = (day.rows || []).find(r => r.grade === grade);
+      const op      = _opacityFor(di, day);
+      const isTotal = !!day.is_total;
+      const sep     = (di < data.length - 1 && !isTotal) ? 'border-right:1px solid rgba(255,255,255,0.04);' : '';
+      const leftBdr = isTotal ? 'border-left:2px solid rgba(245,158,11,0.4);' : '';
+      const bgCol   = isTotal ? 'background:rgba(245,158,11,0.04);' : '';
+      html += `<td style="${netPad}vertical-align:middle;opacity:${op};${sep}${leftBdr}${bgCol}${groupBdr}">`;
+      if (!row || row.n === 0) {
+        html += `<span style="color:var(--mist);font-size:9px;">—</span>`;
+      } else {
+        html += `<span style="font-size:11.5px;font-weight:700;">${fmtN(row.net_acc1d, row.sum_acc, row.sum_dist)}</span>`;
       }
       html += `</td>`;
     });
     html += `</tr>`;
   });
 
-  // ── Fila TOTAL (agregado de TODOS los grades por día) ──────────────────
-  html += `<tr style="border-top:2px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.025);">`;
-  html += `<td style="padding:8px 8px;vertical-align:middle;border-right:1px solid rgba(255,255,255,0.06);">
-    <span style="font-size:10px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--smoke);">Total</span></td>`;
+  // ── Total row (agregado de todos los grades por día) — mismo patrón 2 sub-rows
+  // Helper to compute the perf number for a given day cell in the Total row.
+  // For T-1..T-4 → mediana universo del día (de HIST). For TOTAL (5D) → compuesto.
+  const totalPerfFor = (day) => {
+    if (day.is_total) {
+      if (typeof HIST !== 'undefined') {
+        const hist5 = HIST.slice(-5).filter(h => h.perf1d !== null && h.perf1d !== undefined);
+        if (hist5.length) {
+          let comp = 1;
+          hist5.forEach(h => { comp *= (1 + h.perf1d / 100); });
+          return (comp - 1) * 100;
+        }
+      }
+      return null;
+    }
+    if (day.date && typeof HIST !== 'undefined') {
+      const daySlice = day.date.slice(5);
+      const histEntry = HIST.find(h => h.d === daySlice);
+      if (histEntry && histEntry.perf1d != null) return histEntry.perf1d;
+    }
+    return null;
+  };
 
+  const totalRowBg = 'background:rgba(255,255,255,0.025);';
+  const totalTopBdr = 'border-top:2px solid rgba(255,255,255,0.12);';
+
+  // -- Total / Perf row
+  html += `<tr style="${totalRowBg}">`;
+  html += `<td rowspan="2" style="padding:0 6px;vertical-align:middle;text-align:center;border-right:1px solid rgba(255,255,255,0.06);${totalTopBdr}">
+    <span style="font-size:10.5px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--smoke);">Total</span></td>`;
+  html += `<td style="${perfPad}vertical-align:middle;border-right:1px solid rgba(255,255,255,0.04);${totalTopBdr}">
+    <span style="${metricLbl}">Perf</span></td>`;
   data.forEach((day, di) => {
-    const isTotal = !!day.is_total;
-    const rows    = (day.rows || []).filter(r => r.sum_acc !== null && r.sum_acc !== undefined);
     const op      = _opacityFor(di, day);
+    const isTotal = !!day.is_total;
     const sep     = (di < data.length - 1 && !isTotal) ? 'border-right:1px solid rgba(255,255,255,0.04);' : '';
     const leftBdr = isTotal ? 'border-left:2px solid rgba(245,158,11,0.4);' : '';
     const bgCol   = isTotal ? 'background:rgba(245,158,11,0.06);' : '';
-    html += `<td style="padding:6px 6px 6px 8px;vertical-align:middle;opacity:${op};${sep}${leftBdr}${bgCol}">`;
+    const medPerf = totalPerfFor(day);
+    html += `<td style="${perfPad}vertical-align:middle;opacity:${op};${sep}${leftBdr}${bgCol}${totalTopBdr}">`;
+    if (medPerf === null) {
+      html += `<span style="color:var(--mist);font-size:9px;">—</span>`;
+    } else {
+      html += `<span style="font-size:11.5px;font-weight:700;color:${ncLocal(medPerf)};">${medPerf >= 0 ? '+' : ''}${medPerf.toFixed(1)}%</span>`;
+    }
+    html += `</td>`;
+  });
+  html += `</tr>`;
+
+  // -- Total / Net Acc row
+  html += `<tr style="${totalRowBg}">`;
+  html += `<td style="${netPad}vertical-align:middle;border-right:1px solid rgba(255,255,255,0.04);">
+    <span style="${metricLbl}">Net Acc</span></td>`;
+  data.forEach((day, di) => {
+    const op      = _opacityFor(di, day);
+    const isTotal = !!day.is_total;
+    const sep     = (di < data.length - 1 && !isTotal) ? 'border-right:1px solid rgba(255,255,255,0.04);' : '';
+    const leftBdr = isTotal ? 'border-left:2px solid rgba(245,158,11,0.4);' : '';
+    const bgCol   = isTotal ? 'background:rgba(245,158,11,0.06);' : '';
+    const rows    = (day.rows || []).filter(r => r.sum_acc != null && r.sum_dist != null);
+    html += `<td style="${netPad}vertical-align:middle;opacity:${op};${sep}${leftBdr}${bgCol}">`;
     if (!rows.length) {
       html += `<span style="color:var(--mist);font-size:9px;">—</span>`;
     } else {
       const totalAcc  = rows.reduce((s, r) => s + (r.sum_acc  || 0), 0);
       const totalDist = rows.reduce((s, r) => s + (r.sum_dist || 0), 0);
       const totalNet  = totalAcc - totalDist;
-      const ncLocal   = v => v > 0 ? '#00e5cc' : v < 0 ? '#ff4d6d' : '#8899aa';
-
-      // Perf: para días normales buscar en HIST (mediana universo). Para TOTAL, componer
-      let medPerf = null;
-      if (isTotal) {
-        // Compuesto de las medianas del universo de los 5 días
-        if (typeof HIST !== 'undefined') {
-          // Tomar los últimos 5 perf1d del HIST
-          const hist5 = HIST.slice(-5).filter(h => h.perf1d !== null && h.perf1d !== undefined);
-          if (hist5.length) {
-            let comp = 1;
-            hist5.forEach(h => { comp *= (1 + h.perf1d / 100); });
-            medPerf = (comp - 1) * 100;
-          }
-        }
-      } else if (day.date && typeof HIST !== 'undefined') {
-        const daySlice = day.date.slice(5);
-        const histEntry = HIST.find(h => h.d === daySlice);
-        if (histEntry && histEntry.perf1d !== null && histEntry.perf1d !== undefined) {
-          medPerf = histEntry.perf1d;
-        }
-      }
-
-      html += `<div style="display:flex;flex-direction:column;gap:2px;">`;
-      if (medPerf !== null) {
-        html += `<div style="display:flex;align-items:baseline;gap:4px;">
-          <span style="font-size:7.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--mist);width:36px;flex-shrink:0;">Perf ${isTotal ? '5D' : '1D'}</span>
-          <span style="font-size:11px;font-weight:700;color:${ncLocal(medPerf)};">${medPerf >= 0 ? '+' : ''}${medPerf.toFixed(1)}%</span>
-        </div>`;
-      }
-      html += `<div style="display:flex;align-items:baseline;gap:4px;">
-        <span style="font-size:7.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--mist);width:36px;flex-shrink:0;">Net Acc</span>
-        <span style="font-size:11px;font-weight:700;color:${ncLocal(totalNet)};">${totalNet >= 0 ? '+' : ''}${totalNet}</span>
-        <span style="font-size:8px;color:var(--mist);">(<span style="color:#4dd9be">${totalAcc}</span>/<span style="color:#ff8fa3">${totalDist}</span>)</span>
-      </div>
-      </div>`;
+      html += `<span style="font-size:11.5px;font-weight:700;color:${ncLocal(totalNet)};">${totalNet >= 0 ? '+' : ''}${totalNet}</span>`;
+      html += ` <span style="font-size:8px;color:var(--mist);">(<span style="color:#4dd9be">${totalAcc}</span>/<span style="color:#ff8fa3">${totalDist}</span>)</span>`;
     }
     html += `</td>`;
   });
