@@ -990,7 +990,7 @@
 
       <!-- Advance / Decline (% Advancing) chart (últimos 30 días) -->
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);">
-        <div class="card-tag" style="margin-bottom:8px;">Advance / Decline — % Advancing</div>
+        <div class="card-tag" style="margin-bottom:8px;">Advance / Decline — % Advancing · 30 sessions</div>
         <div style="position:relative;height:160px;width:100%;">
           <canvas id="advChart"></canvas>
         </div>
@@ -998,7 +998,7 @@
 
       <!-- Acc/Dist history chart (últimos 30 días) -->
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);">
-        <div class="card-tag" style="margin-bottom:8px;">Acc / Dist Count — Últimos 30 días</div>
+        <div class="card-tag" style="margin-bottom:8px;">Acc / Dist Count — 30 sessions</div>
         <div style="position:relative;height:160px;width:100%;">
           <canvas id="accDistHistChart"></canvas>
         </div>
@@ -1006,7 +1006,7 @@
 
       <!-- RS Grade Performance -->
       <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);flex:1;">
-        <div class="card-tag" style="margin-bottom:8px;">RS Grade — Perf &amp; Acc/Dist · Últimas 3 sesiones</div>
+        <div class="card-tag" style="margin-bottom:8px;">RS Grade — Perf &amp; Acc/Dist · 5 sessions</div>
         <div id="rsGradePerfTable" style="width:100%"></div>
       </div>
     </div>
@@ -3034,6 +3034,7 @@ function initCharts() {
   if (lastH) renderSnapshot('atrChartSnap', lastD, [
     { color: '#00e5cc', label: 'ATR ratio', value: lastH.atrRatio, decimals: 3 }
   ]);
+  { const _atrT = document.getElementById('atrChartTitle'); if (_atrT) _atrT.textContent = `ATR ratio trend — ${HIST.length} sessions`; }
 
   const accChartEl = document.getElementById('accChart');
   const accChartInstance = new Chart(accChartEl,{
@@ -3058,6 +3059,7 @@ function initCharts() {
       { color: netAccColor, label: 'Net Acc 20d', value: lastH.netAcc, decimals: 2 }
     ]);
   }
+  { const _accT = document.getElementById('accChartTitle'); if (_accT) _accT.textContent = `Net accumulation 20d trend — ${HIST.length} sessions`; }
 
   // ── Acc/Dist Breadth (% acumulando vs distribuyendo, 20d) ──────────────────
   // Dos líneas independientes con puntos:
