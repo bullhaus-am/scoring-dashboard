@@ -963,27 +963,6 @@
 
   </div>
 
-  <!-- AI COMMENTARY -->
-<div class="sec-head" id="ai-commentary-head"><span class="sec-label">AI Market Commentary</span><div class="sec-line"></div></div>
-<div class="card ai-commentary-card" style="margin-bottom:20px;">
-  <div class="ai-comm-body"><p><strong>RÉGIMEN DE MERCADO</strong></p>
-<p>GO en cuadrante BROAD RALLY con M1 y M2 en PASS, pero la lectura interna es más frágil de lo que sugiere el régimen: el Avg Net Acc 20d apenas recuperó a 0.0 desde -0.07, con 36.4% de stocks distribuyendo vs 34.1% acumulando, y 41-46% del universo cotizando bajo sus medias clave. Operativamente significa que el rally es real pero estrecho, concentrado en pockets específicos (semis, airlines, steel), y exige selectividad extrema — no es entorno para comprar amplitud sino liderazgo cuantitativo puro.</p>
-<p><strong>OBSERVACIONES CLAVE</strong></p>
-<li>La dispersión sectorial cayó a 0.325 (BAJA) con solo 5 de 11 sectores positivos, configuración típica de mercado bifurcado donde Technology (Net20d +0.67, 54% acumulando) carga el peso del rally mientras Utilities (-0.44), Financial Services (-0.41) y Consumer Defensive (-0.35) sangran capital institucional — esto no es rotación, es concentración defensiva inversa.</li>
-<li>Semiconductors muestra Net20d +2.59 con 91% de stocks acumulando y 0% distribuyendo sobre 22 nombres — el cluster más limpio del universo y donde se concentran 6 de los top 10 por Composite, confirmando que el liderazgo es industria-específico, no temático difuso.</li>
-<li>Airlines aparece con 100% de acumulación sobre 5 stocks (Net20d +2.40), señal clásica de rotación cíclica temprana hacia beta alto y sensible a ciclo económico — coherente con el rebote de Net Acc 1d en grades D/E (+6 y +8 respectivamente), donde el dinero está testeando rezagados.</li>
-<li>El % bajo EMA20 subió a 41.4% (+1.6pp) pese a que la distribución cedió, indicando que parte del universo está degradando estructura técnica aún sin ventas masivas — deterioro silencioso bajo la superficie del régimen GO.</li>
-<li>Solo 11.7% del universo presenta ATR comprimido (<0.80), volatilidad mediana en 3.14%: no hay setup masivo de bases listas para breakout; los pivotes operables son escasos y exigen paciencia.</li>
-<p><strong>SECTORES E INDUSTRIAS</strong></p>
-<p>Technology domina sin contrapeso: Net20d +0.67 duplica al segundo (Real Estate +0.20) y es el único sector con ratio Acc/Dist claramente favorable (54/28). En el polo negativo, la divergencia Utilities/Financials/Consumer Defensive con %Dist entre 45-49% sugiere salida coordinada de defensivos y rate-sensitive, lectura macro hacia tasas estables o sesgo risk-on. Las tres industrias líderes — Semiconductors, Airlines, Steel — son todas cíclicas de alta beta con 0% distribución interna, un alineamiento que no se ve en regímenes maduros y que típicamente marca fase media de impulso, no techo.</p>
-<p><strong>RS MOMENTUM vs ACUMULACIÓN HOY</strong></p>
-<p>La tabla revela patrón clásico de pullback con acumulación en líderes: RS Grade A/A+ tuvo Perf 1D mediana -0.53% pero Net Acc +3 (18 acc vs 15 dist) — los líderes corrigieron con compradores absorbiendo. En contraste, grades D/E rebotaron (+0.05% y +0.23%) con Net Acc +6/+8, lectura ambigua: puede ser short-covering o rotación temprana hacia rezagados. El grado C es el más débil (-0.19% con Net Acc -3), zona donde el mercado está descartando mediocridad. El RS-MC 99 (A+) de los top 5 confirma que el liderazgo técnico no se quebró pese al rojo del día.</p>
-<p><strong>FUNDAMENTAL, ESTIMATES Y TÉCNICO — TRIPLE CRUCE</strong></p>
-<p>Convergencia plena excepcional en el cluster semis: <strong>ALAB (Comp 99 / Fund A / Est A+)</strong>, <strong>MCHP (Comp 99 / Fund A+ / Est A+)</strong> y <strong>AMD (Comp 99 / Fund A+ / Est A+)</strong> alinean momentum extremo con fundamentals top-decil y revisiones de consenso agresivamente al alza — son los nombres de máxima convicción institucional del universo. <strong>SNX (Comp 99 / Fund A+ / Est A)</strong> suma calidad estructural a la lista. <strong>TSM (Comp 98 / Fund Stale / Est A+)</strong> muestra estimates de altísima calidad pero sin scoring fundamental por filing extranjero, vigilable pero con caveat de data. La excepción dentro del top es <strong>DELL (Comp 98 / Fund A+ / Est B)</strong>: fundamentos sobresalientes con estimates apenas decentes — la calidad histórica supera lo que analistas están dispuestos a revisar al alza, divergencia que sugiere participación más lenta. La mediana de Fund Grade entre líderes RS-MC A+ es B y la de Est Grade es A — el momentum tiene respaldo de estimates más que de fundamentals históricos, perfil típico de ciclo de revisiones al alza. Los 14 stocks Fund A+ con RS-MC <50 y los 12 Est A+ con RS-MC <50 son la cantera de early entries para próximas sesiones si emerge acumulación.</p>
-<p><strong>FOCO OPERATIVO</strong></p>
-<p>1) Monitorear breakouts en semis del top 10 con AccScore subiendo desde nivel actual (50-80) hacia 90+: confirmación de continuación. 2) Watchlist de los 12 Est Grade A+ con RS-MC <50 — entrada si cualquiera cruza RS-MC 70 con Net Acc 5d positivo. 3) Si % distribuyendo supera 40% o Technology Net20d cae bajo +0.40, reducir exposición: el rally pierde su único motor sectorial.</p></div>
-</div>
-<!-- /AI COMMENTARY -->
   <!-- BREADTH_SECTION_START -->
   <!-- ROW 1: Breadth + ATR/NetAcc + Perf chart -->
   <div class="sec-head"><span class="sec-label">Market breadth &amp; daily activity</span><div class="sec-line"></div></div>
@@ -2066,12 +2045,12 @@ function buildRow(s) {
       <td><span class="grade-badge ${estGradeClass(s.estGrade)}">${s.estGrade&&s.estGrade!=='-'?s.estGrade:'—'}</span></td>
       <td style="text-align:center">${s.estPctil!=null?`<span class="detail-icon" onclick="showEstDetail('${s.sym}')" title="Ver detalle Analyst Estimates">📈</span>`:`<span class="detail-icon-disabled" title="Sin datos de estimates">📈</span>`}</td>
       <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5, 1)}%</td>
-      <td class="${ar}">${fmt(s.atrRatio, 2)}</td>
+      <td class="${ar}">${fmt(s.atrRatio, 1)}</td>
       <td style="color:${nc(s.ema20)};font-weight:${fw(s.ema20)}">${sign(s.ema20)}${fmt(s.ema20, 1)}%</td>
       <td style="color:${nc(s.sma50)};font-weight:${fw(s.sma50)}">${sign(s.sma50)}${fmt(s.sma50, 1)}%</td>
-      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.volRatio,1)}%</td>
+      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.volRatio,0)}%</td>
       <td style="color:${nc(s.perf1d)};font-weight:${fw(s.perf1d)}">${sign(s.perf1d)}${fmt(s.perf1d, 1)}%</td>
-      <td style="color:${nc(s.perf6m)};font-weight:${fw(s.perf6m)}">${sign(s.perf6m)}${fmt(s.perf6m, 1)}%</td>
+      <td style="color:${nc(s.perf6m)};font-weight:${fw(s.perf6m)}">${sign(s.perf6m)}${fmt(s.perf6m, 0)}%</td>
       <td style="border-left:1px solid rgba(255,255,255,0.08)">${statusBadge(s)}</td>
     </tr>`;
 }
@@ -2706,12 +2685,12 @@ function renderStocks() {
       <td><span class="grade-badge ${estGradeClass(s.estGrade)}">${s.estGrade&&s.estGrade!=='-'?s.estGrade:'—'}</span></td>
       <td style="text-align:center">${s.estPctil!=null?`<span class="detail-icon" onclick="showEstDetail('${s.sym}')" title="Ver detalle Analyst Estimates">📈</span>`:`<span class="detail-icon-disabled" title="Sin datos de estimates">📈</span>`}</td>
       <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5, 1)}%</td>
-      <td class="${ar}">${fmt(s.atrRatio, 2)}</td>
+      <td class="${ar}">${fmt(s.atrRatio, 1)}</td>
       <td style="color:${nc(s.ema20)};font-weight:${fw(s.ema20)}">${sign(s.ema20)}${fmt(s.ema20, 1)}%</td>
       <td style="color:${nc(s.sma50)};font-weight:${fw(s.sma50)}">${sign(s.sma50)}${fmt(s.sma50, 1)}%</td>
-      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.volRatio,1)}%</td>
+      <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.volRatio,0)}%</td>
       <td style="color:${nc(s.perf1d)};font-weight:${fw(s.perf1d)}">${sign(s.perf1d)}${fmt(s.perf1d, 1)}%</td>
-      <td style="color:${nc(s.perf6m)};font-weight:${fw(s.perf6m)}">${sign(s.perf6m)}${fmt(s.perf6m, 1)}%</td>
+      <td style="color:${nc(s.perf6m)};font-weight:${fw(s.perf6m)}">${sign(s.perf6m)}${fmt(s.perf6m, 0)}%</td>
       <td style="border-left:1px solid rgba(255,255,255,0.12)">${statusBadge(s)}</td>
     </tr>`;
   }).join('');
