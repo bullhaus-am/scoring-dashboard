@@ -1213,8 +1213,14 @@
 
         <span class="fbar-sep"></span>
 
-        <!-- Sección 4: Scope (sector + industry) -->
+        <!-- Sección 4: Scope (market cap + sector + industry) -->
         <div class="fgroup">
+          <select class="fselect" id="mcapDropdown" onchange="setFilterMktCap(this)">
+            <option value="">Market Cap</option>
+            <option value="lt10">&lt; $10B</option>
+            <option value="10to100">$10B – $100B</option>
+            <option value="gt100">&gt; $100B</option>
+          </select>
           <select class="fselect" id="sectorDropdown" onchange="setFilterSector(this)">
             <option value="">Sector</option>
           </select>
@@ -1565,7 +1571,7 @@ let filterMode = 'all';
 // Compat shims used by legacy code paths
 Object.defineProperty(window, 'sortCol', { get: () => sortKeys[0]?.col || 'rank' });
 Object.defineProperty(window, 'sortDir', { get: () => sortKeys[0]?.dir || 1  });
-let filterSector = '', filterIndustry = '', filterTicker = '';
+let filterSector = '', filterIndustry = '', filterTicker = '', filterMktCap = '';
 
 // Populate dropdowns from ALL_STOCKS data
 function initDropdowns() {
@@ -1585,6 +1591,22 @@ function setFilter(f, btn) {
   if (ti) { ti.value = ''; ti.classList.remove('active'); }
   document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  renderStocks();
+}
+
+// ── Scope: market cap dropdown ──────────────────────────────────────────────
+// Buckets fijos:  lt10  =  < $10B   ·   10to100  =  $10B–$100B   ·   gt100  =  > $100B
+function _matchMktCap(mcap) {
+  if (filterMktCap === '')         return true;
+  if (mcap == null || isNaN(mcap)) return false;
+  if (filterMktCap === 'lt10')     return mcap < 10;
+  if (filterMktCap === '10to100')  return mcap >= 10 && mcap <= 100;
+  if (filterMktCap === 'gt100')    return mcap > 100;
+  return true;
+}
+function setFilterMktCap(sel) {
+  filterMktCap = sel.value;
+  sel.classList.toggle('active', !!filterMktCap);
   renderStocks();
 }
 
@@ -1664,9 +1686,12 @@ function clearAllFilters() {
     gmsUpdateButton(k);
   });
 
-  // 4. Sector + Industry
+  // 4. Sector + Industry + Market Cap
   filterSector = '';
   filterIndustry = '';
+  filterMktCap = '';
+  const mcapEl = document.getElementById('mcapDropdown');
+  if (mcapEl) { mcapEl.value = ''; mcapEl.classList.remove('active'); }
   const secEl = document.getElementById('sectorDropdown');
   const indEl = document.getElementById('industryDropdown');
   if (secEl) { secEl.value = ''; secEl.classList.remove('active'); }
@@ -1693,7 +1718,8 @@ function _updateClearAllVisibility() {
     GMS.acc.set.size > 0 ||
     GMS.fund.set.size > 0 ||
     filterSector !== '' ||
-    filterIndustry !== ''
+    filterIndustry !== '' ||
+    filterMktCap !== ''
   );
   btn.classList.toggle('has-filters', hasFilters);
 }
@@ -2623,6 +2649,9 @@ function renderStocks() {
   else if (filterIndustry)  data = data.filter(s => s.industry === filterIndustry);
   else if (filterSector)    data = data.filter(s => s.sector === filterSector);
 
+  // 3b) Market Cap bucket — siempre combinable con sector/industry/ticker
+  if (filterMktCap) data = data.filter(s => _matchMktCap(s.mktCap));
+
   const total = data.length;
     const gradeOrder = {'A+':10,'A':9,'B+':8,'B':7,'C+':6,'C':5,'D+':4,'D':3,'E':2};
     const dqOrder = {'High':4, 'Medium':3, 'Low':2, 'Foreign':1};
@@ -2742,7 +2771,8 @@ function renderStocks() {
   const fundGradeLabel= gmsLabel('fund');
   const estGradeLabel = gmsLabel('est');
   const scopeLabel = filterTicker ? `TICKER: ${filterTicker}` : filterIndustry ? `INDUSTRY: ${filterIndustry}` : filterSector ? `SECTOR: ${filterSector}` : '';
-  const parts = [typeLabel, compGradeLabel, gradeLabel, accGradeLabel, fundGradeLabel, estGradeLabel, scopeLabel].filter(Boolean);
+  const mcapLabel = filterMktCap ? `MKT CAP: ${ {lt10:'<$10B','10to100':'$10B–$100B',gt100:'>$100B'}[filterMktCap] }` : '';
+  const parts = [typeLabel, compGradeLabel, gradeLabel, accGradeLabel, fundGradeLabel, estGradeLabel, mcapLabel, scopeLabel].filter(Boolean);
   const filterDesc = parts.join(' · ');
   document.getElementById('tblFooter').textContent =
     `SHOWING ${Math.min(50, total)} OF ${total} STOCKS  ·  ${filterDesc}  ·  SORTED BY ${sortCol.toUpperCase()} ${sortDir===-1?'↓':'↑'}`;
