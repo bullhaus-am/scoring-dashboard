@@ -74,6 +74,11 @@
   /* KPI cards */
   .kpi-val { font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
   .kpi-sub { font-size: 10px; color: var(--mist); margin-top: 4px; }
+  /* Línea de contexto secundario en los KPIs chicos (Δ vs ayer, % vs universo,
+   * etc.). Texto pequeño y dim para que no compita con el kpi-val principal.
+   * Sirve doble propósito: agregar info no-redundante con los charts de abajo,
+   * Y llenar el espacio vertical libre cuando el grid iguala alturas. */
+  .kpi-delta { font-size: 10px; color: var(--mist); margin-top: 10px; font-family: var(--font-sans); letter-spacing: 0.5px; }
   .col-teal  { color: var(--teal); }
   .col-red   { color: var(--red); }
   .col-amber { color: var(--amber); }
@@ -89,10 +94,21 @@
   .br-meta { display: flex; justify-content: space-between; font-size: 10px; color: var(--smoke); margin-bottom: 5px; font-family: var(--font-sans); }
   .br-track { height: 6px; border-radius: 3px; background: var(--bg3); overflow: hidden; }
   .br-fill  { height: 100%; border-radius: 3px; transition: width 0.4s; }
-  .br-foot { display: flex; gap: 24px; padding-top: 14px; border-top: 1px solid var(--rule); margin-top: 14px; flex-wrap: wrap; }
+  .br-foot { display: flex; flex-direction: column; gap: 6px; padding-top: 8px; border-top: 1px solid var(--rule); margin-top: 8px; }
   .br-stat { }
   .br-stat-lbl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--mist); margin-bottom: 3px; font-family: var(--font-sans); }
   .br-stat-val { font-size: 16px; font-weight: 700; }
+  /* Wrapper inline para las 2 primeras stats del Breadth (% Acc + % Dist) — las
+   * pone lado a lado en vez de stacked. Reduce la altura del card y por ende
+   * la altura del row de Market Filters (los otros 5 KPIs quedan parejos). */
+  .br-row { display: flex; gap: 22px; }
+  /* Compactación adicional del Breadth card: valores más chicos (14 vs 16) y
+   * labels con menos margen. El target es que el contenido completo del card
+   * (card-tag + br-foot) iguale aproximadamente la altura de los KPIs chicos
+   * (card-tag + kpi-val + kpi-sub + kpi-delta ≈ 80px), así el grid no estira
+   * a 239px como antes. */
+  .br-foot .br-stat-lbl { margin-bottom: 1px; }
+  .br-foot .br-stat-val { font-size: 14px; }
 
   /* Shared table vars */
   :root {
@@ -920,40 +936,47 @@
       <div class="card-tag">M1 — Net accumulation 20d</div>
       <div class="kpi-val col-red">-0.01</div>
       <div class="kpi-sub"><span class="filter-badge fb-fail">FAIL</span> &nbsp; need ≥ 0</div>
+      <div class="kpi-delta" data-kpi-delta="m1">Δ ayer: -0.09</div>
     </div>
     <div class="card kpi-pass-card">
       <div class="card-tag">M2 — ATR ratio 5/50</div>
       <div class="kpi-val col-teal">0.944</div>
       <div class="kpi-sub"><span class="filter-badge fb-pass">PASS</span> &nbsp; need ≤ 1.0</div>
+      <div class="kpi-delta" data-kpi-delta="m2">Δ ayer: -0.014</div>
     </div>
     <div class="card kpi-neutral-card">
       <div class="card-tag">Median ATR 5d</div>
       <div class="kpi-val col-smoke">3.12<span style="font-size:16px">%</span></div>
       <div class="kpi-sub" style="color:var(--mist)">Volatility compressing</div>
+      <div class="kpi-delta" data-kpi-delta="atr5">Δ ayer: -0.02%</div>
     </div>
     <div class="card kpi-neutral-card">
       <div class="card-tag">Operable stocks</div>
       <div class="kpi-val col-teal">436</div>
       <div class="kpi-sub" style="color:var(--mist)">Pass all stock-level filters</div>
+      <div class="kpi-delta" data-kpi-delta="operable">44.2% del universo</div>
     </div>
     <div class="card kpi-neutral-card" title="Spread = % RSI>70 − % RSI<30. Positivo = mercado sesgado overbought. Negativo = sesgado oversold. Color: verde si |spread|≤8 y ninguno supera 10% · ámbar si |spread| entre 8-15 o algún lado entre 10-20% · rojo si |spread|>15 o algún lado supera 20%. Umbrales calibrados para breadth de RSI en Russell 1000.">
       <div class="card-tag">RSI breadth spread</div>
       <div class="kpi-val kpi-rsi-val col-teal">+4.5</div>
       <div class="kpi-sub kpi-rsi-spread" style="color:var(--mist)">OB 7.6% &nbsp;·&nbsp; OS 3.1%</div>
+      <div class="kpi-delta" data-kpi-delta="rsi">Δ ayer: -0.7</div>
     </div>
     <div class="card kpi-neutral-card">
-      <div class="card-tag">Breadth — Acc / Dist / Sectors</div>
-      <div class="br-foot" style="margin-top:8px;">
-        <div class="br-stat">
-          <div class="br-stat-lbl">% accumulating</div>
-          <div class="br-stat-val col-smoke">31.9%</div>
+      <div class="card-tag">Breadth</div>
+      <div class="br-foot">
+        <div class="br-row">
+          <div class="br-stat">
+            <div class="br-stat-lbl">% Acc</div>
+            <div class="br-stat-val col-smoke">31.9%</div>
+          </div>
+          <div class="br-stat">
+            <div class="br-stat-lbl">% Dist</div>
+            <div class="br-stat-val col-red">37.8%</div>
+          </div>
         </div>
         <div class="br-stat">
-          <div class="br-stat-lbl">% distributing</div>
-          <div class="br-stat-val col-red">37.8%</div>
-        </div>
-        <div class="br-stat">
-          <div class="br-stat-lbl">Sectors positive</div>
+          <div class="br-stat-lbl">Sectors +</div>
           <div class="br-stat-val col-smoke">3 of 11</div>
         </div>
       </div>
