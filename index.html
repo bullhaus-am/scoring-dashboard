@@ -1845,25 +1845,16 @@ function fmtMktCap(b) {
 }
 
 // 7-day net revisions sobre +1Y EPS: alerta temprana de cambio estructural.
-// Devuelve un <td> con número signed (+5/-2) y fondo color-tinted por intensidad.
-// Intensidad = max(magnitud absoluta normalizada, ratio vs coverage normalizado),
-// para que tanto mega-caps con muchas revisiones absolutas como small-caps con
-// alta fracción del coverage moviéndose se destaquen visualmente igual de fuerte.
-//   - magnitud: 5 net revisions = 100% (capped)
-//   - ratio:    20% del coverage moviéndose = 100% (capped)
-function fmtRev7(net, coverage) {
-  if (net == null) return '<td style="text-align:center;color:#4a5568">—</td>';
-  if (net === 0)   return '<td style="text-align:center;color:#8899aa">0</td>';
-  const absN = Math.abs(net);
-  const mag = Math.min(absN / 5, 1.0);
-  const rat = coverage ? Math.min((absN / coverage) * 5, 1.0) : mag;
-  const intensity = Math.max(mag, rat);
-  const alpha = (intensity * 0.30).toFixed(2);
-  const isPos = net > 0;
-  const bg = isPos ? `rgba(0,229,204,${alpha})` : `rgba(255,77,109,${alpha})`;
-  const color = isPos ? '#00e5cc' : '#ff4d6d';
-  const sign = isPos ? '+' : '';
-  return `<td style="text-align:center;background:${bg};color:${color};font-weight:700">${sign}${net}</td>`;
+// Matchea el estilo visual de los Net columns (Net 50d/20d/5d/1d): solo texto
+// color (teal +, rojo −, gris 0) + bold cuando ≠ 0. Sin fondo tinted, para
+// consistencia con el resto de la tabla. La magnitud del número por sí sola
+// hace el scan rápido (+25 salta a la vista al lado de 0).
+function fmtRev7(net) {
+  if (net == null) return '<td style="color:#4a5568">—</td>';
+  const color  = net > 0 ? '#00e5cc' : net < 0 ? '#ff4d6d' : '#8899aa';
+  const weight = net !== 0 ? '700' : '400';
+  const sign   = net > 0 ? '+' : '';
+  return `<td style="color:${color};font-weight:${weight}">${sign}${net}</td>`;
 }
 
 // ── Watchlist (localStorage) ──────────────────────────────────────────────────
@@ -2063,7 +2054,7 @@ function buildRow(s) {
       ${_accelCellHtml(s.epsAccel, s.revAccel)}
       <td style="text-align:center"><span class="dq-badge ${dqBadgeClass(s.fundDq)}" title="${(s.fundDqDetail||'').replace(/"/g,'&quot;')}">${dqBadgeText(s.fundDq)}</span></td>
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><span class="grade-badge ${estGradeClass(s.estGrade)}">${s.estGrade&&s.estGrade!=='-'?s.estGrade:'—'}</span></td>
-      ${fmtRev7(s.rev7Net1y, s.estNAnalysts)}
+      ${fmtRev7(s.rev7Net1y)}
       <td style="text-align:center">${s.estPctil!=null?`<span class="detail-icon" onclick="showEstDetail('${s.sym}')" title="Ver detalle Analyst Estimates">📈</span>`:`<span class="detail-icon-disabled" title="Sin datos de estimates">📈</span>`}</td>
       <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5, 1)}%</td>
       <td class="${ar}">${fmt(s.atrRatio, 1)}</td>
@@ -2709,7 +2700,7 @@ function renderStocks() {
       ${_accelCellHtml(s.epsAccel, s.revAccel)}
       <td style="text-align:center"><span class="dq-badge ${dqBadgeClass(s.fundDq)}" title="${(s.fundDqDetail||'').replace(/"/g,'&quot;')}">${dqBadgeText(s.fundDq)}</span></td>
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><span class="grade-badge ${estGradeClass(s.estGrade)}">${s.estGrade&&s.estGrade!=='-'?s.estGrade:'—'}</span></td>
-      ${fmtRev7(s.rev7Net1y, s.estNAnalysts)}
+      ${fmtRev7(s.rev7Net1y)}
       <td style="text-align:center">${s.estPctil!=null?`<span class="detail-icon" onclick="showEstDetail('${s.sym}')" title="Ver detalle Analyst Estimates">📈</span>`:`<span class="detail-icon-disabled" title="Sin datos de estimates">📈</span>`}</td>
       <td style="color:#8899aa;border-left:1px solid rgba(255,255,255,0.12)">${fmt(s.atr5, 1)}%</td>
       <td class="${ar}">${fmt(s.atrRatio, 1)}</td>
