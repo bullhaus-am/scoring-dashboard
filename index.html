@@ -1245,8 +1245,7 @@
         </colgroup>
         <thead>
           <tr class="thead-groups">
-            <th colspan="8"  class="thg thg-id">Symbol Data &amp; Industry</th>
-            <th colspan="1"  class="thg thg-comp">Comp<span class="thg-info" onclick="showFormulaInfo('comp')" title="Cómo se calcula">i</span></th>
+            <th colspan="9"  class="thg thg-id">Company Data &amp; Composite Grade<span class="thg-info" onclick="showFormulaInfo('comp')" title="Cómo se calcula el Composite Grade">i</span></th>
             <th colspan="2"  class="thg thg-rs">RS Momentum<span class="thg-info" onclick="showFormulaInfo('rs')" title="Cómo se calcula">i</span></th>
             <th colspan="7"  class="thg thg-acc">Accumulation / Distribution<span class="thg-info" onclick="showFormulaInfo('acc')" title="Cómo se calcula">i</span></th>
             <th colspan="4"  class="thg thg-fund" id="fundGroupHeader">Fundamental Rating<span class="thg-info" onclick="showFormulaInfo('fund')" title="Cómo se calcula">i</span></th>
@@ -2021,7 +2020,7 @@ function buildRow(s) {
       <td class="lft"><span class="sector-tag" title="${s.sector}">${s.sector}</span></td>
       <td class="lft"><span class="industry-tag" title="${s.industry}">${s.industry}</span></td>
       <td style="text-align:right;color:#8899aa" title="Market Cap en US$ billions">${fmtMktCap(s.mktCap)}</td>
-      <td style="border-left:1px solid rgba(255,255,255,0.12)"><span class="grade-badge ${rsmcGradeClass(s.compGrade)}">${s.compGrade||'-'}</span></td>
+      <td><span class="grade-badge ${rsmcGradeClass(s.compGrade)}">${s.compGrade||'-'}</span></td>
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><span class="grade-badge ${rsmcGradeClass(s.rsGrade)}">${s.rsGrade||'-'}</span></td>
       <td style="text-align:center"><span class="${s.blueDot?'blue-dot':'blue-dot-no'}" title="${s.blueDot?'RS en máximos':'' }"></span></td>
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="s-bar-wrap">
@@ -2666,7 +2665,7 @@ function renderStocks() {
       <td class="lft"><span class="sector-tag" title="${s.sector}">${s.sector}</span></td>
       <td class="lft"><span class="industry-tag" title="${s.industry}">${s.industry}</span></td>
       <td style="text-align:right;color:#8899aa" title="Market Cap en US$ billions">${fmtMktCap(s.mktCap)}</td>
-      <td style="border-left:1px solid rgba(255,255,255,0.12)"><span class="grade-badge ${rsmcGradeClass(s.compGrade)}">${s.compGrade||'-'}</span></td>
+      <td><span class="grade-badge ${rsmcGradeClass(s.compGrade)}">${s.compGrade||'-'}</span></td>
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><span class="grade-badge ${rsmcGradeClass(s.rsGrade)}">${s.rsGrade||'-'}</span></td>
       <td style="text-align:center"><span class="${s.blueDot?'blue-dot':'blue-dot-no'}" title="${s.blueDot?'RS en máximos':'' }"></span></td>
       <td style="border-left:1px solid rgba(255,255,255,0.12)"><div class="s-bar-wrap">
