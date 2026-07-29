@@ -2038,13 +2038,16 @@ function nextEarningsCellHtml(s) {
   const d = s.nextEarnings;
   if (!d) return '<td style="text-align:center;color:#556677">—</td>';
   const days = Math.round((new Date(d + 'T00:00:00') - new Date()) / 86400000);
+  // Formato DD-Mon (pedido de Nicolas 2026-07-29): '30-Jul', '05-Aug'
+  const _MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const _dm = d.slice(8,10) + '-' + _MON[parseInt(d.slice(5,7),10)-1];
   if (days < 0) {
     // Ya reportó (Yahoo sin rollear): sin riesgo próximo — gris con check
-    return `<td style="text-align:center;color:#556677" title="Reportó el ${d} (calendario Yahoo sin rollear). Sin evento próximo conocido.">✓${d.slice(5)}</td>`;
+    return `<td style="text-align:center;color:#556677" title="Reportó el ${d} (calendario Yahoo sin rollear). Sin evento próximo conocido.">✓${_dm}</td>`;
   }
   const col = days <= 7 ? '#f85149' : (days <= 14 ? '#e3b341' : '#8899aa');
   const w = days <= 7 ? 700 : 400;
-  const disp = (s.nextEarningsEst ? '~' : '') + d.slice(5);  // MM-DD compacto
+  const disp = (s.nextEarningsEst ? '~' : '') + _dm;
   const tip = (s.nextEarningsEst ? 'Estimada (rango Yahoo): ' : 'Probable: ') + d +
               (days >= 0 ? ` — en ${days} día${days===1?'':'s'}` : ' (pasada — refrescar)') +
               '. Verificar en IR ante un trigger.';
