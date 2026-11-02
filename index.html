@@ -245,7 +245,14 @@
    * padding del wrap 32 + borde 1 + padding de la card 8). max-width: 100%
    * las acota en pantallas más anchas que el .wrap (2630px centrado). */
   .tbl-top  { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;
-              position: sticky; left: 41px; width: calc(100vw - 82px); max-width: 100%; }
+              position: sticky; left: 41px; width: calc(100vw - 82px); max-width: 100%;
+              z-index: 70; }
+  /* z-index 70 (fix 2026-11-02): position:sticky crea un stacking context, así
+   * que el z-index 1000 de los .fmulti-panel (dropdowns de grade) solo cuenta
+   * DENTRO de la barra; sin z-index propio la barra quedaba en auto (0) y los
+   * headers sticky de la tabla (50 / 60) se pintaban encima del menú abierto —
+   * A+ / A / B quedaban tapados detrás del thead. 70 > 60 (headers fijos de la
+   * intersección) y < 100 (topbar). */
   /* No overflow on tbl-wrap: an overflow-x:auto here creates a scrolling
    * context that breaks position:sticky vertical (header sticky-top would
    * reference tbl-wrap which has no vertical scroll). With overflow:visible,
@@ -259,6 +266,8 @@
    * First 4 columns (Fav, Rank, Δ Rank, Ticker) stick to the left of viewport
    * during horizontal page scroll. Z-index ladder:
    *   - topbar: 100 (declared elsewhere)
+   *   - .tbl-top (barra de texto + filtros, sticky-left): 70 — encima de los
+   *     headers para que sus dropdowns de grade no queden tapados
    *   - sticky header rows: 50 (vertical scroll only)
    *   - sticky-left body cells: 10 (horizontal scroll only)
    *   - sticky-left header cells (intersection): 60 (above both)
